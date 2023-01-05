@@ -18,22 +18,20 @@ knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 
 There are two things we do every time we start working in R Studio:
 
-1.  Turn on the Tidyverse Package. Think of it like opening your toolbox so you can use the tools
-    inside of it
+1.  Turn on the Tidyverse Package. Think of it like opening your toolbox so you can use the tools inside of it
 
 ```{r libraries}
 library(tidyverse)
 ```
 
-2.  Tell R Studio where to find the files you want to use and reads in the house data so we can
-    begin exploring it.
+2.  Tell R Studio where to find the files you want to use and reads in the house data so we can begin exploring it.
 
 ```{r read data}
 setwd("C:/Users/james.starling/OneDrive - West Point/Documents/GitHub/MA256/LSN1_2/") 
 data <- read_csv("L02_Redfin-Nashville.csv")
 
 # OR reach out to a website where the data is hosted:
-data <- read_csv("https://raw.githubusercontent.com/jkstarling/MA256/main/LSN1_2/L02_Redfin-Nashville.csv")
+data <- read_csv("https://raw.githubusercontent.com/jkstarling/MA256/main/data/L02_Redfin-Nashville.csv")
 ```
 
 ## Calculate Monthly House Payments
