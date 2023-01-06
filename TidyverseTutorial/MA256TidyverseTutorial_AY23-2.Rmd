@@ -1,0 +1,329 @@
+---
+title: ''
+output:
+  html_document: default
+  pdf_document: default
+editor_options:
+  markdown:
+    wrap: 100
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
+
+
+# MA256 Tidyverse Tutorial (AY23-2)
+
+```{r}
+# install.packages("tidyverse")
+# install.packages("janitor")
+```
+
+
+
+```{r libraries}
+library(tidyverse)
+```
+
+2.  Tell R Studio where to find the files you want to use and reads in the house data so we can begin exploring it.
+
+```{r read data}
+# setwd("C:/Users/james.starling/OneDrive - West Point/Documents/GitHub/MA256/data/")
+# data <- read_csv("L02_Redfin-Nashville.csv")
+
+# OR reach out to a website where the data is hosted:
+wage_data <- read_csv("https://raw.githubusercontent.com/jkstarling/MA256/main/data/wage_data.csv")
+```
+
+
+
+```{r}
+head(wage_data)
+```
+
+```{r}
+head(wage_data$Age)
+```
+
+```{r}
+wage_data %>% select(Earnings, Sex, Age)
+```
+
+```{r}
+wage_data %>% select(-Education, 
+                     -Occupation, 
+                     -MaritalStatus, 
+                     -Race, 
+                     -FamilySize, 
+                     -FamilyMakeup, 
+                     -Age_squared)
+```
+
+```{r}
+wage_data %>% filter(Earnings>0)
+```
+
+
+
+```{r}
+wage_data%>%
+  filter(Occupation!="53: Never Worked")
+```
+
+
+```{r}
+employed_data = wage_data%>%
+  filter(Occupation!="53: Never Worked" & Earnings>0)
+```
+
+
+```{r}
+employed_data %>%
+  summarise(Mean_Earnings = mean(Earnings))
+employed_data %>%
+  summarise(Median_Earnings = median(Earnings))
+employed_data %>%
+  summarise(SD_Earnings = sd(Earnings))
+```
+
+
+
+```{r}
+employed_data %>% 
+  group_by(Sex) %>% 
+  summarise(Mean_Earnings = mean(Earnings), 
+            Median_Earnings = median(Earnings), 
+            size = n())
+```
+
+
+
+```{r}
+employed_data %>% 
+  group_by(Sex, MaritalStatus) %>% 
+  summarise(Mean_Earnings = mean(Earnings), 
+            Median_Earnings = median(Earnings), 
+            Size = n()) %>% 
+  arrange(MaritalStatus)
+```
+
+
+
+
+## Creating new variables
+
+
+```{r}
+employed_data %>%
+  mutate(Earnings_per_member=Earnings/FamilySize) %>% 
+  select(Earnings, FamilySize, Earnings_per_member)
+```
+
+```{r}
+mean_age = employed_data%>%
+  summarise(mean(Age)) %>% as.numeric()
+mean_age
+2*mean_age
+```
+
+### GGplot2
+
+
+```{r}
+employed_data %>%
+  ggplot(aes(x = Earnings))
+employed_data %>%
+  ggplot(aes(x = Earnings))+
+  geom_histogram()
+
+```
+
+
+
+
+
+```{r}
+employed_data %>%
+  ggplot(aes(x = Earnings))+
+  geom_histogram()+
+  labs(x="Earnings (USD)",y="Count",title = "Histogram of Earnings")
+```
+
+
+```{r}
+employed_under_150K = employed_data %>% 
+  filter(Earnings<150000)
+
+employed_data %>% filter(Earnings>150000) %>%  count(Sex)
+```
+
+
+
+
+
+```{r}
+employed_under_150K %>% count(Sex)
+```
+
+
+
+```{r}
+employed_under_150K %>%
+  ggplot(aes(x = Earnings))+
+  geom_histogram()+
+  labs(x="Earnings (USD)",y="Count",title = "Histogram of Earnings")
+```
+
+```{r}
+employed_under_150K%>%
+  ggplot(aes(x = Earnings, fill = Sex))+
+  geom_histogram()+
+  labs(x="Earnings (USD)",y="Count",title = "Histogram of Earnings by Sex")
+```
+
+
+
+```{r}
+employed_under_150K%>%
+  ggplot(aes(x = Earnings, fill = Sex))+
+  geom_histogram(position="dodge")+
+  labs(x="Earnings (USD)",y="Count",title = "Histogram of Earnings by Sex")
+```
+
+
+
+```{r}
+employed_under_150K%>%
+  ggplot(aes(x = Age,y=Earnings, color = Sex))+geom_point()+
+  labs(x="Age (Years)",y="Earnings (USD)",title = "Age vs. Earnings by Sex")
+```
+
+
+```{r}
+employed_under_150K %>% 
+  group_by(Age) %>% 
+  summarise(Median = median(Earnings)) %>% 
+  ggplot(aes(x = Age,y=Median))+geom_line()+
+  labs(x="Age (Years)",y="Earnings (USD)",title = "Age vs. Median Earnings")
+```
+
+
+```{r}
+employed_under_150K %>% 
+  group_by(Age, Sex) %>% 
+  summarise(Median = median(Earnings)) %>% 
+  ggplot(aes(x = Age,y=Median, color = Sex))+geom_line()+
+  labs(x="Age (Years)",y="Earnings (USD)",title = "Age vs. Median Earnings by Sex")
+```
+
+
+```{r}
+employed_under_150K %>% 
+  ggplot(aes(x = MaritalStatus, y = Earnings, color = Sex)) + geom_boxplot()+
+  labs(title  = "Comparative Boxplot of Marital Status and Earnings by Sex", x = "Marital Status")
+```
+
+
+```{r}
+employed_under_150K %>% 
+  group_by(Age, Sex) %>% 
+  summarise(Median = median(Earnings)) %>% 
+  ggplot(aes(x = Age,y=Median, color = Sex))+geom_line()+
+  labs(x="Age (Years)",y="Earnings (USD)", color = "Sex of respondent", title = "Age vs. Median Earnings by Sex")
+```
+
+
+```{r}
+employed_under_150K %>% 
+  group_by(Age, Sex) %>% 
+  summarise(Median = median(Earnings)) %>% 
+  ggplot(aes(x = Age,y=Median, color = Sex))+geom_line()+
+  labs(x="Age (Years)",y="Earnings (USD)", color = "Sex of respondent", title = "Age vs. Median Earnings by Sex")+
+  theme(text = element_text(size=20))
+```
+
+```{r}
+employed_under_150K %>% 
+  group_by(Age, Sex) %>% 
+  summarise(Median = median(Earnings)) %>% 
+  ggplot(aes(x = Age,y=Median, color = Sex))+geom_line()+
+  labs(x="Age (Years)",y="Earnings (USD)", color = "Sex of respondent", title = "Age vs. Median Earnings by Sex")+
+  theme(text = element_text(size=10),plot.title=element_text(size=30))
+```
+
+
+
+
+```{r}
+employed_under_150K %>% 
+  group_by(Age, Sex) %>% 
+  summarise(Median = median(Earnings)) %>% 
+  ggplot(aes(x = Age,y=Median, color = Sex))+geom_line()+
+  labs(x="Age (Years)",y="Earnings (USD)", color = "Sex of respondent", title = "Age vs. Median Earnings by Sex")+
+  scale_x_continuous(limits=c(0,100),breaks=c(seq(from = 0,to = 100,by = 10)))+
+  scale_y_continuous(limits=c(0,70000), breaks=c(10000, 30000, 50000))
+```
+
+#### Change the theme
+
+```{r}
+employed_under_150K %>% 
+  group_by(Age, Sex) %>% 
+  summarise(Median = median(Earnings)) %>% 
+  ggplot(aes(x = Age,y=Median, color = Sex))+geom_line()+
+  labs(x="Age (Years)",y="Earnings (USD)", color = "Sex of respondent", title = "Age vs. Median Earnings by Sex")+
+  theme_classic()
+```
+
+
+
+```{r}
+employed_under_150K %>% 
+  group_by(Age, Sex) %>% 
+  summarise(Median = median(Earnings)) %>% 
+  ggplot(aes(x = Age,y=Median, color = Sex))+geom_line()+
+  labs(x="Age (Years)",y="Earnings (USD)", color = "Sex of respondent", title = "Age vs. Median Earnings by Sex")+
+  theme_bw()
+```
+
+```{r}
+employed_under_150K %>% 
+  filter(Occupation == "14: Economists") %>% 
+  ggplot(aes(x = Age,y= Earnings, color = Sex))+geom_point(aes(size = FamilySize))+
+  labs(x="Age (Years)",y="Earnings (USD)", color = "Sex of respondent",  size = "Family Size", title = "Age vs. Median Earnings by Sex for Economists")
+```
+
+
+
+```{r}
+
+```
+
+
+
+```{r}
+
+```
+
+
+
+```{r}
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

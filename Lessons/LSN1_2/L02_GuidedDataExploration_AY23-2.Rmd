@@ -12,7 +12,7 @@ editor_options:
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 ```
 
-# MA 376 Lesson 2 - Guided Data Exploration (AY23-2)
+# MA256 Lesson 2 - Guided Data Exploration (AY23-2)
 
 ## Getting Started
 
