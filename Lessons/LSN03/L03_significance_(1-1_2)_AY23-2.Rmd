@@ -96,19 +96,19 @@ whether they preferred Chips Ahoy! over Keebler's original chocolate chip cookie
 consumers, 45 (90%) of them preferred Chips Ahoy! Chips Ahoy! now claims that 90% of consumers
 prefer their cookies over Keebler's.
 
-**Step 1: Ask a Research Question:** Restate from the given information.
+**Step 1: Ask a Research Question:** Q1) Restate from the given information.
 
 `r colorize("Do people prefer Chips Ahoy! over Keebler's chocolate chip cookies?", "blue")`
 
 \vfill
 
-**Step 2: Design a Study & Collect Data:** Explain what type of study was conducted.
+**Step 2: Design a Study & Collect Data:** Q3) Explain what type of study was conducted.
 
 `r colorize("(single) blind study with 50 randomly selected consumers. Each participant was asked if they preferred Chips Ahoy! or Keebler's", "blue")`
 
 \vfill
 
-**Step 3: Explore the Data:** What could we do with the data to help us understand it better?
+**Step 3: Explore the Data:** Q4) What could we do with the data to help us understand it better?
 
 `r colorize("(single) blind study with 50 randomly selected consumers. Each participant was asked if they preferred Chips Ahoy! or Keebler's", "blue")`
 
@@ -119,31 +119,31 @@ prefer their cookies over Keebler's.
 *To draw inferences for this or any other research question, we must set the framework by answering
 the following questions. Do this at boards in teams of 2-3:*
 
-Q1) What are the observational units?
+Q5) What are the observational units?
 
 `r colorize("The randomly selected consumers who participated in the blind taste test experiment.", "blue")` 
 \vfill
 
-Q2) What is the sample size and number of samples?
+Q6) What is the sample size and number of samples?
 
 `r colorize("The sample size (n) = 50. There was only 1 sample of 50 consumers.", "blue")`
 \vfill
 
-Q3) Identify & classify the variable collected.
+Q7) Identify & classify the variable collected.
 
 `r colorize("The variable is whether a consumer preferred Chips Ahoy! It's a binary categorical variable (Yes or No) ", "blue")` \vfill
 
 \newpage
 
 
-Q4) What is the symbol, definition & value of the sample statistic?
+Q8) What is the symbol, definition & value of the sample statistic?
 
 $\hat{p}$ `r colorize(" (p-hat) represents the short-run proportion of consumers from the experiment who preferred Chips Ahoy's original chocolate chip cookies over Keebler's original chocolate chip cookies.", "blue")`
 
 `r colorize("NOTE: We can ALWAYS calculate this value from the data using R if not given.", "blue")` $\hat{p} = 45 / 50 = 90\% \; or \; 0.9.$
 \vfill
 
-Q5) What is the symbol, definition, & value of the population parameter?
+Q9) What is the symbol, definition, & value of the population parameter?
 
 $\pi$ `r colorize("represents the long-run proportion of consumers who prefer Chips Ahoy's original chocolate chip cookies over Keebler's original chocolate chip cookies.", "blue")` 
 
@@ -152,17 +152,17 @@ $\pi$ `r colorize("represents the long-run proportion of consumers who prefer Ch
 
 
 
-Q6) What are the null \& alternate hypotheses in words and symbol notation?
+Q10) What are the null \& alternate hypotheses in words and symbol notation?
 
-`r colorize("Null Hypothesis: The long run proportion of consumers who prefer Chips Ahoys original chocolate chip cookie over Keeblers original chocolate chip cookie is 50\\%. ", "blue")`  $\\H_0: \pi = 0.5$
+`r colorize("Null Hypothesis: The long run proportion of consumers who prefer Chips Ahoys original chocolate chip cookie over Keeblers original chocolate chip cookie is 50\\%. $H_0: \\pi = 0.5$", "blue")`  
 \vfill
 
-`r colorize("Alternate Hypothesis: The long run proportion of consumers who prefer Chips Ahoy's original chocolate chip cookie over Keebler's original chocolate chip cookie is greater than 50\\%.", "blue")` 
-$\\H_a: \pi > 0.5$
+`r colorize("Alternate Hypothesis: The long run proportion of consumers who prefer Chips Ahoy's original chocolate chip cookie over Keebler's original chocolate chip cookie is greater than 50\\%. $H_a: \\pi > 0.5$", "blue")` 
+
 \vfill
 
 
-Q7) With the framework established, we can use the 3S strategy and *One Proportion* applet
+Q11) With the framework established, we can use the 3S strategy and *One Proportion* applet
 (<http://www.isi-stats.com/isi2nd/ISIapplets2021.html>) to estimate the likelihood that Chips Ahoy
 got the result they did if consumers could not taste a difference and were randomly choosing one of
 the two cookies. 
@@ -173,30 +173,30 @@ the two cookies.
 
 *Getting the Null Distribution:*
 
-Probability of choosing Chips Ahoy! (success/heads) = $\pi$ (Parameter) = `r colorize("0.5", "blue")` 
+\hspace{0.5cm} Probability of choosing Chips Ahoy! (success/heads) = $\pi$ (Parameter) = `r colorize("0.5", "blue")` 
 
-Number of tosses = n (Sample size) = `r colorize("50", "blue")` 
+\hspace{0.5cm} Number of tosses = n (Sample size) = `r colorize("50", "blue")` 
 
-Number of repetitions = `r colorize("1,000", "blue")` 
+\hspace{0.5cm} Number of repetitions = `r colorize("1,000", "blue")` 
 
-Select "Draw Samples" button. 
+\hspace{0.5cm} Select "Draw Samples" button. 
 
-**3. Strength of Evidence: ** How common/uncommon is our observation? Report the p-value. Select the “Count samples” “Count” button to calculate the P-value for this simulation. (what number should you use for this value?)
+**3. Strength of Evidence: ** Q12) How common/uncommon is our observation? Report the p-value. Select the “Count samples” “Count” button to calculate the P-value for this simulation. (What number should you use for the *As extreme as* value?) Did we prove the alternative hypothesis? 
 
 
-`r colorize("We can see subjectively that our statistic (red vertical line) is very uncommon, so there is very strong evidence that our statistic is extremely unlikely to have occurred by random chance. the reported p-value should be around 0. ", "blue")` 
+`r colorize("We can see subjectively that our statistic (red vertical line) is very uncommon, so there is very strong evidence that our statistic is extremely unlikely to have occurred by random chance. the reported p-value should be around 0. No, we have not proven the alternate hypothesis - it is still possible to get this result from chance, even if unlikely.", "blue")` 
 
 \vfill
 
  
 \newpage 
 
-**Step 4: Draw Inferences:  **
+**Step 4: Draw Inferences:  ** Q13) What can you conclude from this study?
 
 `r colorize("We are extremely confident that the long run proportion of consumers who prefer Chips Ahoy! original chocolate chip cookies over Keebler’s original chocolate chip cookies is greater than 50\\% but how much greater do people prefer Chips Ahoy over Keebler? In lesson 8, we will calculate confidence intervals to estimate the range of values within which the true long run proportion lies based on 90\\%, 95\\% or 99\\% confidence.", "blue")` 
 \vfill
 
-**Step 5: Formulate Conclusions: ** Can you generalize to other brands? Can you identify any bias in the study? 
+**Step 5: Formulate Conclusions: ** Q14) Can you generalize to other brands? Can you identify any bias in the study? 
   
 `r colorize("Consumers seem to prefer Chips Ahoy’s original chocolate chip cookies over Keebler’s original chocolate chip cookies based on this single experiment, but can we generalize to the entire Chips Ahoy brand versus the entire Keebler brand? We will learn more about generalization in lessons 6 \\& 7, but to answer this question – we should not be comfortable generalizing the results to the entire brand. It’s possible that Keebler’s Chewy or Chocolate Chunk cookies are better than Chips Ahoy’s.", "blue")` 
 
@@ -208,18 +208,31 @@ Select "Draw Samples" button.
 4. Perhaps after taking a bite of the first cookie, people’s palate isn’t as sensitive to the flavors. Did researchers clean the palate before consumers tasted the 2nd cookie? If not, perhaps everyone thinks the 1st cookie tasted is better due to palate sensitivity to flavors. We will explore what conditions allow us to determine cause and effect in lesson 09.", "blue")` 
 \vfill
 
-**Step 6: Look Back and Ahead:**  Identify limitations & suggest ways to overcome in new studies. 
+**Step 6: Look Back and Ahead:**  Q15) Identify limitations & suggest ways to overcome in new studies. 
 
 
-`r colorize("Structure the experiment as double-blind, and/or in additional ways to avoid bias examples above. 
-Since Chips Ahoy! has something to gain from the results of the experiment, they are obviously biased. A neutral 3rd party should repeat the experiment to see if they get similar results. In fact, let’s do that now.  ", "blue")` 
+`r colorize("Structure the experiment as double-blind, and/or in additional ways to avoid bias examples above. Since Chips Ahoy! has something to gain from the results of the experiment, they are obviously biased. A neutral 3rd party should repeat the experiment to see if they get similar results. In fact, let’s do that now.  ", "blue")` 
+\vfill
+
+### A third competitor. 
+
+Q16) How would the analysis above change if we introduced a third cookie competitor and conducted the experiment in our classroom? 
+
+`r colorize("We would have a sample size of $n=16 or 17$; p-hat = (changes based on outcomes) ; $H_0 = 1/3; H_a > 1/3$ ", "blue")` .
+
+\vfill
+
+Q17)Is it possible for the observed proportion to match the null hypothesis if the null hypothesis is false?
+
+`r colorize("Yes, it is possible.", "blue")` .
+
+\vfill
+
+Q18) Is it possible for the observed proportion to differ significantly from the null hypothesis if the null is true?
+
+`r colorize("Yes, it is possible.", "blue")` .
+
 \vfill
 
 
 
-
-
-
-
-`r colorize("...", "blue")` 
-\vfill
