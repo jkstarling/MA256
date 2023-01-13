@@ -1,8 +1,8 @@
 ---
 title: ''
 output:
-  html_document: default
   pdf_document: default
+  html_document: default
 editor_options:
   markdown:
     wrap: 100
