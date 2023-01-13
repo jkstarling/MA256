@@ -86,15 +86,8 @@ What factors impact the strength of evidence?
 
 \vfill
 
-Using a theoretical z-score, how do we calculate the p-value? (Hint: Draw a picture...)
+Using a theoretical z-score, how do we calculate the p-value? (Hint: Take a look at the Course Guide - Block 2/Lesson 3-4 )
 
-<!-- `r colorize("$H_0: z = 0 $", "blue")` -->
-
-<!-- `r colorize("$H_a: z \\ne 0$", "blue")`   -->
-
-<!-- `r colorize("$H_a: z < 0 $ ", "blue")` -->
-
-<!-- `r colorize("$H_a: z > 0 \\qquad \\int_{-\\infty}^{-a} f(x) dx $", "blue")` -->
 
 \begin{tabular}{ccl}
 \vspace{.1in}
