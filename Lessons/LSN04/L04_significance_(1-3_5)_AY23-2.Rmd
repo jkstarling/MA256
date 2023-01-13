@@ -1,0 +1,350 @@
+---
+title: ''
+geometry: "left=2cm,right=2cm,top=2cm,bottom=2cm"
+output:
+  pdf_document: default
+  html_document: default
+editor_options:
+  markdown:
+    wrap: 100
+---
+
+```{r setup, message=FALSE, echo=TRUE, include=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+colorize <- function(x, color) {
+  if (knitr::is_latex_output()) {
+    sprintf("\\textcolor{%s}{%s}", color, x)
+  } else if (knitr::is_html_output()) {
+    sprintf("<span style='color: %s;'>%s</span>", color, 
+      x)
+  } else x
+}
+# `r colorize("...", "blue")`
+```
+
+# MA256 Lesson 4 - Significance - Strength of Evidence  (1.3, 1.4, 1.5)
+
+Define and describe the standardized statistic for a proportion:
+\vspace{.2in}
+
+z = `r colorize("$\\frac{\\hat{p} - mean (null)}{SD(null)}$", "blue")`  
+
+\vfill
+
+When can we use a theory-based approach to calculate a p-value? (for a one-proportion z-test)
+
+`r colorize("When our sample size is large enough. For a one-proportion z-test, we must have at least 10 successes and 10 failures in our sample.", "blue")`  
+
+\vfill
+
+
+Using the theoretical approach, what is the expected standard deviation of a null distribution? Why? 
+\vspace{.2in}
+
+SD = `r colorize("$\\sqrt{\\frac{\\pi (1-\\pi)}{n}}$. This is due to the central limit theorem.", "blue")`  
+
+\vfill
+
+Using the theoretical approach, how do we calculate our standardized statistic?
+
+z = `r colorize("$\\frac{\\hat{p} - \\pi}{\\sqrt{\\frac{\\pi (1-\\pi)}{n}}}$", "blue")`  
+
+\vfill
+
+
+Guidelines for using p-value/standardized test statistic for strength of evidence. 
+
+
+\begin{tabular}{c|p{4.0cm} | p{4.0cm}}
+ & p-value  & standardized test-stat \\ \hline  \vspace{.1in}
+Weak Evidence against the null 
+& `r colorize("$0.1 < p$", "blue")`   
+& `r colorize("$|z| \\le 1.5$", "blue")`    \\ 
+\vspace{.1in}
+Moderate Evidence against the null 
+& `r colorize("$0.05 < p \\le 0.1$", "blue")` 
+& `r colorize("$1.5 < |z| \\le  2$", "blue")`    \\
+\vspace{.1in}
+Strong Evidence against the null 
+& `r colorize("$0.01 < p \\le  0.05$", "blue")` 
+& `r colorize("$2 < |z| \\le 3$", "blue")`   \\
+\vspace{.1in}
+Very Strong Evidence against the null 
+& `r colorize("$p \\le 0.01 $", "blue")` 
+& `r colorize("$|z| > 3 $", "blue")`
+\end{tabular}
+
+\vfill
+
+What factors impact the strength of evidence?
+
+`r colorize("Distance from the Null", "blue")`
+
+`r colorize("Sample Size", "blue")`
+
+`r colorize("1 Tail vs 2 Tail test", "blue")`
+
+\vfill
+
+Using a theoretical z-score, how do we calculate the p-value? (Hint: Draw a picture...)
+
+<!-- `r colorize("$H_0: z = 0 $", "blue")` -->
+
+<!-- `r colorize("$H_a: z \\ne 0$", "blue")`   -->
+
+<!-- `r colorize("$H_a: z < 0 $ ", "blue")` -->
+
+<!-- `r colorize("$H_a: z > 0 \\qquad \\int_{-\\infty}^{-a} f(x) dx $", "blue")` -->
+
+\begin{tabular}{ccl}
+\vspace{.1in}
+`r colorize("(two-sided) $H_0: z = 0 $", "blue")`& \\
+\vspace{.1in}
+`r colorize("(two-sided) $H_a: z \\ne 0$", "blue")` & 
+`r colorize("2*(1 - pnorm(abs(z)))", "blue")` & 
+`r colorize("$p-val = \\int_{-\\infty}^{-|z|} f(x) dx + \\int_{|z|}^{\\infty} f(x) dx = 2 \\int_{|z|}^{\\infty} f(x) dx $", "blue")`\\
+\vspace{.1in}
+`r colorize("(lower-tail) $H_a: z < 0 $ ", "blue")`& 
+`r colorize("pnorm(z)", "blue")` &
+`r colorize("$p-val = \\int_{-\\infty}^{-z} f(x) dx$", "blue")`\\
+\vspace{.1in}
+`r colorize("(upper-tail) $H_a: z > 0$", "blue")` &  
+`r colorize("1 - pnorm(z)", "blue")` & 
+`r colorize("$p-val = \\int_{z}^{\\infty} f(x) dx$", "blue")`\\
+\end{tabular}
+
+\vfill
+\vfill
+
+```{r include=FALSE} 
+library(tidyverse)
+p1 <- ggplot(data = data.frame(x = c(-3, 3)), aes(x)) +
+  stat_function(fun = dnorm, n = 101, args = list(mean = 0, sd = 1)) + ylab("") +
+  scale_y_continuous(breaks = NULL)
+p1 + geom_vline(xintercept=-2, linetype="dashed", color = "red") + geom_vline(xintercept=2, linetype="dashed", color = "red")
+
+2*(1-pnorm(2))
+pnorm(-2)
+1-pnorm(2)
+```
+
+
+\newpage
+
+
+**2)** An article published in \textit{College Mathematics Journal} (Eyler, Shalla, Doumaux, and McDevitt, 2009) found that players tend to not prefer scissors when playing Rock-Paper-Scissors. You want to test if people really choose scissors less, and conduct a test. You played 120 games and your friend chose scissors 31 times.
+
+\hspace{0.1in} **a) ** List the null and alternate hypothesis in words and symbols.
+
+`r colorize("$H_0: \\pi = 0.3333$. The true proportion of times that a person choose scissors in Rock-Paper-Scissors is $\\frac{1}{3}$.", "blue")`
+\vfill
+
+`r colorize("$H_a: \\pi < 0.333$. The true proportion fo times that a person chooses scissors in Rock-Paper-Scissors is less than $\\frac{1}{3}$.", "blue")`
+\vfill
+
+
+\hspace{0.1in} **b) ** Run a simulation using the WileyPlus applet and report the mean and standard deviation of your null distribution.
+
+`r colorize("Mean $\\approx 0.333, SD \\approx 0.043$.", "blue")`
+\vfill
+
+
+\hspace{0.1in} **c) ** What is the standardized statistic (z) for your test? Comment on the strength of evidence.}
+
+`r colorize("The z-score should be close to -1.74, which is moderate evidence against the null hypothesis that scissors is chosen randomly at a rate of $\\frac{1}{3}$.", "blue")`
+\vfill
+
+`r colorize("With Mean and SD above, $z = \\frac{\\frac{31}{120} - 0.333}{0.043} = \\frac{0.258333 - 0.33333}{0.043} = -1.74$}", "blue")`
+\vfill
+
+
+\hspace{0.1in} **d) ** If you repeated the test another 240 times and your friend chose scissors the same proportion of times}\\ \{ ($\hat{p} = 0.258333)$, would you expect your strength of evidence to increase, decrease, or stay the same?}
+
+`r colorize("We would expect our strength of evidence to increase if the sample size is larger but the observed proportion is the same.", "blue")`
+\vfill
+
+
+\hspace{0.1in} **e) ** If we repeated the experiment with a different friend and our sample size stayed the same (120), but }\\ \{the number of times he chose scissors was 38, would the strength of evidence increase, decrease, or stay the same?}
+
+`r colorize("We would expect the strength of evidence to decrease if the observed statistic is closer to the null (less distance) and the sample size stayed the same.", "blue")`
+\vfill
+
+
+\hspace{0.1in} **f) ** What if we used our original experimental data ($\frac{31}{120}$ scissors), but instead we wanted to do a two-sided test instead of a one-sided test. Would our strength of evidence increase, decrease, or stay the same?
+
+`r colorize("The strength of evidence would decrease if we go from a one-sided to a two-sided test. Of note, our p-value will roughly double (higher p-value is less strength of evidence), but our z-statistic is  still the same.", "blue")`
+\vfill
+
+\pagebreak
+
+**3) ** After Al Franken (D-MN) resigned from the U.S. Senate in 2018, one might wonder if Minnesota has had a larger number of congressional resignations than one would expect compared to other states. On Teams, download the \color{blue} resignations.csv \color{black} file and upload it into R using the Tidyverse Tutorial or Course Guide as reference. This file lists all of the congressional resignations from state senators back to 1905. As each state has exactly 2 senators, it is reasonable to assume that if a resigned senator is chosen at random, each state has an equal chance of being represented if state has nothing to do with resignation.
+
+The following code follows the Halloween Candy example in the Course Guide (Significance: How Strong is the Evidence?) and can be used to find proportions of the dataset.
+
+```{r eval=FALSE, warning=FALSE}
+library(tidyverse)
+library(janitor)
+
+resign <- read_csv("https://raw.githubusercontent.com/jkstarling/MA256/main/data/resignations.csv", show_col_types = FALSE)
+resign %>%
+  count(State) %>%
+  mutate(Proportion = n/sum(n)) %>%
+  adorn_totals()
+
+resign %>%
+  mutate(MN = State == "MN") %>%
+  count(MN) %>%
+  mutate(Proportion = n/sum(n)) %>%
+  adorn_totals()
+```
+
+\vfill
+ 
+ \hspace{0.1in} **a) ** In your own words, explain what the research question is. What are our observational units and variable(s) of interest? Classify the variables as either categorical or quantitative.
+ 
+`r colorize("The question is do senators from MN resign their office at an unusually high rate? Our observational units are senators who have resigned since 1905. The variable is which state they are from, which is categorical.", "blue")`
+\vfill
+ 
+ \hspace{0.1in} **b)** List your null and alternate hypotheses, observed statistic, sample size, and the standard deviation of your null distribution.
+ 
+`r colorize("$H_0: \\pi = \\frac{1}{50} = 0.2; $", "blue")`
+
+`r colorize("$H_a: \\pi \\ne 0.2$", "blue")` 
+
+`r colorize("$\\hat{p} = \\frac{5}{120} = 0.04166667$", "blue")`
+
+`r colorize("$n = 120;$", "blue")` 
+
+`r colorize("$sd \\approx 0.013$", "blue")`
+
+
+\vfill
+ 
+ 
+ \hspace{0.1in} **c)** List your simulated p-value. Comment on the strength of evidence.
+ 
+`r colorize("Answers may vary slightly, but should be around 0.092. This is moderate evidence against the null that the proportion of resigned senators from MN is 0.02.", "blue")`
+\vfill
+ 
+ \hspace{0.1in} **d) ** Calculate your standardized statistic. Comment on the strength of evidence.
+
+`r colorize("$z = \\frac{0.041666667 - 0.02}{0.013} = 1.666667$. This is moderate evidence against the null hypothesis that the proportion of resigned senators from MN is 0.02.", "blue")`
+\vfill
+
+
+\newpage
+
+
+
+
+\textbf{4) } Two firsties miss recall formation because they partied hard over the weekend, but blamed their lateness on a flat tire. The TAC team brings them both into separate offices and asks them both one question which will determine if they get hours or not. Which tire went flat? This question works if we assume that each tire is equally likely to be chosen, but it has been proposed that people tend to answer ``right front" more often. 
+
+To test this, we asked 28 cadets, if they were in this situation, which tire would they say had gone flat. Our results are shown below.
+
+\begin{tabular}{|c|c|c|c|}
+\hline
+\textbf{Left Front} & \textbf{Left Rear} & \textbf{Right Front} & \textbf{Right Rear}\\
+\hline
+6 & 4 & 14 & 4\\
+\hline
+\end{tabular}
+
+
+\hspace{0.1in} \textbf{a) } What is the research question?
+
+`r colorize("Do cadets pick the right front tire more often than other tires?", "blue")` 
+\vfill
+
+\hspace{0.1in} \textbf{b) } Identify the observational units in this study.
+
+`r colorize("Each of the 28 cadets asked", "blue")` 
+\vfill
+
+\hspace{0.1in} **c) ** Describe the parameter of interest (in words). 
+
+`r colorize("The parameter $\\pi$ is the long run proportion of cadets who choose the right front tire.", "blue")` 
+\vfill
+
+\hspace{0.1in}  **d)** State the appropriate null and alternate hypotheses to be tested, both in words and symbols. 
+
+`r colorize("$H_0: \\pi = \\frac{1}{4}$ - Our null hypothesis is that the long run proportion of cadets who choose the right front tire is one out of four.", "blue")` 
+
+`r colorize("$H_a: \\pi > \\frac{1}{4}$ - Our alternate hypothesis is that the long run proportion of cadets who choose the right front tire is greater than one in four", "blue")` 
+\vfill
+
+\hspace{0.1in} **e)** What is our observed statistic? What is our sample size? 
+
+`r colorize("$\\hat{p} = \\frac{14}{28} = 0.5$; \\textit{n} = 28", "blue")` 
+\vfill
+
+\hspace{0.1in}**f) ** Using the one-proportion applet, list the simulated p-value, standardized statistic, and interpret the strength of evidence.
+
+`r colorize("Answers may vary.", "blue")` 
+
+`r colorize("p-value = 0.003; This is the probability of observing a result at least as extreme as 14/28 assuming our null hypothesis is true.", "blue")` 
+
+`r colorize("z = 3.125. The observed result of 0.5 is 3.125 standard deviations above the hypothesized long-run proportion of 0.25", "blue")` 
+
+`r colorize("Both of these indicate very strong strength of evidence against the null hypothesis that the long run proportion of cadets who choose front right is $\\frac{1}{4}$.", "blue")` 
+
+\vfill
+
+\hspace{0.1in} **g) **  Does our sample meet the validity conditions to use a theory-based test?
+
+`r colorize("Yes, we have 14 successes and 14 failures, both of which are above 10", "blue")` 
+\vfill
+
+\newpage 
+
+\hspace{0.1in} **h)** Assume that validity conditions are met. What is the theory-based standardized statistic  and p-value?
+
+`r colorize("z = $\\frac{0.5 - 0.25}{\\sqrt{\\frac{0.25 \\times (1 - 0.25)}{28}}}$ = 3.05505; p-value = 1 - pnorm(3.05505) = 0.001125", "blue")` 
+
+```{r}
+z <- (0.5-0.25) / sqrt(0.25 *(1-0.25) / 28); z
+1 - pnorm(z)
+```
+
+\vfill
+
+\hspace{0.1in} **i) ** Summarize the conclusion that you draw from this study and your analysis. Explain your reasoning.
+
+`r colorize("We have very strong evidence that cadets choose the right front tire more than 25$\\%$ of the time. Through simulation, we would only expect to see our observation of $\\frac{14}{28}$ about 1$\\%$ of the time if the true long-run proportion of this process was 0.25.", "blue")` 
+\vfill
+
+\textbf{Suppose this study were repeated with only 14 cadets and 7 of them answered ``front right." Use this reduced sample scenario to answer parts \textit{j} through \textit{l}.}
+\vspace{0.1in}
+
+\hspace{0.1in} **j)** What would you expect to happen to the strength of evidence against the null hypothesis in this case? 
+
+`r colorize("We would expect weaker strength of evidence because the proportion stays the same but the sample size is smaller, so our p-value should be higher.", "blue")` 
+\vfill
+
+\hspace{0.1in} **k) **  Does our reduced sample meet the validity conditions to use a theory-based test?
+
+`r colorize("No, here we have 7 successes and 7 failures, both less than the 10 required", "blue")` 
+\vfill
+
+\hspace{0.1in} **l)** Using our reduced sample, calculate the new p-value and standardized statistic. Specify if you simulated or used theoretical methods.
+
+`r colorize("We do not meet validity conditions, so we must simulate. Answers will vary, should be about  p-value = 0.0370, z = 2.21", "blue")` 
+
+```{r}
+set.seed(256)
+nreps <- 1000
+pi <- 0.25
+ncadets <- 14
+phat <- 0.5 * ncadets
+stat <- rep(NA, nreps)
+
+for(i in 1:nreps){
+  myobs <- rbinom(1, ncadets, pi)
+  stat[i] <- myobs
+}
+sum(stat >= phat) / nreps
+
+```
+
+
+\vfill
+
