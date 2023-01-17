@@ -49,11 +49,11 @@ What is the difference between a \textbf{parameter} and a \textbf{statistic}?
 
 \textbf{$H_0$} :
 
-`r colorize("Null Hypothesis, the \textit{Random Chance} model for the long-run behavior of the parameter.", "blue")`
+`r colorize("Null Hypothesis, the \\textit{Random Chance} model for the long-run behavior of the parameter.", "blue")`
 \vfill 
 
 \hspace{.1in} \textbf{$H_a$} :
-`r colorize("Alternate Hypothesis, the \textit{Something More} model for the long-run behavior of the parameter.", "blue")`
+`r colorize("Alternate Hypothesis, the \\textit{Something More} model for the long-run behavior of the parameter.", "blue")`
 \vfill 
 
 \hspace{.1in} \textbf{$\pi$} :
@@ -61,16 +61,16 @@ What is the difference between a \textbf{parameter} and a \textbf{statistic}?
 \vfill 
 
 \hspace{.1in} \textbf{$\hat{p}$} :
-`r colorize("The observed proportion statistic from data, used to argue or infer about the parameter}", "blue")`
+`r colorize("The observed proportion statistic from data, used to argue or infer about the parameter.", "blue")`
 \vfill 
 
 \hspace{.1in} \textbf{n} :
-`r colorize("The sample size; The number of observations within each sample to construct the statistic", "blue")`
+`r colorize("The sample size; The number of observations within each sample to construct the statistic.", "blue")`
 \vfill 
 
 \hspace{.1in} \textbf{p-value} :
 
-`r colorize("The probability of observing an observation at least as extreme as }", "blue")` $\hat{p}$ `r colorize("assuming the null hypothesis is true.}", "blue")`
+`r colorize("The probability of observing an observation at least as extreme as", "blue")` $\hat{p}$ `r colorize(" assuming the null hypothesis is true.", "blue")`
 \vfill \textbf{Classify the strength of evidence for each range of p-values.}
 
 ```{=tex}
@@ -91,10 +91,7 @@ What is the difference between a \textbf{parameter} and a \textbf{statistic}?
 
 ## Chips Ahoy vs Keebler Original Chocolate Chip Cookies
 
-Chips Ahoy! conducted a blind taste-test experiment with 50 randomly selected consumers and recorded
-whether they preferred Chips Ahoy! over Keebler's original chocolate chip cookies. Of those 50
-consumers, 45 (90%) of them preferred Chips Ahoy! Chips Ahoy! now claims that 90% of consumers
-prefer their cookies over Keebler's.
+Chips Ahoy! conducted a blind taste-test experiment with 50 randomly selected consumers and recorded whether they preferred Chips Ahoy! over Keebler's original chocolate chip cookies. Of those 50 consumers, 45 (90%) of them preferred Chips Ahoy! Chips Ahoy! now claims that 90% of consumers prefer their cookies over Keebler's.
 
 **Step 1: Ask a Research Question:** Q1) Restate from the given information.
 
@@ -110,14 +107,13 @@ prefer their cookies over Keebler's.
 
 **Step 3: Explore the Data:** Q4) What could we do with the data to help us understand it better?
 
-`r colorize("(single) blind study with 50 randomly selected consumers. Each participant was asked if they preferred Chips Ahoy! or Keebler's", "blue")`
+`r colorize("We could calculate the summary statistics (alrady done in this case). We could create some figures to get a better idea of the data. Two, side-by-side barcharts or a stacked barchart would probably be best.", "blue")`
 
 \vfill
 
 **Step 4:** Draw Inferences: Significance (today's lesson!)
 
-*To draw inferences for this or any other research question, we must set the framework by answering
-the following questions. Do this at boards in teams of 2-3:*
+*To draw inferences for this or any other research question, we must set the framework by answering the following questions. Do this at boards in teams of 2-3:*
 
 Q5) What are the observational units?
 
@@ -126,7 +122,7 @@ Q5) What are the observational units?
 
 Q6) What is the sample size and number of samples?
 
-`r colorize("The sample size (n) = 50. There was only 1 sample of 50 consumers.", "blue")`
+`r colorize("The sample size (n) = 50. There was only one sample of 50 consumers.", "blue")`
 \vfill
 
 Q7) Identify & classify the variable collected.
@@ -163,9 +159,7 @@ Q10) What are the null \& alternate hypotheses in words and symbol notation?
 
 
 Q11) With the framework established, we can use the 3S strategy and *One Proportion* applet
-(<http://www.isi-stats.com/isi2nd/ISIapplets2021.html>) to estimate the likelihood that Chips Ahoy
-got the result they did if consumers could not taste a difference and were randomly choosing one of
-the two cookies. 
+(<http://www.isi-stats.com/isi2nd/ISIapplets2021.html>) to estimate the likelihood that Chips Ahoy got the result they did if consumers could not taste a difference and were randomly choosing one of the two cookies. 
 
 **1. Statistic:** Write out the statistic: $\hat{p} = 45 / 50 = 90\% \; or \; 0.9$
 
@@ -201,11 +195,16 @@ the two cookies.
 `r colorize("Consumers seem to prefer Chips Ahoy’s original chocolate chip cookies over Keebler’s original chocolate chip cookies based on this single experiment, but can we generalize to the entire Chips Ahoy brand versus the entire Keebler brand? We will learn more about generalization in lessons 6 \\& 7, but to answer this question – we should not be comfortable generalizing the results to the entire brand. It’s possible that Keebler’s Chewy or Chocolate Chunk cookies are better than Chips Ahoy’s.", "blue")` 
 
 
-`r colorize("Is the cookie the reason people preferred one over the other, or could there have been bias in the research? Examples of intentional or unintentional bias could be:
-1. If researchers lead the experiment by saying, “Folks seem to prefer cookie \\#1 (Chips Ahoy) over \\#2 (Keebler), what do you think?”, then consumers may be more likely to group-think and prefer cookie \\#1. 
-2. If cookie \\#1 is served on a different/better plate than cookie #2, it may subconsciously influence people to prefer that cookie (because of the plate). 
-3. Telling people “Cookie \\#1” vs “Cookie \\#2” could influence people to select cookie \\#1, just because we typically think of \\#1 as first place or the best. 
-4. Perhaps after taking a bite of the first cookie, people’s palate isn’t as sensitive to the flavors. Did researchers clean the palate before consumers tasted the 2nd cookie? If not, perhaps everyone thinks the 1st cookie tasted is better due to palate sensitivity to flavors. We will explore what conditions allow us to determine cause and effect in lesson 09.", "blue")` 
+`r colorize("Is the cookie the reason people preferred one over the other, or could there have been bias in the research? Examples of intentional or unintentional bias could be:.", "blue")`
+
+`r colorize("1. If researchers lead the experiment by saying, “Folks seem to prefer cookie \\#1 (Chips Ahoy) over \\#2 (Keebler), what do you think?”, then consumers may be more likely to group-think and prefer cookie \\#1.", "blue")` 
+
+`r colorize("2. If cookie \\#1 is served on a different/better plate than cookie \\#2, it may subconsciously influence people to prefer that cookie (because of the plate).", "blue")` 
+
+`r colorize("3. Telling people “Cookie \\#1” vs “Cookie \\#2” could influence people to select cookie \\#1, just because we typically think of \\#1 as first place or the best.", "blue")` 
+
+`r colorize("4. Perhaps after taking a bite of the first cookie, people’s palate isn’t as sensitive to the flavors. Did researchers clean the palate before consumers tasted the 2nd cookie? If not, perhaps everyone thinks the 1st cookie tasted is better due to palate sensitivity to flavors. We will explore what conditions allow us to determine cause and effect in lesson 09.", "blue")` 
+
 \vfill
 
 **Step 6: Look Back and Ahead:**  Q15) Identify limitations & suggest ways to overcome in new studies. 
