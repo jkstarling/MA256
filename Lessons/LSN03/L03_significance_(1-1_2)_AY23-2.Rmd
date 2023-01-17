@@ -39,7 +39,7 @@ colorize <- function(x, color) {
 
 What is the difference between a \textbf{parameter} and a \textbf{statistic}?
 
-`r colorize("A parameter is the long-run behavior of a random process and it is not observable. A statistic is the summary of observed results and is used to infer about the parameter.", "blue")`
+`r colorize("A parameter is the long-run behavior of a random process and it is (generally) not observable. A statistic is the summary of observed results and is used to infer about the parameter.", "blue")`
 
 \vfill
 
@@ -49,15 +49,15 @@ What is the difference between a \textbf{parameter} and a \textbf{statistic}?
 
 \textbf{$H_0$} :
 
-`r colorize("Null Hypothesis, the \\textit{Random Chance} model for the long-run behavior of the parameter.", "blue")`
+`r colorize("Null Hypothesis, the \\textit{by-chance-alone} explanation. Use the null model or the chance model to reflect this hypothesis.", "blue")`
 \vfill 
 
 \hspace{.1in} \textbf{$H_a$} :
-`r colorize("Alternate Hypothesis, the \\textit{Something More} model for the long-run behavior of the parameter.", "blue")`
+`r colorize("Alternate Hypothesis, the \\textit{there is an effect} explanation that contradicts the null hypothesis. Researchers hope this hypothesis is supported by the data they collect.", "blue")`
 \vfill 
 
 \hspace{.1in} \textbf{$\pi$} :
-`r colorize("The proportion parameter, the long-run behavior of a random process. It is unobservable.", "blue")`
+`r colorize("The proportion parameter, the long-run behavior of a random process. It is (typically) unobservable.", "blue")`
 \vfill 
 
 \hspace{.1in} \textbf{$\hat{p}$} :
