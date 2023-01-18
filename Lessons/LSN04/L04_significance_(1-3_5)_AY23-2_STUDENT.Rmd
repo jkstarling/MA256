@@ -1,0 +1,289 @@
+---
+title: ''
+geometry: "left=2cm,right=2cm,top=2cm,bottom=2cm"
+output:
+  pdf_document: default
+  html_document: default
+editor_options:
+  markdown:
+    wrap: 100
+---
+
+```{r setup, message=FALSE, echo=TRUE, include=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# MA256 Lesson 4 - Significance - Strength of Evidence  (1.3, 1.4, 1.5)
+
+Define and describe the standardized statistic for a proportion:
+\vspace{.2in}
+
+z = 
+
+\vfill
+
+When can we use a theory-based approach to calculate a p-value? (for a one-proportion z-test)
+
+ 
+
+\vfill
+
+
+Using the theoretical approach, what is the expected standard deviation of a null distribution? Why? 
+\vspace{.2in}
+
+SD = 
+
+\vfill
+
+Using the theoretical approach, how do we calculate our standardized statistic?
+
+z = 
+
+\vfill
+
+
+Guidelines for using p-value/standardized test statistic for strength of evidence. 
+
+
+\begin{tabular}{c|p{4.0cm} | p{4.0cm}}
+ & p-value  & standardized test-stat \\ \hline  \vspace{.1in}
+Weak Evidence against the null & &  \\ 
+\vspace{.1in}
+Moderate Evidence against the null & &  \\
+\vspace{.1in}
+Strong Evidence against the null & &  \\
+\vspace{.1in}
+Very Strong Evidence against the null & & 
+\end{tabular}
+
+\vfill
+
+What factors impact the strength of evidence?
+
+
+\vfill
+
+Using a theoretical z-score, how do we calculate the p-value? (Hint: Take a look at the Course Guide - Block 2/Lesson 3-4 )
+
+
+
+\vfill
+\vfill
+
+```{r include=FALSE} 
+library(tidyverse)
+
+zstar <- 1
+
+p1 <- ggplot(data = data.frame(x = c(-3, 3)), aes(x)) +
+  stat_function(fun = dnorm, n = 101, args = list(mean = 0, sd = 1)) + ylab("") +
+  scale_y_continuous(breaks = NULL)
+p1 + geom_vline(xintercept=-zstar, linetype="dashed", color = "red") +
+  geom_vline(xintercept=zstar, linetype="dashed", color = "red")
+
+2*(1-pnorm(zstar))
+pnorm(-zstar)
+1-pnorm(zstar)
+
+```
+
+
+\newpage
+
+
+**2)** An article published in \textit{College Mathematics Journal} (Eyler, Shalla, Doumaux, and McDevitt, 2009) found that players tend to not prefer scissors when playing Rock-Paper-Scissors. You want to test if people really choose scissors less, and conduct a test. You played 120 games and your friend chose scissors 31 times.
+
+\hspace{0.1in} **a) ** List the null and alternate hypothesis in words and symbols.
+
+\vfill
+
+
+\hspace{0.1in} **b) ** Run a simulation using the *One Proportion* applet
+(<http://www.isi-stats.com/isi2nd/ISIapplets2021.html>) and report the mean and standard deviation of your null distribution. (make sure you select *summary statistics* box and the "proportion of successes" button)
+
+\vfill
+
+
+\hspace{0.1in} **c) ** What is the standardized statistic (z) for your test? Comment on the strength of evidence.}
+
+```{r}
+# pi <- 
+# phat <- 
+# sd <- 
+# z <- 
+# z
+```
+
+
+\vfill
+
+
+\hspace{0.1in} **d) ** If you repeated the test another 240 times and your friend chose scissors the same proportion of times ($\hat{p} = 0.258333)$, would you expect your strength of evidence to increase, decrease, or stay the same?
+
+\vfill
+
+
+\hspace{0.1in} **e) ** If we repeated the experiment with a different friend and our sample size stayed the same (120), but }\\ \{the number of times he chose scissors was 38, would the strength of evidence increase, decrease, or stay the same?
+
+\vfill
+
+
+\hspace{0.1in} **f) ** What if we used our original experimental data ($\frac{31}{120}$ scissors), but instead we wanted to do a two-sided test instead of a one-sided test. Would our strength of evidence increase, decrease, or stay the same?
+
+\vfill
+
+\pagebreak
+
+**3) ** After Al Franken (D-MN) resigned from the U.S. Senate in 2018, one might wonder if Minnesota has had a larger number of congressional resignations than one would expect compared to other states. On Teams, download the \color{blue} resignations.csv \color{black} file and upload it into R using the Tidyverse Tutorial or Course Guide as reference. This file lists all of the congressional resignations from state senators back to 1905. As each state has exactly 2 senators, it is reasonable to assume that if a resigned senator is chosen at random, each state has an equal chance of being represented if state has nothing to do with resignation.
+
+The following code follows the Halloween Candy example in the Course Guide (Significance: How Strong is the Evidence?) and can be used to find proportions of the dataset.
+
+```{r eval=FALSE, warning=FALSE, message=FALSE}
+# library(tidyverse)
+# library(janitor)
+
+# resign <- read_csv("resignations.csv")
+# resign <- read_csv("https://raw.githubusercontent.com/jkstarling/MA256/main/data/resignations.csv", show_col_types = FALSE)
+# resign %>%
+#   count(State) %>%
+#   mutate(Proportion = n/sum(n),std = sd(Proportion)) %>%
+#   adorn_totals()
+# 
+# resign %>%
+#   mutate(MN = State == "MN") %>%
+#   count(MN) %>%
+#   mutate(Proportion = n/sum(n)) %>%
+#   adorn_totals()
+```
+
+\vfill
+ 
+ \hspace{0.1in} **a) ** In your own words, explain what the research question is. What are our observational units and variable(s) of interest? Classify the variables as either categorical or quantitative.
+ 
+\vfill
+ 
+ \hspace{0.1in} **b)** List your null and alternate hypotheses, observed statistic, sample size, and the standard deviation of your null distribution. (Use the applet to calculate the standard deviation)
+ 
+
+\vfill
+ 
+ 
+ \hspace{0.1in} **c)** List your simulated p-value. Comment on the strength of evidence.
+ 
+\vfill
+ 
+ \hspace{0.1in} **d) ** Calculate your standardized statistic. Comment on the strength of evidence.
+
+```{r}
+# pi <-  
+# phat <-  
+# sd <- 
+# z <- 
+# z
+# 2*(1-pnorm(z))
+```
+
+\vfill
+
+
+\newpage
+
+
+
+
+\textbf{4) } Two firsties miss recall formation because they partied hard over the weekend, but blamed their lateness on a flat tire. The TAC team brings them both into separate offices and asks them both one question which will determine if they get hours or not. Which tire went flat? This question works if we assume that each tire is equally likely to be chosen, but it has been proposed that people tend to answer ``right front" more often. 
+
+To test this, we asked 28 cadets, if they were in this situation, which tire would they say had gone flat. Our results are shown below.
+
+\begin{tabular}{|c|c|c|c|}
+\hline
+\textbf{Left Front} & \textbf{Left Rear} & \textbf{Right Front} & \textbf{Right Rear}\\
+\hline
+6 & 4 & 14 & 4\\
+\hline
+\end{tabular}
+
+
+\hspace{0.1in} \textbf{a) } What is the research question?
+
+\vfill
+
+\hspace{0.1in} \textbf{b) } Identify the observational units in this study.
+
+\vfill
+
+\hspace{0.1in} **c) ** Describe the parameter of interest (in words). 
+
+\vfill
+
+\hspace{0.1in}  **d)** State the appropriate null and alternate hypotheses to be tested, both in words and symbols. 
+
+\vfill
+
+\hspace{0.1in} **e)** What is our observed statistic? What is our sample size? 
+
+\vfill
+
+\hspace{0.1in}**f) ** Using the one-proportion applet, list the simulated p-value, standardized statistic, and interpret the strength of evidence.
+
+
+\vfill
+
+\hspace{0.1in} **g) **  Does our sample meet the validity conditions to use a theory-based test?
+
+\vfill
+
+\newpage 
+
+\hspace{0.1in} **h)** Assume that validity conditions are met. What is the theory-based standardized statistic  and p-value?
+
+
+```{r}
+# z <- 
+# z
+# 1 - pnorm(z)
+```
+
+\vfill
+
+\hspace{0.1in} **i) ** Summarize the conclusion that you draw from this study and your analysis. Explain your reasoning.
+
+\vfill
+
+\textbf{Suppose this study were repeated with only 14 cadets and 7 of them answered ``front right." Use this reduced sample scenario to answer parts \textit{j} through \textit{l}.}
+\vspace{0.1in}
+
+\hspace{0.1in} **j)** What would you expect to happen to the strength of evidence against the null hypothesis in this case? 
+
+\vfill
+
+\hspace{0.1in} **k) **  Does our reduced sample meet the validity conditions to use a theory-based test?
+
+\vfill
+
+\hspace{0.1in} **l)** Using our reduced sample, calculate the new p-value and standardized statistic. Specify if you simulated or used theoretical methods.
+
+
+```{r}
+# z <- 
+# z
+# 1 - pnorm(z)
+# 
+# set.seed(256)
+# nreps <- XXX
+# pi <- XXX
+# ncadets <- XXX
+# phat <- XXX
+#   
+# stat <- rep(NA, nreps)
+# 
+# for(i in 1:nreps){
+#   myobs <- rbinom(1, ncadets, pi)
+#   stat[i] <- myobs
+# }
+# sum(stat >= phat) / nreps
+
+```
+
+

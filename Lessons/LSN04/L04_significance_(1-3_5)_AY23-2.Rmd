@@ -116,9 +116,12 @@ p1 <- ggplot(data = data.frame(x = c(-3, 3)), aes(x)) +
   scale_y_continuous(breaks = NULL)
 p1 + geom_vline(xintercept=-2, linetype="dashed", color = "red") + geom_vline(xintercept=2, linetype="dashed", color = "red")
 
-2*(1-pnorm(2))
-pnorm(-2)
-1-pnorm(2)
+
+zstar <- 1
+2*(1-pnorm(zstar))
+pnorm(-zstar)
+1-pnorm(zstar)
+
 ```
 
 
@@ -136,28 +139,37 @@ pnorm(-2)
 \vfill
 
 
-\hspace{0.1in} **b) ** Run a simulation using the WileyPlus applet and report the mean and standard deviation of your null distribution.
+\hspace{0.1in} **b) ** Run a simulation using the *One Proportion* applet
+(<http://www.isi-stats.com/isi2nd/ISIapplets2021.html>) and report the mean and standard deviation of your null distribution. (make sure you select *summary statistics* box and the "proportion of successes" button)
 
 `r colorize("Mean $\\approx 0.333, SD \\approx 0.043$.", "blue")`
 \vfill
 
 
-\hspace{0.1in} **c) ** What is the standardized statistic (z) for your test? Comment on the strength of evidence.}
+\hspace{0.1in} **c) ** What is the standardized statistic (z) for your test? Comment on the strength of evidence.
+
+```{r}
+pi <- 0.3333
+phat <- 31/120
+sd <- 0.043
+z <- (phat - pi) / sd
+z
+```
 
 `r colorize("The z-score should be close to -1.74, which is moderate evidence against the null hypothesis that scissors is chosen randomly at a rate of $\\frac{1}{3}$.", "blue")`
 \vfill
 
-`r colorize("With Mean and SD above, $z = \\frac{\\frac{31}{120} - 0.333}{0.043} = \\frac{0.258333 - 0.33333}{0.043} = -1.74$}", "blue")`
+`r colorize("With Mean and SD above, $z = \\frac{\\frac{31}{120} - 0.333}{0.043} = \\frac{0.258333 - 0.33333}{0.043} = -1.74$", "blue")`
 \vfill
 
 
-\hspace{0.1in} **d) ** If you repeated the test another 240 times and your friend chose scissors the same proportion of times}\\ \{ ($\hat{p} = 0.258333)$, would you expect your strength of evidence to increase, decrease, or stay the same?}
+\hspace{0.1in} **d) ** If you repeated the test another 240 times and your friend chose scissors the same proportion of times ($\hat{p} = 0.258333)$, would you expect your strength of evidence to increase, decrease, or stay the same?
 
 `r colorize("We would expect our strength of evidence to increase if the sample size is larger but the observed proportion is the same.", "blue")`
 \vfill
 
 
-\hspace{0.1in} **e) ** If we repeated the experiment with a different friend and our sample size stayed the same (120), but }\\ \{the number of times he chose scissors was 38, would the strength of evidence increase, decrease, or stay the same?}
+\hspace{0.1in} **e) ** If we repeated the experiment with a different friend and our sample size stayed the same (120), but }\\ \{the number of times he chose scissors was 38, would the strength of evidence increase, decrease, or stay the same?
 
 `r colorize("We would expect the strength of evidence to decrease if the observed statistic is closer to the null (less distance) and the sample size stayed the same.", "blue")`
 \vfill
@@ -174,14 +186,15 @@ pnorm(-2)
 
 The following code follows the Halloween Candy example in the Course Guide (Significance: How Strong is the Evidence?) and can be used to find proportions of the dataset.
 
-```{r eval=FALSE, warning=FALSE}
+```{r eval=FALSE, warning=FALSE, message=FALSE}
 library(tidyverse)
 library(janitor)
 
-resign <- read_csv("https://raw.githubusercontent.com/jkstarling/MA256/main/data/resignations.csv", show_col_types = FALSE)
+resign <- read_csv("resignations.csv")
+# resign <- read_csv("https://raw.githubusercontent.com/jkstarling/MA256/main/data/resignations.csv", show_col_types = FALSE)
 resign %>%
   count(State) %>%
-  mutate(Proportion = n/sum(n)) %>%
+  mutate(Proportion = n/sum(n),std = sd(Proportion)) %>%
   adorn_totals()
 
 resign %>%
@@ -195,14 +208,14 @@ resign %>%
  
  \hspace{0.1in} **a) ** In your own words, explain what the research question is. What are our observational units and variable(s) of interest? Classify the variables as either categorical or quantitative.
  
-`r colorize("The question is do senators from MN resign their office at an unusually high rate? Our observational units are senators who have resigned since 1905. The variable is which state they are from, which is categorical.", "blue")`
+`r colorize("The question is do senators from MN resign their office at a different rate? Our observational units are senators who have resigned since 1905. The variable is which state they are from, which is categorical.", "blue")`
 \vfill
  
- \hspace{0.1in} **b)** List your null and alternate hypotheses, observed statistic, sample size, and the standard deviation of your null distribution.
+ \hspace{0.1in} **b)** List your null and alternate hypotheses, observed statistic, sample size, and the standard deviation of your null distribution. (Use the applet to calculate the standard deviation)
  
-`r colorize("$H_0: \\pi = \\frac{1}{50} = 0.2; $", "blue")`
+`r colorize("$H_0: \\pi = \\frac{1}{50} = 0.02; $", "blue")`
 
-`r colorize("$H_a: \\pi \\ne 0.2$", "blue")` 
+`r colorize("$H_a: \\pi \\ne 0.02$", "blue")` 
 
 `r colorize("$\\hat{p} = \\frac{5}{120} = 0.04166667$", "blue")`
 
@@ -216,10 +229,19 @@ resign %>%
  
  \hspace{0.1in} **c)** List your simulated p-value. Comment on the strength of evidence.
  
-`r colorize("Answers may vary slightly, but should be around 0.092. This is moderate evidence against the null that the proportion of resigned senators from MN is 0.02.", "blue")`
+`r colorize("Answers may vary slightly, but should be around 2 x 0.047 = 0.094. This is moderate evidence against the null that the proportion of resigned senators from MN is 0.02.", "blue")`
 \vfill
  
  \hspace{0.1in} **d) ** Calculate your standardized statistic. Comment on the strength of evidence.
+
+```{r}
+pi <- 0.02
+phat <- 5/120
+sd <- 0.013
+z <- (phat - pi) / sd
+z
+2*(1-pnorm(z))
+```
 
 `r colorize("$z = \\frac{0.041666667 - 0.02}{0.013} = 1.666667$. This is moderate evidence against the null hypothesis that the proportion of resigned senators from MN is 0.02.", "blue")`
 \vfill
@@ -323,6 +345,9 @@ z <- (0.5-0.25) / sqrt(0.25 *(1-0.25) / 28); z
 `r colorize("We do not meet validity conditions, so we must simulate. Answers will vary, should be about  p-value = 0.0370, z = 2.21", "blue")` 
 
 ```{r}
+z <- (0.5-0.25) / sqrt(0.25 *(1-0.25) / 14); z
+1 - pnorm(z)
+
 set.seed(256)
 nreps <- 1000
 pi <- 0.25
