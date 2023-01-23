@@ -1,0 +1,96 @@
+---
+title: ''
+geometry: "left=2cm,right=2cm,top=1cm,bottom=2cm"
+output:
+  pdf_document:
+    extra_dependencies: ["xcolor", "amsmath"]
+  html_document: default
+editor_options:
+  markdown:
+    wrap: 100
+---
+
+```{r setup, message=FALSE, echo=TRUE, include=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+colorize <- function(x, color) {
+  if (knitr::is_latex_output()) {
+    sprintf("\\textcolor{%s}{%s}", color, x)
+  } else if (knitr::is_html_output()) {
+    sprintf("<span style='color: %s;'>%s</span>", color, 
+      x)
+  } else x
+}
+# `r colorize("...", "blue")`
+```
+
+\newcommand{\sol}[1]{\color{teal}  #1 \color{black}}
+<!-- \renewcommand{\sol}[1]{} -->
+
+
+<!-- xcolor standard colors: 
+black, blue, brown, cyan, darkgray, green, lime, magenta, olive, orange, red, purple, teal, violet, yellow, etc.  -->
+
+
+# MA256 Lesson 6 - Backpack Example - Generalization (2.3, 2.4)
+
+For the backpack example, we are trying to see if the proportion of backpack weight to body weight is less than 10\%. 
+
+$H_0: percent = 10\%$
+
+$H_a: percent \le 10 \%$
+
+```{r out.width = "50%", message=FALSE, warning=FALSE}
+library(tidyverse)
+
+backpack <- read.csv("Backpack.csv")
+
+perc <- (backpack$BackpackWt / backpack$BodyWt) * 100
+
+summary(perc)
+
+```
+
+We resample, with replacement, to get a bootstrap estimate of the standard deviation.  
+
+```{r out.width = "50%"}
+set.seed(256)
+
+M <- 1000
+RES <- data.frame(res.med = rep(NA, M),
+                  res.mean = rep(NA, M))
+n <- 100
+
+for(i in seq(1:M)){
+  x <- sample(perc, n, replace = TRUE)
+  RES$res.med[i] <- median(x)
+  RES$res.mean[i] <- mean(x)}
+```
+
+Here we plot the results of the bootstrap for the mean and the median. 
+
+```{r out.width = "50%"}
+RES %>% ggplot(aes(x=res.mean)) + geom_histogram()
+RES %>% ggplot(aes(x=res.med)) + geom_histogram()
+
+sd(RES$res.mean)
+sd(RES$res.med)
+
+```
+
+We can see that the standard deviation of the median is larger than it is for the mean. 
+
+Since the bootstrap will be centered around the actual data (and not the null hypothesis), we will shift the results of the bootstrap by the difference in the mean of the data and the null hypothesis. 
+
+To estimate the p-value, we will count the number of observations that are below the observed median. 
+
+```{r out.width = "50%"}
+my.shift <- 10 - 7.713
+my.median <- 7.143
+
+RES %>% ggplot(aes(x=res.med + my.shift)) + 
+  geom_histogram() + 
+  geom_vline(xintercept= my.median, linetype="dashed", color = "red")
+
+# estimated p-value
+sum(RES$res.med + my.shift <= my.median) / M
+```

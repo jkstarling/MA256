@@ -1,0 +1,448 @@
+---
+title: ''
+geometry: "left=2cm,right=2cm,top=1cm,bottom=2cm"
+output:
+  pdf_document:
+    extra_dependencies: ["xcolor", "amsmath"]
+  html_document: default
+editor_options:
+  markdown:
+    wrap: 100
+---
+
+```{r setup, message=FALSE, echo=TRUE, include=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+# MA256 Lesson 6 - Generalization (2.3, 2.4)
+
+## Warm up (quiz)
+
+1.  What are the 3 S's in the 3S Strategy?
+
+\vfill
+
+2.  What are the 4 elements used to describe a distribution?
+
+\vfill
+
+3.  Describe the shape of the following distribution and determine whether the mean or median better represents the Center.
+
+![](distribution.jpg){width="200"}
+
+
+
+4. What are two ways to measure the strength of evidence for a single categorical variable?  
+
+\vfill
+
+5. What are the two ways to measure strength of evidence for a single quantitative variable? 
+
+\vfill
+
+6. What is the point of Central Limit Theorem (CLT)? Build the table below showing validity conditions by scenario & key formula.
+
+\begin{table*}[h!]
+\begin{center}
+\begin{tabular}{|p{1.5in}|p{2.0in}|p{2.0in}|p{1.0in}|}
+\hline
+\textbf{Applications} & \textbf{Validity Conditions} & \textbf{Formula} & \textbf{Example}\\ \hline
+Endless Random Process with Fixed Probability of Success (Categorical Vars) & 
+ &
+ & 
+ \\  \hline
+Sampling from a Population (Categorical Variables)  & 
+ &  
+ & 
+\\  \hline
+Sampling from a Population (Quantitative Variables)  &
+ &
+ &
+\\  \hline
+\end{tabular}
+\end{center}
+\end{table*}
+
+
+\pagebreak 
+
+## ACFT, IOCT, and APFT Dataset
+
+Load the ACFT Dataset posted on Microsoft Teams. This constitutes data collected on or about 2019 (pre-Covid) from randomly selected cadets in 1st Regiment on physical fitness and includes APFT, IOCT, and ACFT performance. Researchers were curious to know how cadets performed physically on various tests, specifically if they were above average. We will conduct analysis on all three tests.
+
+
+```{r message=FALSE, error=FALSE}
+# library(tidyverse)
+# ACFT <- read_csv("ACFT1.csv")
+# ACFT <- read_csv("https://raw.githubusercontent.com/jkstarling/MA256/main/data/ACFT1.csv")
+```
+
+
+We can begin exploring our available data to see what variables are captured.
+```{r}
+# head(...)
+# colnames(...)
+```
+
+1. What are the observational units in this study?
+
+\vfill
+
+
+2. What are some categorical and quantitative variables of interest? List and classify some of interest.
+
+\vfill
+
+
+### APFT
+
+The APFT is scored with 3 events on a 100 point scale, where 60 is passing in each of the three events (pushup, situp, and 2 mile run). If a Soldier scores at least 100 points on each event, they can push past 300 to an "extended scale," but if any event falls beneath the 100 point threshold then the "additional" points are lost. It has been suggested that the Corps of Cadets had an average APFT score of 270, and we want to assess if this is true.
+
+#### Step 1: Ask a Research Question \
+
+\textbf{A.3)} What is the research question?
+
+
+\vfill
+
+
+\textbf{A.4)} Based on these questions, what is the population of interest?
+
+
+\vfill
+
+#### Step 2: Design a Study and Collect Data\
+
+\textbf{A.5)} What is our null and alternate hypothesis, stated in both words and symbols?
+
+
+\vfill
+
+
+
+\textbf{A.6)} What is our variable of interest? Is it categorical or quantitative?
+
+\vfill
+
+
+\textbf{A.7)} Based on the classification in \textbf{6}, what theory-based test will we conduct? (hint: z or t)
+
+\vfill
+
+\pagebreak 
+
+#### Step 3: Explore the Data\
+
+\textbf{A.8)} Use R to create a histogram of the APFT scores and describe the shape, center, variability, and any unusual observations. (Check the Tidyverse Tutorial for reference.)
+
+```{r out.width = "50%"}
+# ACFT %>% ggplot(aes(x = ...)) + 
+#   geom_XXXX() + 
+#   labs(x = "Overall Score", y="Count", title="Cadet APFT Scores")
+```
+
+
+
+\textbf{A.9)} Calculate the mean, median, standard deviation, and sample size of the ACFT scores. Include the proper notation as appropriate.  (Check the Tidyverse Tutorial for reference.)
+
+```{r}
+# ACFT %>% summarise(mean = XXXX, 
+#                    median = XXX, 
+#                    s = XXX, 
+#                    n = XXX)
+```
+
+
+#### Step 4: Draw Inferences Beyond the Data\
+
+\textbf{A.10)} Have we met our validity conditions to use theoretical methods? Why or why not?
+
+\vfill
+
+
+\textbf{A.11)} Assume we met our validity conditions. Using theory, calculate the appropriate standardized statistic.
+
+```{r}
+# t <- XXX
+# t
+```
+
+\vfill
+
+
+\textbf{A.12)} Calculate the appropriate p-value using the theoretical method and standardized statistic from \textbf{A.11}.
+
+```{r}
+# XXXX
+```
+
+
+\vfill
+
+\textbf{A.13)} Comment on the strength of evidence as it applies to our null and alternate hypotheses.
+
+\vfill
+
+#### Step 4: REDUX (using the median)\
+
+\textbf{A.14)} After looking at your figure and summary statistics above (A.8 and A.9), does it make sense that the mean is higher than the median APFT score? Explain why the mean and median have this relationship. 
+
+\vfill
+
+\textbf{A.15)} The largest APFT score in the data was 375 points. What would happen to the mean if the score was incorrectly recorded as 475? What would happen to the median? 
+
+\vfill
+
+\textbf{A.16)} For this dataset, the difference between the mean and median is not large, but we still might consider the median a more appropriate statistic to focus on, as it would represent a *typical* score, rather than the mean score which is being pulled to the right by a few large percentages. The problem is, all the theory you saw in Sections 2.2 and 2.3 only applies to means. So how can we get a sense for how much sample-to-sample variation there is in the sample medians? How does this work? 
+
+\vfill
+
+\pagebreak
+
+
+\textbf{A.17)} Is it plausible that this sample came from a population with a population median of 270 points? Use the bootstrap to answer. Do we see a difference between the bootstrapped mean and median?
+
+```{r out.width = "50%"}
+# set.seed(256)
+# M <- 1000
+# apft.scores <- ACFT$XXXXX
+# n <- XXXX
+# 
+# RES <- data.frame(res.med = rep(NA, M),
+#                   res.mean = rep(NA, M))
+# 
+# for(i in seq(1:M)){
+#   x <- sample(apft.scores, n, replace = XXXX)
+#   RES$res.med[i] <- median(x)
+#   RES$res.mean[i] <- mean(x)
+# }
+# 
+# # calculate the difference between the mean (under null hypothesis) and the observed median (your data)
+# my.shift <- XXXXX
+# my.high.median <- XXXX
+# my.low.median <- XXXXXX
+# 
+# RES %>% ggplot(aes(x=res.mean-my.shift)) + geom_histogram()
+# RES %>% ggplot(aes(x=res.med-my.shift)) + 
+#   geom_histogram() + 
+#   geom_vline(xintercept= my.high.median, linetype="dashed", color = "red") + 
+#   geom_vline(xintercept= my.low.median, linetype="dashed", color = "red")
+# 
+# pval <- ( sum(XXXXX > XXXX) + 
+#     sum(XXXX < XXXX)) / M
+```
+
+
+
+#### Step 5: Formulate Conclusions\
+
+\textbf{A.18)} Do you feel comfortable generalizing the results of your analysis to all Army cadets (USMA, ROTC, G2G)? Explain your reasoning.
+
+
+\vfill
+
+
+\textbf{A.19)} Do you feel comfortable generalizing the results of your analysis to the Corps of Cadets? Explain your reasoning.
+
+
+\vfill
+
+
+\textbf{A.20)} What population could you generalize your results to? Explain your reasoning.
+
+
+\vfill
+
+
+\textbf{A.21)} How confident are you to say that we have proven the alternate hypothesis?
+
+
+\vfill
+
+
+#### Step 6: Look Back and Ahead  \
+
+\textbf{A.22)} Suggest how you might redesign the experiment to allow you to draw a more broad conclusion.
+
+\vfill
+
+\textbf{A.23)} Suppose your research question had an alternate hypothesis for a one-sided test. That is, do USMA cadets, on average, perform better than 270? Report your new alternate hypothesis, p-value  and the significance of your findings. Is this surprising?
+```{r}
+ # 1 - pt(XXX, XXX)
+```
+
+\pagebreak
+
+
+\textbf{A.24)} Suppose you wanted to assess the data for only males or only females. Repeat your original ($\ne$) }\\analysis with the proper subsets and report on your findings.
+```{r}
+# ACFT %>% group_by(XXX) %>% summarise(mn = mean(XXX), sd = sd(XXX), n=n())
+# t.m <- (301-270) / (28.6/ sqrt(234)); t.m
+# t.f <- (312-270) / (29.4 / sqrt(59)); t.f
+# # (males, females)
+# c(1-pt(t.m,234), c(1-pt(t.f,59))) 
+```
+
+
+<!-- \pagebreak -->
+
+
+
+### ACFT
+
+The ACFT is scored with 6 events on a 100 point scale, where 60 is passing in each of the six events. If the arbitrary ``average'' score is 80 in each event (480 points), is the Corps of Cadets ``average'' at the ACFT?
+
+#### Step 1: Ask a Research Question\
+
+
+\textbf{C.1)} What is the research question?
+
+
+\vfill
+
+\textbf{C.2)} Based on these questions, what is the population of interest?
+
+
+\vfill
+
+#### Step 2: Design a Study and Collect Data\
+
+
+\textbf{C.3)} What is our null and alternate hypothesis, stated in both words and symbols?
+
+
+\vfill
+
+\textbf{C.4)} What is our variable of interest? Is it categorical or quantitative?
+
+
+\vfill
+
+\textbf{C.5)} Based on the classification in \textbf{6}, what theory-based test will we conduct? (hint: z or t)
+
+
+#### Step 3: Explore the Data\
+
+
+\textbf{C.6)} Use R to create a histogram of the ACFT scores and describe the shape, center, variability, and any unusual observations.
+
+```{r out.width = "50%"}
+# ACFT %>% ggplot(aes(x = XXX)) +
+#   geom_histogram() +
+#   labs(x = "Overall Score", y="Count", title="Cadet ACFT Scores")
+```
+
+
+\vfill
+
+\textbf{C.7)} Calculate the mean, median, standard deviation, and sample size of the ACFT scores. Include the proper notation as appropriate.
+
+```{r}
+# ACFT %>% summarize(XXX)
+```
+
+
+\vfill
+
+\pagebreak
+
+
+#### Step 4: Draw Inferences Beyond the Data\
+
+\textbf{C.8)} Have we met our validity conditions to use theoretical methods? Why or why not?
+
+
+\vfill
+
+\textbf{C.9)} Assume we met our validity conditions. Using theory, calculate the appropriate standardized statistic.
+
+```{r}
+# t <- XXX
+# t
+```
+
+\vfill
+
+\textbf{C.10)} Calculate the appropriate p-value using the theoretical method and standardized statistic from \textbf{11}.
+
+```{r}
+# XXXX
+```
+
+\vfill
+
+\textbf{C.11)} Comment on the strength of evidence as it applies to our null and alternate hypotheses.
+
+
+\vfill
+
+
+\textbf{C.12)}  Repeat the analysis but use the median as the statistic of interest. Note: You will have to use the bootstrap method that you used with the APFT data.
+
+```{r out.width = "50%"}
+# set.seed(256)
+# M <- 1000
+# acft.scores <- ACFT$ACFT_score
+# XXXX
+# ... (many lines go here...)
+# XXXX
+```
+
+\vfill
+
+
+#### Step 5: Formulate Conclusions\
+
+\textbf{C.13)} Do you feel comfortable generalizing the results of your analysis to all Army cadets (USMA, ROTC, G2G)? Explain your reasoning.
+
+
+\vfill
+
+\textbf{C.14)} Do you feel comfortable generalizing the results of your analysis to the Corps of Cadets? Explain your reasoning.
+
+
+\vfill
+
+\textbf{C.15)} What population could you generalize your results to? Explain your reasoning.
+
+
+\vfill
+
+
+\textbf{C.16)} How confident are you to say that we have proven the alternate hypothesis?
+
+
+\vfill
+
+
+#### Step 6: Look Back and Ahead\
+
+\textbf{C.17)} Suggest how you might redesign the experiment to allow you to draw a more broad conclusion.
+
+
+\vfill
+
+\textbf{C.18)} Suppose your research question had an alternate hypothesis for a one-sided test. Report your new new alternate hypothesis, p-value  and the significance of your findings. Is this surprising?
+```{r}
+# XXXX
+```
+
+
+\vfill
+
+
+\textbf{C.19)} Suppose you wanted to assess the data for only males or only females. Repeat your original ($\ne$) analysis with the proper subsets and report on your findings.
+
+```{r}
+# XXXX (SEE EXAMPLE FROM APFT DATA)
+```
+
+
+
+
+\vfill
+
+\textbf{C.20)} What do the signs of the \textit{t} statistic tell you that the p-value alone does not in this case?
+
