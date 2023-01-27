@@ -37,7 +37,7 @@ For the backpack example, we are trying to see if the proportion of backpack wei
 
 $H_0: percent = 10\%$
 
-$H_a: percent \le 10 \%$
+$H_a: percent < 10 \%$
 
 ```{r out.width = "50%", message=FALSE, warning=FALSE}
 library(tidyverse)
