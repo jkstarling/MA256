@@ -38,7 +38,7 @@ black, blue, brown, cyan, darkgray, green, lime, magenta, olive, orange, red, pu
 ### Q1) Research Question: How much do students at your school sleep on a typical night? Let’s make the question more specific and ask about last night. Is the average less than the recommended eight hours? How can we estimate this population average?
 
 \sol{Null hypothesis: The average length of time all students at your school slept last night was 8 hours; $H_0: \mu = 8$ \\
-Alternative hypothesis: The average length of time all students at your school slept last night was less than 8 hours; $H_a: \mu \le 8$}
+Alternative hypothesis: The average length of time all students at your school slept last night was less than 8 hours; $H_a: \mu < 8$}
 \vfill
 
  
@@ -234,82 +234,81 @@ Options 3 \& 4. Both are about samples instead of the population, so they do not
 
 \sol{$H_a: \pi > 50\%$.  The alternate hypothesis is that the long run proportion of couples who lean their heads to the right is greater than 50$\%$.}
 
-\vspace{0.5in}
-
-\large{ \textbf{Güntürkün's findings are compiled in the "Kissing.csv" dataset available on Teams. Load the data into R to analyze it, using the TidyVerse Tutorial and Course Guide to help with coding as needed.}}
-
-\normalsize{}
-
-\vspace{0.25in}
+\vfill
 
 
 \hspace{0.1in} \textbf{f) }   Calculate  the  sample  proportion  of  the  observed  couples  who  leaned  their  heads  to  the  right while kissing. Also indicate the symbol used to denote this value.
 
-\sol{$\hat{p} = \frac{80}{124} = 0.645$}
-
-\color{blue}
-\begin{verbatim}
+```{r message=FALSE, warning=FALSE, error=FALSE}
 library(tidyverse)
 library(janitor)
+kiss <- read_csv("https://raw.githubusercontent.com/jkstarling/MA256/main/data/Kissing.csv")
+kiss %>% count(Direction)
+phat <- 80/124
+phat
+```
 
-Kissing %>% 
-  count(Direction) %>% 
-  mutate(Proportion = n/sum(n)) %>% 
-  adorn_totals()
-\end{verbatim}
-\color{black}
 
-\vspace{0.25in}
+\sol{$\hat{p} = \frac{80}{124} = 0.645$}
 
-\hspace{0.1in} \colorbox{yellow}{\textbf{g) } Do we meet the validity conditions to conduct a theoretical test? Justify your answer.}
+\vfill
+
+\hspace{0.1in} \textbf{g) } Do we meet the validity conditions to conduct a theoretical test? Justify your answer.
 
 \sol{Yes, we meet the validity conditions because 80 right and 44 left are both larger than 10.}
 
-\vspace{0.25in}
+\vfill
 
-\hspace{0.1in}\colorbox{yellow}{\textbf{h) } If we wanted to do strength of evidence testing using theoretical methods, which test would we use?}
+\hspace{0.1in} \textbf{h) } If we wanted to do strength of evidence testing using theoretical methods, which test would we use?
 
 \sol{As we are assessing quantitative (categorical) variables, we would use a one proportion z-test.}
 
-\vspace{0.25in}
+\vfill
 
-\hspace{0.1in} \textbf{i) } Using the applet to simulate, assess the strength of evidence that the sample data provide for Güntürkün’s conjecture that kissing couples tend to lean their heads to the right more often than they would by random chance. Report the approximate p-value and summarize your conclusion about this strength of evidence.
+\hspace{0.1in} \textbf{i) } Use a theoretical test to assess the strength of evidence that the sample data provide for Güntürkün’s conjecture that kissing couples tend to lean their heads to the right more often than they would by random chance. Report the approximate p-value and summarize your conclusion about this strength of evidence.
+
+```{r}
+pi <- 0.5
+z <- (phat - pi) / sqrt(pi*(1-pi)/ 124 )
+z
+1-pnorm(abs(z))
+```
 
 \sol{Should be roughly 0 - this gives very strong evidence that the proportion is not equal to 0.5}
-
-\vspace{0.25in}
+\vfill
 
 
 \hspace{0.1in} \textbf{j) }  Now use theoretical methods to test whether the data provide evidence that the probability that a couple leans their heads to the right while kissing ($\pi$) is different from 0.60. (Note that this question changes both the null hypothesis and the alternate hypothesis)  Report the standardized statistic, p-value, and comment on the strength of evidence. 
+
+```{r}
+pi <- 0.6
+z <- (phat - pi) / sqrt(pi*(1-pi)/ 124 )
+z
+2*(1-pnorm(abs(z)))
+```
 
 \sol{z = 1.02653 \\
 p-value = 0.3046419\\
 This is weak evidence against the null hypothesis, we would say that 0.6 is plausible for the true proportion of couples who kiss while leaning right.}
 
-%\color{blue}
-%\begin{verbatim}
-%null <- 0.6
-%phat <- 80/124
-%n <- 124
-%sd <- sqrt(null * (1 - null)/n)
-%z <- (phat - null)/sd; z
-%pvalue <- 2*(1-pnorm(abs(z))); pvalue
-%\end{verbatim}
-%\color{black}
+\vfill
 
-\hspace{0.1in} \colorbox{yellow}{\textbf{k) } Using theoretical methods, calculate the 95$\%$ confidence interval. Interpret your results.}
+
+\hspace{0.1in} \textbf{k)}  Using theoretical methods, calculate the 95$\%$ confidence interval. Interpret your results.
+```{r}
+c(phat - qnorm(0.975) * sqrt(phat*(1-phat)/124), phat + qnorm(0.975) * sqrt(phat*(1-phat)/124))
+```
 
 \sol{Our confidence interval is $\hat{p} \pm$ M * SE = $0.645 \pm qnorm(1 - \frac{0.05}{2}) * \sqrt{\frac{0.645 * (1-0.645)}{124}} = (0.5609, 0.7294)$\\
 We are 95$\%$ confident that the true parameter lies between 0.5609 and 0.7294.}
+\vfill
 
 
-\vspace{0.25 in}
-
-\hspace{0.1in} \colorbox{yellow}{\textbf{l) } Does your confidence interval include 0.50? Does it include 0.60? Explain how your answers relate to the}\\ \colorbox{yellow}{strength of evidence tests conducted in 9 and 10 above.}
+\hspace{0.1in} \textbf{l)} Does your confidence interval include 0.50? Does it include 0.60? Explain how your answers relate to the strength of evidence tests conducted in *i* and *j* above.
 
 \sol{Our interval does not include 0.5 but it does include 0.6. This makes sense since, with a signifance level of 0.05, we already concluded in 9 that 0.50 is not feasible, but 0.60 is.}
+\vfill
 
-\vspace{0.25in}
 
 \hspace{0.1in} \textbf{m) } Now  suppose  we  were  to  use  a  significance  level  of  0.01  instead  of  0.05. How would you expect the interval of plausible values to change: wider, narrower, or no change? Explain your reasoning. 
 
@@ -317,23 +316,19 @@ We are 95$\%$ confident that the true parameter lies between 0.5609 and 0.7294.}
 
 \vspace{0.25in}
 
-\hspace{0.1in} \colorbox{yellow}{\textbf{n) } Calculate the corresponding 99$\%$ confidence interval. Did it behave as expected?}
+\hspace{0.1in} \textbf{n) } Calculate the corresponding 99$\%$ confidence interval. Did it behave as expected?
+
+```{r}
+c(phat - qnorm(0.995) * sqrt(phat*(1-phat)/124), phat + qnorm(0.995) * sqrt(phat*(1-phat)/124))
+```
 
 \sol{Our confidence interval is  $\hat{p} \; \pm$ M * SE = $0.645 \pm qnorm(1 - \frac{0.01}{2}) * \sqrt{\frac{0.645 * (1-0.645)}{124}} = (0.534, 0.756)$\\
 This is a wider interval than our 95$\%$ confidence interval above, as expected.}
 
-%\color{blue}
-%\begin{verbatim}
-%alpha <- 1-.99
-%M <- qnorm(1 - alpha/2)
-%se <- sqrt(phat * (1 - phat)/n)
-%c(phat - M * sd2, phat + M*se)
-%\end{verbatim}
-%\color{black}
 
 \vspace{0.25in}
 
-\hspace{0.1in} \colorbox{yellow}{\textbf{o) } Based on your 99$\%$ confidence interval, what can be said about the p-value for testing a } \\ \colorbox{yellow}{null hypothesis of 0.78?}
+\hspace{0.1in}  \textbf{o) } Based on your 99$\%$ confidence interval, what can be said about the p-value for testing a null hypothesis of 0.78?
 
 \sol{As it falls outside of our 99$\%$ confidence interval, we know that the p-value must be less than 0.01 for a two-sided test and a null hypothesis of $\pi = 0.78$.}
 
@@ -356,14 +351,16 @@ This is a wider interval than our 95$\%$ confidence interval above, as expected.
 ```{r}
 # 90%
 qnorm(0.95)
+qt(0.95, 19)
 # 95%
 qnorm(0.975)
+qt(0.975, 19)
 # 99%
 qnorm(0.995)
+qt(0.995, 19)
 ```
 
-
-\newpage 
+\sol{the numbers for the t distribution are larger than the normal distribtuion at the same quantile. } 
 
 
 
