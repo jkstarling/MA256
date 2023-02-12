@@ -157,12 +157,15 @@ null <- 57
 statistic <- xbar_F-xbar_M
 t <- (statistic-null)/sd
 c(statistic, t)
+<<<<<<< HEAD
 
 ## using built-in t-test
 Fioct <- ioct.data %>% filter(sex=="F") %>% select(IOCT_Time)
 Mioct <- ioct.data %>% filter(sex=="M") %>% select(IOCT_Time)
 
 t.test(Fioct, Mioct, mu = 57, var.equal = FALSE)
+=======
+>>>>>>> 4580825a8c19bd0d8128d141d719f34a277a65c4
 ```
 
 
