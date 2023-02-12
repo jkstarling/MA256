@@ -1,0 +1,208 @@
+---
+title: ''
+geometry: "left=2cm,right=2cm,top=1cm,bottom=2cm"
+output:
+  pdf_document:
+    extra_dependencies: ["xcolor", "amsmath","multicol"]
+  html_document: default
+editor_options:
+  markdown:
+    wrap: 100
+---
+
+```{r setup, message=FALSE, echo=TRUE, include=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+\newcommand{\sol}[1]{\color{blue}  #1 \color{black}}
+
+<!-- \renewcommand{\sol}[1]{} -->
+<!-- xcolor standard colors: 
+black, blue, brown, cyan, darkgray, green, lime, magenta, olive, orange, red, purple, teal, violet, yellow, etc.  -->
+
+
+# MA256 Lesson 11 - Two Groups, Two Means (6.1-6.3)
+
+## Review for Single Mean:
+
+### Hypotheses (in symbols):
+
+$H_0:$ \sol{$\mu = \mu_0$}
+
+$H_a:$ \sol{$\mu \ne \mu_0$}
+
+Strength of Evidence:  \sol{Calculate t statistic: $t=\frac{\bar x - \mu_0}{s/\sqrt{n}}$}
+
+\sol{reject $H_0$ for $t$ "more extreme" using the guidlines for appropriate significance level.}
+
+Confidence Interval: \sol{$\bar x \pm t^*_{(1-\alpha/2, n-1)} \times s /\sqrt{n}$}
+
+\sol{reject $H_0$ if $\mu_0$ is NOT in CI.}
+
+
+## Two means: 
+
+### Hypotheses (in symbols):
+
+$H_0:$ \sol{$\mu_1 - \mu_2 = 0 $}
+
+$H_a:$ \sol{$\mu_1 - \mu_2 \ne 0 $}
+
+Strength of Evidence:  \sol{Calculate t statistic: $t=\frac{\bar x_1 - \bar x_2}{\sqrt{\frac{s_1^2}{n_1}+\frac{s_2^2}{n_2}}}$}
+
+
+Confidence Interval:  \sol{$\bar x_1 - \bar x_2 \pm t^*_{(1-\alpha/2, n-1)}\sqrt{\frac{s_1^2}{n_1}+\frac{s_2^2}{n_2}}$} 
+
+
+## IOCT Tabbing
+
+How fair are the "tabbing" IOCT times? Currently to tab the IOCT a male must have a time faster than 2:38 (158 seconds) and a female must have a time faster than 3:35 (215 seconds). This is a difference of 57 seconds.  Is this a fair difference? How much do male and female's times differ on the IOCT? You think that the difference in average male and female times is not 57 seconds. The data we have is the IOCT times for all cadets who took MA206 in AY21-1 and have a valid IOCT time.
+
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+ioct.data <- read.csv("https://raw.githubusercontent.com/jkstarling/MA256/main/data/IOCT_tab_data.csv", 
+                      stringsAsFactors = TRUE)
+```
+
+
+1. Identify the explanatory and response variables recorded and classify them as either categorical or
+quantitative.
+
+\sol{IOCT Times: Quantitative Response Variable \\
+Sex: Categorical Explanatory Variable}
+
+2. In words, state the null and the alternative hypotheses to t est whether male or female's IOCT times differ from 57 seconds.
+
+\sol{Null Hypothesis: The difference in the long run average IOCT completion times for males and females is 57 sec.\\
+Alt Hypothesis: The difference in the long run average IOCT completion times for males and females is not 57 sec.}
+
+3. Define the parameters of interest and assign symbols.
+
+\sol{$\mu_F$: The long-run average IOCT Completion Times for Females\\
+$\mu_M$: The long-run average IOCT Completion Times for Males}
+
+
+4. State the null and the alternative hypotheses in symbols.
+
+\sol{$H_0: \mu_F - \mu_M = 57$ seconds \\
+$H_a: \mu_F - \mu_M \ne  57$ seconds}
+
+
+5. Calculate the five-number summary of IOCT time by group, calculate the IQR for each group, and create a graphical representation of the five-number summary in R Studio using example code from the course guide.
+
+```{r out.width = '40%', eval=TRUE}
+ioct.data %>%
+  group_by(sex) %>%
+  summarize(Minimum = min(IOCT_Time),
+            LowerQuartile = quantile(prob =.25, IOCT_Time),
+            Median = median(IOCT_Time),
+            UpperQuartile = quantile(prob=.75, IOCT_Time),
+            Maximum = max(IOCT_Time))
+
+288.5-223.8 #IQR-Females
+191-166 # IQR-Males
+
+ioct.data %>%
+  ggplot(aes(x = as.factor(sex), y = IOCT_Time)) + geom_boxplot()+
+  labs(x = "Biological Sex", y = "IOCT Time (Seconds)", 
+       title = "IOCT Time (Seconds) by Biological Sex") 
+```
+
+
+6. Do the validity conditions appear to be satisfied for these data? Justify your answer.
+
+```{r out.width = '40%', eval=TRUE}
+ioct.data %>%
+  ggplot(aes(x=IOCT_Time)) + 
+  geom_histogram() +
+  facet_grid(sex~.)
+
+#Male Histogram
+ioct.data %>%
+  filter(sex=="M")%>%
+  ggplot(aes(x=IOCT_Time))+geom_histogram()+
+  labs(title="Histogram of Male IOCT Completion Times")
+
+#Female Histogram
+ioct.data %>%
+  filter(sex=="F")%>%
+  ggplot(aes(x=IOCT_Time))+geom_histogram()+
+  labs(title="Histogram of Female IOCT Completion Times")
+```
+
+\sol{Yes. There are 104 females and 280 males (at least 20 observations each) in the sample and neither distribution for IOCT Times is strongly skewed.}
+
+
+
+7. Conduct the theory-based two-sample t-test:
+
+(a) What is the standardized statistic?
+```{r}
+ioct.data %>%
+  group_by(sex) %>%
+  summarize(avgtime=mean(IOCT_Time),
+            sdtime=sd(IOCT_Time),
+            size=n())
+
+# Calculate the Standardized Statistic
+xbar_M <- 182
+xbar_F <- 264
+s_M <- 25.8
+s_F <- 66.1
+n_M <- 280
+n_F <- 104
+sd <- sqrt(s_M^2/n_M+s_F^2/n_F)
+null <- 57
+statistic <- xbar_F-xbar_M
+t <- (statistic-null)/sd
+c(statistic, t)
+
+## using built-in t-test
+Fioct <- ioct.data %>% filter(sex=="F") %>% select(IOCT_Time)
+Mioct <- ioct.data %>% filter(sex=="M") %>% select(IOCT_Time)
+
+t.test(Fioct, Mioct, mu = 57, var.equal = FALSE)
+```
+
+
+(b) In light of your standardized statistic, should you expect the p-value to be large or small? How are you deciding?
+
+\sol{With a t statistic of 3.7523, I have very strong evidence against the null hypothesis so I would expect a very
+small p-value (< 0.01).}
+
+(c) What is your p-value? Provide the value (number) and an explanation in context of the problem. 
+```{r}
+pval <- 2*(1-pt(abs(t), (n_F+n_M) - 2))
+pval
+```
+
+\sol{The p-value of 0.0002024 is the probability of observing a long run differene in average IOCT times of 82 seconds assuming the null hypothesis is true.}
+
+
+(d) Based on the p-value, evaluate the strength of evidence provided by the data against the null hypothesis. Do you reject or fail to reject your null hypothesis.
+
+\sol{Although possible, it is very unlikely that the observed difference in average IOCT completion times for males and females occurred by random chance due to very strong evidence against the null hypothesis . I would reject the null in favor of there being a difference in average IOCT completion times for males and females that is not equal to 57 seconds.}
+
+
+8. Determine the 95\% confidence interval for the difference in means of male and female IOCT Times.
+
+(a) What is the 95\% confidence interval?
+
+```{r}
+multiplier <- qt(0.975, (n_F+n_M) - 2)
+sd <- sqrt(s_M^2 / n_M + s_F^2 / n_F)
+c(statistic - multiplier * sd, statistic + multiplier * sd)
+```
+
+
+
+(b) Does the 95\% confidence interval agree with your conclusion in #5?
+
+\sol{Yes. Since the null hypothesis value for the difference in average IOCT times of females and males (57 seconds) is not in my 95% confidence interval range of plausible values, 57 seconds is not plausible and I reject the Null hypothesis. Since my confidence interval shows the long run average female IOCT time is between 68.9 and 95.1 seconds larger than the average male IOCT time, I would revise my conclusion to reflect the appropriate direction rather than say "not equal to."}
+
+(c) Interpret the 95\% confidence interval. 
+
+\sol{We are 95\% confident that the true long run average male IOCT time is less than the true long run average female IOCT time by between 68.8 and 95.1 seconds. }
+
+
