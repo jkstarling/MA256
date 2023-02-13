@@ -157,15 +157,12 @@ null <- 57
 statistic <- xbar_F-xbar_M
 t <- (statistic-null)/sd
 c(statistic, t)
-<<<<<<< HEAD
 
 ## using built-in t-test
 Fioct <- ioct.data %>% filter(sex=="F") %>% select(IOCT_Time)
 Mioct <- ioct.data %>% filter(sex=="M") %>% select(IOCT_Time)
 
 t.test(Fioct, Mioct, mu = 57, var.equal = FALSE)
-=======
->>>>>>> 4580825a8c19bd0d8128d141d719f34a277a65c4
 ```
 
 
@@ -209,3 +206,31 @@ c(statistic - multiplier * sd, statistic + multiplier * sd)
 \sol{We are 95\% confident that the true long run average male IOCT time is less than the true long run average female IOCT time by between 68.8 and 95.1 seconds. }
 
 
+9. Operating under the null hypothesis mentioned in \# 3 above, create a simulation to simulate males and females taking the IOCT. Estimate the p-value. Use 1000 replications and plot your results. 
+
+```{r warning=FALSE, message=FALSE,  out.width = '40%', eval=TRUE}
+set.seed(256)
+
+M <- 1000
+xbar <- 82
+mu0 <- 57
+sexs <- ioct.data$sex
+iocts <- ioct.data$IOCT_Time
+
+RES <- data.frame(res = rep(NA, M))
+
+for(rep in 1:M){
+  sex.shuf <- sample(sexs)
+  m.mean <- mean(iocts[sex.shuf == "M"])
+  f.mean <- mean(iocts[sex.shuf == "F"])
+  RES$res[rep] <- f.mean - m.mean
+}
+
+RES %>% ggplot(aes(x=res)) + 
+  geom_histogram() + 
+  geom_vline(xintercept = 82-57, color="red") + 
+  geom_vline(xintercept = -(82-57), color="red")
+
+# estimate p-value
+sum(RES$res >= mu0) / M
+```

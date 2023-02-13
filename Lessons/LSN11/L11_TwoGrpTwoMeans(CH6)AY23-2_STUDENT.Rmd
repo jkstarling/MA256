@@ -182,3 +182,11 @@ quantitative.
 
 \vfill
 
+9. Operating under the null hypothesis mentioned in \# 3 above, create a simulation to simulate males and females taking the IOCT. Estimate the p-value. Use 1000 replications and plot your results. 
+
+```{r warning=FALSE, message=FALSE,  out.width = '40%', eval=TRUE}
+# set.seed(256)
+# 
+# M <- 1000
+# ...
+```
