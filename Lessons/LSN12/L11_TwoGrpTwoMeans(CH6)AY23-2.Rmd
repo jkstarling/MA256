@@ -146,10 +146,10 @@ ioct.data %>%
             size=n())
 
 # Calculate the Standardized Statistic
-xbar_M <- 181.8750	
-xbar_F <- 264.1346
-s_M <- 25.84629
-s_F <- 66.12272
+xbar_M <- 182
+xbar_F <- 264
+s_M <- 25.8
+s_F <- 66.1
 n_M <- 280
 n_F <- 104
 sd <- sqrt(s_M^2/n_M+s_F^2/n_F)
@@ -177,7 +177,7 @@ pval <- 2*(1-pt(abs(t), (n_F+n_M) - 2))
 pval
 ```
 
-\sol{The p-value of 0.000175 is the probability of observing a long run differene in average IOCT times of 82 seconds assuming the null hypothesis is true.}
+\sol{The p-value of 0.0002024 is the probability of observing a long run differene in average IOCT times of 82 seconds assuming the null hypothesis is true.}
 
 
 (d) Based on the p-value, evaluate the strength of evidence provided by the data against the null hypothesis. Do you reject or fail to reject your null hypothesis.
@@ -199,11 +199,11 @@ c(statistic - multiplier * sd, statistic + multiplier * sd)
 
 (b) Does the 95\% confidence interval agree with your conclusion in #5?
 
-\sol{Yes. Since the null hypothesis value for the difference in average IOCT times of females and males (57 seconds) is not in my 95\% confidence interval range of plausible values, 57 seconds is not plausible and I reject the Null hypothesis. Since my confidence interval shows the long run average female IOCT time is between 69.15 and 95.36 seconds larger than the average male IOCT time, I would revise my conclusion to reflect the appropriate direction rather than say "not equal to."}
+\sol{Yes. Since the null hypothesis value for the difference in average IOCT times of females and males (57 seconds) is not in my 95% confidence interval range of plausible values, 57 seconds is not plausible and I reject the Null hypothesis. Since my confidence interval shows the long run average female IOCT time is between 68.9 and 95.1 seconds larger than the average male IOCT time, I would revise my conclusion to reflect the appropriate direction rather than say "not equal to."}
 
 (c) Interpret the 95\% confidence interval. 
 
-\sol{We are 95\% confident that the true long run average male IOCT time is less than the true long run average female IOCT time by between 69.15 and 95.36 seconds. }
+\sol{We are 95\% confident that the true long run average male IOCT time is less than the true long run average female IOCT time by between 68.8 and 95.1 seconds. }
 
 
 9. Operating under the null hypothesis mentioned in \# 3 above, create a simulation to simulate males and females taking the IOCT. Estimate the p-value. Use 1000 replications and plot your results. 
