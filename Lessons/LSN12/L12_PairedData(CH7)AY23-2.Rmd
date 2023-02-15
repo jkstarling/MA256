@@ -144,12 +144,6 @@ ecoli.time %>%
     s = sd(Difference),
     n = n()
   )
-
-xbar <- -51.63
-n <- 14
-sd <- 58.77 / sqrt(n)
-null <- 0
-t <- (xbar-null) / sd
 ```
 
 \sol{See R output.}
@@ -158,6 +152,11 @@ t <- (xbar-null) / sd
 ### STEP 4: Draw inferences beyond the data.
 9. Carry out an appropriate test of significance to see whether, on average, there is a genuine difference between the first E. coli count and the second E. coli count. Report your p-value and a 95% confidence interval.
 ```{r}
+xbar <- -51.63
+n <- 14
+sd <- 58.77 / sqrt(n)
+null <- 0
+t <- (xbar-null) / sd
 pvalue <- 2*(1-pt(abs(t),n-1))
 pvalue 
 
@@ -252,7 +251,8 @@ Let’s look at one last research question. As a general rule, the flow rate of 
 \sol{Similarities: Both are looking at a quantitative response variable, and both are a test on a single mean.\\ Differences: The first question was a matched pairs analysis on two dependent measures; this is comparing the quantitative response to a parameter value that makes contextual sense.}
 
 19. Create a dotplot of the flow rates. Include average and standard deviation for the flow rate. What do you observe?
-```{r warning=FALSE, message=FALSE}
+
+```{r warning=FALSE, message=FALSE, out.width = '40%'}
 ecoli.flow <- read.csv("https://raw.githubusercontent.com/jkstarling/MA256/main/data/Ecoli_flow-1.csv")
 
 ecoli.flow %>% 

@@ -143,14 +143,7 @@ There are several research questions we will ask in this investigation. The firs
 #   summarise(
 #     mean = XXX,
 #     s = XXX,
-#     n = n()
-#   )
-# 
-# xbar <- XXX
-# n <- XXX
-# sd <- XXX
-# null <- 0
-# t <- (xbar-null) / sd
+#     n = n() )
 ```
 
 
@@ -158,6 +151,12 @@ There are several research questions we will ask in this investigation. The firs
 ### STEP 4: Draw inferences beyond the data.
 9. Carry out an appropriate test of significance to see whether, on average, there is a genuine difference between the first E. coli count and the second E. coli count. Report your p-value and a 95% confidence interval.
 ```{r}
+# xbar <- XXX
+# n <- XXX
+# sd <- XXX
+# null <- 0
+# t <- (xbar-null) / sd
+#
 # pvalue <- XXX
 # pvalue 
 # 
