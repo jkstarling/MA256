@@ -1,0 +1,293 @@
+---
+title: ''
+geometry: "left=2cm,right=2cm,top=1cm,bottom=2cm"
+output:
+  pdf_document:
+    extra_dependencies: ["xcolor", "amsmath","multicol"]
+  html_document: default
+editor_options:
+  markdown:
+    wrap: 100
+---
+
+```{r setup, message=FALSE, echo=TRUE, include=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+\newcommand{\sol}[1]{\color{violet} #1 \color{black}}
+
+<!-- \renewcommand{\sol}[1]{} -->
+<!-- xcolor standard colors: 
+black, blue, brown, cyan, darkgray, green, lime, magenta, olive, orange, red, purple, teal, violet, yellow, etc.  -->
+
+
+# MA256 Lesson 12 - Paired Data (7.1-7.3)
+
+
+## Review of methods so far...
+  <!-- &  &  &  & \\    -->
+  <!-- &  &  &  & \\  \hline -->
+  <!--   &  &  &  & \\    -->
+\begin{tabular}{r|p{3.0cm} | p{3.0cm} | p{3.0cm} | p{3.7cm}}
+ & 1-Categorical & 1-Quantitative & 2-Categorical & 1-Cat/1-Quant\\ \hline  
+parameter & \sol{$\pi$} & \sol{$\mu$} & \sol{$\pi_1 - \pi_2$} & \sol{$\mu_1 - \mu_2$} \\ \hline
+statistic & \sol{$\hat\pi$} & \sol{$\bar x$} & \sol{$\hat p_1 - \hat p_2$} & \sol{$\bar x_1 - \bar x_2$} \\ \hline
+test & \sol{one-prop z-test} & \sol{one sample t-test} & \sol{two-sample z-test} & \sol{two-sample t-test} \\  \hline
+sd & \sol{$\sqrt{\frac{\pi(-1\pi)}{n}}$} & \sol{$s/\sqrt{n}$} & 
+\sol{$\sqrt{\frac{\hat p_1 (1-\hat p_1)}{n_1} + {\frac{\hat p_2 (1-\hat p_2)}{n_2}}}$} &
+\sol{$\sqrt{\frac{s_1^2}{n_1}+\frac{s_2^2}{n_2}}$} \\  \hline
+stand. stat & \sol{$\frac{\hat p - \pi}{sd}$} & \sol{$\frac{\bar x - \mu_0}{sd}$} & \sol{$\frac{\hat p_1 - \hat p_2- \mu_0}{sd}$} & \sol{$\frac{\bar x_1 -\bar x_2 - \mu_0}{sd}$} \\  \hline
+valid. conds. & \sol{10 succ/10 fails} & \sol{Symmetric distr. OR $\ge20$ obs. and sample dist no strongly skewed} & \sol{10 obs in each box of a 2-way table} & \sol{$\ge 20$ obs. in each and not strongly skewed} \\  \hline
+CI & \sol{$\hat p \pm z^*_{(1-\alpha/2)} \cdot sd$} & \sol{$\bar x \pm t^*_{(1-\alpha/2, n-1)} \cdot sd$} & \sol{$\hat p_1 - \hat p_2 \pm z^*_{(1-\alpha/2)} \cdot sd$} & \sol{$\bar x_1 - \bar x_2 \pm t^*_{(1-\alpha/2, n-2)} \cdot sd$}  \\  \hline
+\end{tabular}
+
+
+Q1) Are the examples above (and the ones we have considered throughout the semester) representative of *independent groups designs* or *paired designs*? Why? 
+
+\sol{We have assumed independence between each observation with the studies we have looked at so far. There were no systematic connections relating individuals in one group to individuals in another group. }
+
+Q2) What is a *paired design*? What is the difference between a *paired design using matching* and a *paired design using repeated measures*? 
+
+\sol{A paired design has response values that come in pairs, with one response value in the pair for Group 1 and the other for Group 2. pd using matching - the pairs come from matching similar individuals to create groups of two. pd using repeated measures - the pairs come from measuring the same individual twice, once under each condition}
+
+Q3) What are a few benefits from using a *paired design*?
+
+\sol{Since we are accounting for variability in the observational/experimental unit, we can have more powerful tests and narrower confidence intervals. }
+
+
+Q4) Using the ACFT as an example, explain how you would set up 1) a *paired design using matching* and 2) a *paired design using repeated measures*. 
+
+\sol{PD-matching: Two people/items/etc. become independent study groups when they are paired due to having nearly identical characteristics. Example: use some method to identify pairs such as similar body types, GPA, other physical test (IOCT for example) and have one of them take the ACFT after a training regimen and the other take the ACFT with a different training regimen or no training regimen.\\
+PD-repeated measures: Each observational unit (person/item, etc.) participates is measured in both conditions. Example: Measure ACFT performance before a formal required ACFT training regimen and again afterwards for each individual/participant. }
+
+## Theory-based approach for paired samples
+
+Parameter/statistic: \sol{$\mu_d = \mu_1 - \mu_2$ and $\bar x_d$}
+
+$H_0:$ \sol{$\mu_d = \mu_0$, where  $\mu_0$ is a number (typically 0)}
+
+$H_a:$ \sol{$\mu_d \ne \mu_0$}
+
+Strength of Evidence:  \sol{Calculate t statistic: $t=\frac{\bar x_d - \mu_0}{s/\sqrt{n}}$} 
+\sol{reject $H_0$ for $t$ "more extreme" using the guidlines for appropriate significance level.}
+
+Confidence Interval: \sol{$\bar x_d \pm t^*_{(1-\alpha/2, n-1)} \times s /\sqrt{n}$}
+\sol{reject $H_0$ if $\mu_0$ is NOT in CI.}
+
+\newpage
+
+
+## Filtering Water in Cameroon
+
+Students and professors in the Nursing and Engineering Departments at Hope College went to the central African country of Cameroon to help improve drinking water quality and community health in rural communities by installing water filters in or near homes in one village. The families living in this village had no electricity, had no water distribution system, and got their water from streams. The filters they installed contained a diffuser plate, fine sand, coarse sand, and gravel. Using the new filters, family members were expected to gather their water and filter it before drinking, instead of drinking directly from the stream as was common practice.
+
+Students working on this project examined the quality of the filters by looking at many different variables, including general observations, filter observations, microbiology observations, household practice observations, user perceptions, and water source observations. It should be noted, when making inferences, the water filters in this dataset should be treated as a sample of all filters that could be constructed if this pilot project were expanded to other villages. Thus, inference is to an as-yet-unbuilt, larger population of filters.
+
+
+
+
+### STEP 1: Ask a research question.
+There are several research questions we will ask in this investigation. The first one is: On average, is there a significant difference in the E. coli counts between the water that has just been filtered and water that is sitting in the bottom of a filter after it was filtered the previous day? The dataset we will use contains results from 14 water filters each giving E. coli counts (per 100 mL) on the first day and the second day after the water was filtered.
+
+
+### STEP 2: Design a study and collect data.
+1. What are the observational units?
+
+\sol{The observational units are the filters.}
+
+2. What variables are measured/recorded on each observational unit?
+
+\sol{Escherichia coli count on just filtered water and E.coli count on water filtered the day before}
+
+3. Identify the role of these variables (explanatory, response). Classify the variables in this study as categorical or quantitative.
+
+\sol{These variables are quantitative, but we can also consider the difference in E. coli counts for each day as a quantitative response variable.}
+
+4. Are the samples of the first E. coli count independent or dependent of the samples of the second E. coli count? Explain. Based on your answer, is this an independent samples or paired design?
+
+\sol{The samples of the first E. coli count are dependent of the samples of the second E. coli count because they came from the same filter. If the filter is functioning well, we would expect both E.coli counts to be low. If the filter is not functioning well, we would expect both E. coli counts to be higher. So we will perform a matched pairs test for the mean difference.}
+
+5. Could the sample size of 14 be large enough to give a valid p-value from a theory-based test of significance?
+
+\sol{The validity conditions are questionable with a sample size of 14. It might be reasonable to use the theory-based t-test if the distribution of the differences is reasonably symmetric.}
+
+6. State the null and alternative hypotheses to be investigated with this study in symbols or in words.
+
+\sol{$H_0: \mu_d = 0$ and $H_a: \mu_d \ne 0$ where $\mu_d$ is the long-run average of the
+differences (Day 1 – Day 2) of E. coli counts.}
+
+### STEP 3: Explore the data.
+7. What are the average E. coli counts for each day? Did the E. coli in the sample increase or decrease on average from Day 1 to Day 2? Explain. Also give the standard deviations for the E. coli counts for each day.
+```{r warning=FALSE, message=FALSE}
+library(tidyverse)
+ecoli.time <- read.csv("https://raw.githubusercontent.com/jkstarling/MA256/main/data/Ecoli_time-1.csv")
+
+ecoli.time %>% 
+  summarise(
+    mean1=mean(Day_1),
+    sd1= sd(Day_1),
+    mean2=mean(Day_2),
+    sd2= sd(Day_2)
+  )
+```
+\sol{}
+
+
+8. What is the average of the difference (Day 1 – Day 2) in E. coli counts? Does the sign of this average correspond to your answer of increasing or decreasing between Day 1 and Day 2 in  \#7? Explain. Also give the standard deviation for the differences in E. coli counts.
+```{r}
+ecoli.time <- ecoli.time %>% 
+  mutate(Difference= Day_1 -Day_2)
+
+ecoli.time %>%
+  summarise(
+    mean = mean(Difference),
+    s = sd(Difference),
+    n = n()
+  )
+
+xbar <- -51.63
+n <- 14
+sd <- 58.77 / sqrt(n)
+null <- 0
+t <- (xbar-null) / sd
+```
+
+\sol{See R output.}
+
+
+### STEP 4: Draw inferences beyond the data.
+9. Carry out an appropriate test of significance to see whether, on average, there is a genuine difference between the first E. coli count and the second E. coli count. Report your p-value and a 95% confidence interval.
+```{r}
+pvalue <- 2*(1-pt(abs(t),n-1))
+pvalue 
+
+multiplier <- qt(.975, n-1)
+se <- sd
+CI <- c(xbar - multiplier * se, xbar + multiplier * se)
+CI
+```
+
+\sol{See R output.}
+
+
+### STEP 5: Formulate conclusions.
+10. Based on your p-value and confidence interval, what conclusions can you draw from this test?
+
+\sol{There is strong evidence against the null and in support of the alternative that there is a genuine difference between the mean E.coli on Day 1 and Day 2. On average there is between 17.697/100 mL and 85.563/100 mL more E. coli on Day 2 than on Day 1.}
+
+
+11. Can generalizations be made to a larger population? Is there a cause-effect relationship between the variables?
+
+\sol{We can generalize to filters yet to be made as this is being treated as pilot data. We cannot draw a cause-and-effect conclusion as this was an observational study and there are many possible confounding variables.}
+
+### STEP 6: Look back and ahead.
+12. Discuss the study design. Why does pairing make sense here? What would you do differently to improve upon this study? What further research would you propose based on your findings from this study?
+
+\sol{Researchers were wondering whether there was a difference in E. coli counts from just filtered water compared to water filtered the day before. Data were gathered on 14 filters in a village in Cameroon. The average E. coli count of just filtered water was 43.48/100 mL of water and 94.79/100 mL of water for the water filtered the day before. A matched pairs test was run on the data and resulted in a p-value of 0, which offered very strong evidence against the null and in support of the alternative that there is a difference in the average E. coli counts between Day 1 and Day 2 of filtered water. We can generalize these results to the population of filters yet to be built but are not able to draw any causal inference as this was an observational study, not a randomized experiment. Further research could be done on newer filters, also looking at more than 1-day-old water.}
+
+
+## PART II
+
+As mentioned earlier, sand is used in the filter. Different filters had different amounts of sand. The students split the filters into two groups: those that had more than 2 inches of sand and those that had less. We will explore whether this difference results in different E. coli counts when filtering the water. In this sample, we have results from 19 filters, 14 with more than 2 inches of sand and 5 with less than 2 inches of sand.
+
+
+13. Identify the explanatory and response variables in this study. Classify the variables in this study as categorical or quantitative.
+
+\sol{Explanatory variable is amount of sand and response is E. coli counts. Amount of sand is categorical (>2 inches or <2 inches) and E. coli counts is a quantitative variable.}
+
+14. What are the average E. coli counts for each sand level? Are the counts higher or lower with the higher level of sand in the filter? Also give the standard deviations for the E. coli counts for each sand level.
+```{r warning=FALSE, message=FALSE}
+ecoli.sand <- read.csv("https://raw.githubusercontent.com/jkstarling/MA256/main/data/Ecoli_sand-1.csv")
+
+ecoli.sand %>% 
+  group_by(sand_level) %>% 
+  summarise(
+    mean_sand=mean(day_1),
+    sd_sand= sd(day_1),
+    n=n())
+
+```
+
+\sol{See R output above. }
+
+15. Are the samples of the first E. coli count independent or dependent of the samples of the second E. coli count? Explain.
+
+\sol{Independent. The filters that have >2 inches of sand are different filters than those with <2 inches of sand. Independent two-sample test for means.}
+
+16. Is the sample large enough to use a theory-based test?
+
+\sol{No, the sample size is not large enough to conduct a theory-based test.}
+
+17. (Assume you can conduct a theory-based test and...) Carry out an appropriate test of significance to see whether on average there is a difference in the E. coli counts between filters with more than 2 inches of sand and those with less. Report your p-value, a 95% confidence interval, and your conclusion.
+```{r}
+xbar_above <- 38.83571
+xbar_below <- 80.600
+s_above <- 70.006
+s_below <- 96.83388
+n_above <- 14
+n_below <- 5
+sd <- sqrt(s_above^2/n_above + s_below^2/n_below)
+null <- 0
+statistic <- xbar_above - xbar_below
+t <- (statistic-null)/sd
+
+n <- n_above+n_below
+pvaluesand <- 2*(1-pt(abs(t), n-2)); pvaluesand
+multiplier <- qt(.975,n-2)
+se <- sd
+CIsand <- c(statistic - multiplier * se, statistic + multiplier * se)
+c(t, pvaluesand, CIsand)
+```
+
+\sol{We have weak evidence against the null and so conclude it is plausible that the average E. coli counts are the same for filters with >2 inches of sand and filters with <2 inches of sand.}
+
+
+## PART III
+
+Let’s look at one last research question. As a general rule, the flow rate of a water filter in good working condition should be around 1,000 mL/min. Let’s test to see whether these water filters had an average flow rate that is significantly different than 1,000 mL/min.
+
+
+18. List some similarities and differences between this research question and our first research question looking at the average difference in first and second E. coli counts.
+
+\sol{Similarities: Both are looking at a quantitative response variable, and both are a test on a single mean.\\ Differences: The first question was a matched pairs analysis on two dependent measures; this is comparing the quantitative response to a parameter value that makes contextual sense.}
+
+19. Create a dotplot of the flow rates. Include average and standard deviation for the flow rate. What do you observe?
+```{r warning=FALSE, message=FALSE}
+ecoli.flow <- read.csv("https://raw.githubusercontent.com/jkstarling/MA256/main/data/Ecoli_flow-1.csv")
+
+ecoli.flow %>% 
+  ggplot(aes(x=Flow_ratio))+geom_dotplot()
+
+ecoli.flow %>%
+  summarise(
+    meanflow = mean(Flow_ratio),
+    sflow = sd(Flow_ratio),
+    nflow = n()
+  )
+```
+\sol{Dotplot of the flow rates shows two clumps of data.}
+
+20. Carry out an appropriate test of significance to see whether the Cameroon water filters (population) tend to flow at a rate different than 1,000 mL/min, or is an average of 1,000 mL/min plausible? State your hypotheses, 95% confidence interval, p-value, and conclusions.
+```{r}
+xbar <- 913.6     
+s <- 582.9         # sample standard deviation
+n <- 23          # sample size
+sd <- s/sqrt(n)  # standard deviation of the null distribution
+null <- 1000       
+t <- (xbar-null)/sd
+pvalue_flow <- 2*(1-pt(abs(t), n-1))
+
+multiplier <- qt(.975, n-1) # 95% CI
+se <- sd
+CI <- c(xbar-multiplier*se, xbar+multiplier*se)
+c(t, pvalue_flow, CI)
+```
+
+\sol{We have weak evidence against the null and so it is plausible that on average the filters are flowing at 1000}
+
+21. You should have found that 1,000 mL/min is a plausible value for average flow rate for the population of all similar water filters. Does this mean that all the filters have flow rates of about 1,000 mL/min? Is testing a single mean here really telling us what we need to know about these filters? Why or why not?
+
+\sol{Recalling what the dotplot looked like when we explored our data, it appears that roughly half of the filters are filtering too quickly and the other half are filtering too slowly. This does make the average where we want it, but none of the filters individually are doing a good job of filtering, at least from a flow standpoint. Exploring the data is a very important part of the six-step method.}
+
+
+
