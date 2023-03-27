@@ -25,316 +25,247 @@ black, blue, brown, cyan, darkgray, green, lime, magenta, olive, orange, red, pu
 ```{r include=FALSE, message=FALSE}
 library(tidyverse)
 library(lubridate)
+library(table1)
 
-houses <- read_csv("https://raw.githubusercontent.com/jkstarling/MA256/main/data/Houses.csv")
+### DO NOT RUN THIS UNLESS YOU WANT TO EXPLORE ALL NFL DATA
+#loading play by play for the 2021 season
+# library(nflfastR)
+# data <- load_pbp(2021)
+# field_goal <- data %>% filter(is.na(field_goal_result)!=T)
 
+# setwd("C:/Users/....navigatetoyourfolder...")
+# field_goal <- read.csv("fg_2021.csv", header = TRUE, stringsAsFactors = FALSE)
+
+field_goal <- read_csv("https://raw.githubusercontent.com/jkstarling/MA256/main/data/fg_2021.csv")
 ```
 
 
-# MA256 Lesson 18 \& 19 - Multiple Variables and Interactions (Causality and Multiple Regression Supplement Ch3 \& 4)
+# MA256 Lesson 20 Logistic Regression
 
-Many people say that you can predict the cost of a home (in thousands of USD) based on its size (square footage) because bigger homes cost more to build, so I’d like for you to verify this claim using a random sample of homes around Lake Michigan (Houses.csv). 
-
-## A1.)	Identify and classify the variables of interest.
-
-Explanatory: \sol{Home size (in square feet) - Quantitative}
-
-Response:  \sol{Price (in thousands of USD) - Quantitative}
-
-## A2.)	Define the coefficient symbols and interpret what they represent (in context) given the simple linear regression equation in the form of $y = \beta_0 + \beta_1*sqft$.
-
-$\beta_0$ \sol{(Intercept Coefficient): the average price of a 0 sqft home (vacant lot). }
-
-$\beta_1$ \sol{(Slope Coefficient): the population slope is the predicted increase in average price (in thousands of USD) for every one-square-foot increase in home size.}
-
-## A3.)	Express the null and alternate hypotheses in words & symbols.
-
-$H_0:$ \sol{$\beta_1 = 0$. There is no association between the size of a home and its price.}
-
-$H_a:$ \sol{$\beta_1 > 0$. There is a positive association between the size of a home and its price.} 
+#### Background
+The 2021 NFL Season had seen some historically bad weeks for the field goal kickers. In this lesson we will look at the relationship between kick distance and and field goal result, and the relationship between field surface and field goal result as part of the model building process.
 
 
+(1) Explore the variables `field_goal_result` and `surface` using the `table()` command. What do you notice? Can we simplify the data?
 
-## A4.)	Create a scatterplot of Home Size vs Price, and add a layer (`geom_smooth`) to include the best-fitting least squares regression line. Describe what you see. 
-
-```{r out.width="40%"}
-houses %>% ggplot(aes(x = sqft, y = `price in thousands`)) + 
-  geom_point() +
-  geom_smooth(method = "lm") + 
-  labs(x="Home Size in Square Feet", y = "Home Price in Thousands",
-       title = "Home Price vs. Square Feet")
-```
-
-
-
-
-## A5.)	Use the Course Guide example R Code for Lesson 18-19 to find estimates of the fitted model and then write the complete equation for `house.lm` given the form of $y = \beta_0 + \beta_1 * sqft$. Are the 4x validity conditions met for us to use the theory-based approach to assess strength of evidence? Use headers to explicitly state each of them, and then clarify if they are met.
-
-```{r out.width="40%"}
-house.lm <- houses %>% lm(`price in thousands` ~ sqft, data = .)
-summary(house.lm)
-
-house.lm %>%
-  fortify(house.lm$model) %>%  # fortify converts a model to a dataframe
-  ggplot(aes(x = .fitted, 
-             y = .resid)) +
-  geom_point() +
-  geom_hline(yintercept = 0) +
-  labs( x = "Predicted Values", 
-        y = "Residuals", 
-        title = "Residuals vs. Predicted Values")
-
-house.lm %>%
-  fortify(house.lm$model) %>%
-  ggplot(aes(x = .resid)) +
-  geom_histogram() +
-  labs(x = "Residuals", y = "Count",
-       title = "Histogram of Residuals")
-```
-
-\sol{Price= -59.36870 + 0.21274*sqft}
-
-Linearity: \sol{The data seems to generally follow a linear trend.} 
-
-Independence (New): \sol{It makes sense the home prices are independent from one another e.g. if my neighbor’s house has ugly paint inside that won’t influence my house price – or – if my neighbor’s house only has 2 bathrooms but mine has 4 that won’t effect my home price. }
-
-Normality: \sol{Equal number of observations above (6) and below (7) the line. }
-
-Equal Variance: \sol{There is an approximately equal variance throughout the entire domain, given flexibility due to small sample size. }
-
-
-
-## A6.)	Interpret your slope and intercept coefficients:
-
-Slope Coefficient: \sol{The increase in average price (in thousands of USD) for every 1 sqft increase in home size is 0.21274. }
-
-Alternative Interpretation: \sol{The increase in average price for every 1 square foot increase in home size is \$212.74 (0.21274 * 1,000 since price is in thousands).}
-
-
-Intercept Coefficient: \sol{The average price (in thousands of USD) of a 0 square foot home is 
--59.36870. }
-
-Alternative Interpretation: \sol{The average price of a 0 square foot home is -\$59,368.70 
-(-59.36870 * 1,000 since price is in thousands).}
-
-
-## A7.)	Would you be comfortable using your model to predict the price of a 0 sqft home (vacant lot)? Why or why not? 
-
-\sol{Since positive numbers indicate money flowing from a buyer to a seller to purchase their property, and since the intercept coefficient is negative, it doesn’t make sense that someone would pay me \$59,368.70 to “purchase” a vacant lot i.e. 0 square foot home. I am not comfortable using my model in this way. WE MUST ALWAYS USE CAUTION WHEN EXTRAPOLATING WITH OUR MODEL. }
-
-
-### A7-Bonus) If we want to predict prices for vacant lots, what should we use to create a model?
-
-\sol{If we wanted to predict the prices of vacant lots, perhaps we should only use vacant lots to create a new least squares regression model. }
-
-
-## A8.)	Calculate the 95\% confidence interval for the slope statistic and provide an interpretation of the CI.
 
 ```{r}
-
-sqft.coef <- summary(house.lm)$coefficients['sqft','Estimate']
-sqft.se <- summary(house.lm)$coefficients['sqft','Std. Error']
-multiplier <- qt(0.975, df = 11)
-c(sqft.coef - multiplier*sqft.se, sqft.coef + multiplier*sqft.se)
+table(field_goal$field_goal_result)
+table(field_goal$surface)
 ```
 
-\sol{The 95\% CI = Statistic ± mult*SD. Since the slope coefficient (statistic) is 0.21274, since its Standard Error (SE) is 0.06963, and the multiplier is approx 2.2, the 95\% CI can be calculated as follows:\\
-Lower Bound: 0.21274 – (2.2*0.06963) = 0.0595\\
-Upper Bound: 0.21274 + (2.2*0.06963) = 0.3660\\
-95\% CI: (0.0595, 0.3660)\\
-I am 95\% confident that a 1 sqft increase in home size is associated with an average increase of 0.0595 thousands of USD to 0.3660 thousands of USD in home price for homes around Lake Michigan.}
+\sol{We notice that there are multiples types of turf and that there are 14 blocked field goals (which are also missed field goals)}
 
-## A9.)	Briefly explain why location i.e. lakefront (=1) or non-lakefront (=0), may be another explanatory variable. 
-
-\sol{Lake houses are traditionally more expensive than non-lakefront houses. Lake impacts the response variables.}
-
-
-## A10.)	 Does lakefront effect price and sqft? Create a new scatterplot that is colored based on lakefront status. 
-```{r out.width="40%"}
-houses %>% ggplot(aes(x = sqft, y = `price in thousands`, color = as.factor(lake))) +
-  geom_point()
-```
-
-
-\sol{Based on the scatterplot results, it seems like even the smallest lakefront homes are more expensive than the largest non-lakefront homes that are twice the size (in sqft). }
-
-
-## A11.) We can adjust for the additional explanatory variable by including it in a multiple regression model. In this model, we estimate the price per square foot when we hold the location of the house constant.
-
-$price_i = \beta_0 + \beta_1*sqft_i + \beta_2*lake_i$
-
-where $price_i$ is the price of house $i$, $sqft_i$ is the size (sq ft) of house $i$, and $lake_i$ is 1 if house $i$ is lakefront and 0 if not lakefront. It may help to think of “$i$" as a counter from house #1 to #13
-
-Create a new model with lake as an additional variable to create a scatter plot to view the new model. 
-
-```{r out.width="40%"}
-house.lake.lm <- houses %>% lm(`price in thousands` ~ sqft + lake, data = .)
-  
-houses <- houses %>% mutate(price.predict = predict(house.lake.lm, newdata = .),
-        	 residuals = `price in thousands` - price.predict)
-
-houses %>% ggplot(aes(x = sqft, y = `price in thousands`, color = as.factor(lake))) +
-  geom_line(aes(x=sqft, y=house.lake.lm$fitted.values)) +
-  geom_point(aes(y = `price in thousands`)) +
-  labs(x="Home Size in Square Feet", y="Home Price in Thousands of USD", 
-       		color="Lakefront Status", 
-       		title="Home Price in Thousands of USD vs Size in Square Feet")
-
-```
-
-
-
-## A12.)	Based on the slopes of the two lines, what assumption does this model make about the price per square foot? 
-
-\sol{The slope for both the lakefront and non-lakefront homes is the same i.e. the price per square foot is the same regardless of whether a home is on the lake (no “interaction”). }
-
-
-
-
-## A13.)	How do we interpret $\beta_0,  \beta_1, \beta_2$ given the regression line equation in the form of $price_i = \beta_0 + \beta_1*sqft_i + \beta_2*lake_i$?
-
-$\beta_0$: \sol{The price of a 0 square foot home (vacant lot) that is not on the lake.}
-
-$\beta_1$: \sol{The change in average price of a home for every 1 square foot change in home size after adjusting for location (lakefront or not lakefront). }
-
-$\beta_2$: \sol{The increase in average price because a home is lakefront after adjusting for size.}
-	
-	
-## A14.)	 What is our new regression model with lakefront status as an additional variable in the form of $price_i = \beta_0 + \beta_1*sqft_i + \beta_2*lake_i$? 
+(2) Using what you found in the last question, use the `case_when()` function to change *blocked* field goals to *missed* and change various types of turf to say *turf*. Hint: mimic the example for the surface below. 
 
 ```{r}
-summary(house.lake.lm)
-```
+#changing the variations of turf to just turf
+fg <- field_goal %>% 
+  mutate(surface = case_when(surface=="astroturf"~"turf",
+                             surface=="fieldturf"~"turf", 
+                             surface=="matrixturf"~"turf",
+                             surface=="sportturf"~"turf",
+                             TRUE~surface)) %>% 
+  mutate(surface = as.factor(surface))
 
-\sol{$Price_i = -70.1821 + 0.1481*sqft_i + 331.2235*lake_i$}
+# Selecting only field goals and changing blocked field goals to be missed.  
+fg <- fg %>% 
+  mutate(field_goal_result = case_when(field_goal_result=="blocked"~"missed", 
+                                       TRUE~field_goal_result)) %>% 
+  mutate(field_goal_result = fct_rev(as.factor(field_goal_result)))
 
-
-## A15.)	Calculate Prices of 2500 sqft houses on the lake and not on the lake. 
-```{r}
-predict(house.lake.lm, data.frame(sqft = 2500, lake = 1))
-predict(house.lake.lm, data.frame(sqft = 2500, lake = 0))
-```
-
-
-\sol{2500 sqft Lakefront: -70.1821 + 0.1481*(2500) + 331.2235*(1) = \$631,260.40}
-
-\sol{2500 sqft Non Lakefront: -70.1821 + 0.1481*(2500) + 331.2235*(0) = \$300,036.90}
-
-
-
-## A16.)	 How did the price per square foot (slope) change compared to when we held location constant?
-
-
-\sol{The price per square foot decreased from \$212.74 (0.21274) to \$148.10 (0.1481) because the majority of the price difference was due to the lakefront premium. }
-
-
-## A17.)	 Which model predicts home price more accurately?
-
-\sol{The first model had a coefficient of determination (R Squared) of 0.4591 so it accounted for 45.91\% of the variance in Price due to size. The second model has an R Squared of 0.9255 so it accounted for 92.55\% in home price due to size and location.}
-
-
-## A18.) Use the Course Guide example R Code for Lesson 18-19 as a template to plot the residuals vs predicted values to determine whether there is evidence of an interaction?  
-
-
-```{r out.width="40%"}
-house.lake.lm %>%
-  fortify(house.lake.lm$model) %>%  # fortify converts a model to a dataframe
-  ggplot(aes(x = .fitted, 
-             y = .resid,
-             color = as.factor(lake))) +
-  geom_point() +
-  geom_hline(yintercept = 0) +
-  labs( x = "Predicted Values", 
-        y = "Residuals", 
-        title = "Residuals vs. Predicted Values")
 
 ```
 
-\sol{ For non-lakefront homes, the trend in the residuals (Predicted – Actual) shows that the slope of the least-squares regression line overestimates home prices initially (lower sqft homes), and then underestimates them for larger sqft homes. \\
-     For lakefront homes, the trend in residuals underestimates home prices initially (lower sqft homes), and overestimates prices for larger sqft homes.\\
-     Therefore, adding an interaction term will allow the slopes to be individually tailored to each set of data rather than assuming the price per square foot would be the same regardless of location. This is further validated by looking at this following diagram, and recognizing that the best fit line for blue dots by themselves would have a more positive slope, while the best fit line for red dots would be less positive.}
+
+(3) Create a contingency table using the `table1()` command (or the `table()` command).
 
 
-## A19.)	 Create and provide the new model that includes an interaction between lake and sqft and takes the form $price_i = \beta_0 + \beta_1*sqft_i + \beta_2*lake_i + \beta_3*sqft_i*lake_i$? 
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+# Contingency table
+table1(~field_goal_result|surface, data = fg)
+# table(fg$field_goal_result, fg$surface)
+```
+
+
+(4) Calculate the odds ratio comparing field goals attempted on turf and field goals attempted on grass?   
+How do we interpret the odds ratio? 
 
 ```{r}
-house.int.lm <- houses %>% lm(`price in thousands` ~ sqft * lake, data = .)
-summary(house.int.lm)
+odds_turf <- 381/58
+odds_grass <- 537/100
+OR <- odds_turf/odds_grass
+OR
+(OR - 1) * 100
 ```
 
-\sol{$Price_i = 58.11341 + 0.08394*sqft_i + 28.65098*lake_i + 0.13595* sqft_i*lake_i$.}
+
+\sol{The odds of field goals attempted on turf being made are 1.22 times larger than the odds of field goals attempted on grass being made OR field goals attempted on turf are 22\% more likely to be made compared to field goals attempted on grass}
 
 
-## A20.)	 Which of the 3 models had the highest accuracy? 
+(5) What if I wanted the odds ratio between field goals attempted on grass and field goals attempted on turf, how do I calculate and interpret it? 
 
-\sol{The interaction model had an R-Squared (Coefficient of Determination) value of 0.9684 so it accounts for 96.84\% of the variance in home price that is attributed to sqft and location. }
-
-
-## A21.) Create a scatterplot that shows the predicted linear models for those houses on a lake and those away from it using the interaction model. 
-
-```{r out.width="40%"}
-houses%>%
- ggplot(aes(x=sqft,y=`price in thousands`, color=as.factor(lake)))+
- geom_point()+
- geom_smooth(method = "lm")+
- labs(x="Home Size in Square Feet", y="Home Price in Thousands of USD", 
- 	title="Home Price in Thousands of USD vs Size in Square Feet")
-
+```{r}
+1/OR
+(1/OR - 1) * 100
 ```
 
-## A22.) How do we interpret the two slope coefficients associated with the size of a home i.e. sqft and sqft*lake given the least squared regression equation of: 
-$price_i = 58.11341 + 0.08394*sqft_i + 28.65098*lake_i + 0.13595* sqft_i*lake_i$.
-
-\sol{The price per square foot for non-lakefront homes is simply 0.08394*sqft = \$83.94 per sqft because lake = 0 which eliminates the second sqft term. However, when lake=1 (lakefront homes), the price per square foot becomes (0.08394 + 0.13595)*sqft = 0.21989*sqft = \$219.89 per sqft. }
+\sol{Field goals attempted on grass are 18\% less likely to be made compared to field goals attempted on turf. }
 
 
-## A23.)	 Is there evidence that the price per square foot is different for lakefront and nonlakefront homes? How do you know?
+### Logistic Regression Model
+To be able to adjust for the field surface we need some type of model. Because we have a binary response we will use the logistic regression model. The logistic regression model is a linear equation that takes the form:
+$$\small  logit(\pi_i) = ln\left(\dfrac{\pi_i}{1-\pi_i}\right) = \beta_0 + \beta_1 x_i $$
+where log odds are linearly related to $\small x$ (if we graph $\small \pi$ and $\small x$ they are related in the S-shaped curve.) 
 
-\sol{Yes. The p-value associated with the interaction term is 0.00682, which is statistically significant because it provides very strong evidence against the null hypothesis of no interaction term, as long as the validity conditions are met for this model.}
+I am assuming that you are familiar with logs with base $e$, where $e$ represents Euler's constant of approx 2.718. R uses base log base $e$ by default when you use the *log* function.
+
+The model estimate is: 
+
+$$\small  \text{Predicted log odds} = logit(\hat{p}_i) = ln\left(\dfrac{\hat{p}_i}{1-\hat{p}_i}\right) = b_0 + b_1 x_i$$
+
+(6) With this model we can estimate the probability of success $\small\pi$ (estimated proportion of success). Show how you can do this. 
+
+\sol{$$\small  exp\left[ln\left(\dfrac{\hat{p}_i}{1-\hat{p}_i}\right)\right]  = exp \left[b_0 + b_1 x_i\right] $$}
+\sol{$$\small \dfrac{\hat{p}_i}{1-\hat{p}_i} = exp\left[b_0 + b_1 x_i\right]$$}
+\sol{$$\small \hat{p}_i = \dfrac{exp\left[b_0 + b_1 x_i \right]}{1+ exp\left[b_0 + b_1 x_i \right]} = \frac{odds}{1+odds}$$}
 
 
-## A24.)	 The main effect of location (by itself) is not significant in the model with an interaction. Should we conclude that the location of the house is not associated with price? Justify your answer. 
-
-\sol{No. Location is significant in that it modifies the effect of size through the interaction.}
+(7) We conduct inference on our coefficients as usual. What are the null and alternative hypotheses? How will we know if the coefficient is statistically significant?
 
 
+\sol{Null: There is no linear relationship between the log odds and the explanatory variable}
 
-## A25.)	 Use the Course Guide example R Code for Lesson 18-19 as a template to assess whether the model that includes lakefront status meets the four validity conditions (LINE):
+\sol{Alternative: There is a linear relationship between the log odds and the explanatory variable}
 
-```{r out.width="40%"}
-house.int.lm %>%
-  fortify(house.int.lm$model) %>%  # fortify converts a model to a dataframe
-  ggplot(aes(x = .fitted, 
-             y = .resid,
-             color = as.factor(lake))) +
-  geom_point() +
-  geom_hline(yintercept = 0) +
-  labs( x = "Predicted Values", 
-        y = "Residuals", 
-        title = "Residuals vs. Predicted Values")
+\sol{$$\small H_0: \beta_1 = 0 \text{ vs } H_A: \beta_1 \neq 0$$}
 
-house.int.lm %>%
-  fortify(house.int.lm$model) %>%
-  ggplot(aes(x = .resid)) +
-  geom_histogram() +
-  labs(x = "Residuals", y = "Count",
-       title = "Histogram of Residuals")
+\sol{Confidence interval containing the null value (0) indicates that the estimate is not statistically significant. }
+
+
+<!-- (7) How do we get the odds ratios given the log odds?  -->
+
+<!-- \sol{We exponentiate to get the odds ratio} -->
+
+
+<!-- (8) Our hypotheses are: $$\small H_0: OR = 1 \text{ vs } H_A: OR \neq 1$$ -->
+<!-- - Confidence interval containing the null value indicates that the estimate is not statistically significant. So if we are dealing with OR, when do we have a statistically significant result?   -->
+
+<!-- \sol{When 1 is NOT in the CI.} -->
+
+
+### Categorical Explanatory Variable
+(8) Fit the model with the binary explanatory variable that indicates whether or not the the field goal was attempted on turf or grass.  
+Calculate the confidence interval of the model's coefficients using the `confint()` function. 
+(Check the levels of the **surface** variable with the function `contrasts()`)
+
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+contrasts(fg$surface)
+surface.glm <- fg %>% glm(field_goal_result ~ surface, data=., family='binomial')
+summary(surface.glm)
+coef(surface.glm)                # Predicted log odds of making the field goal
+confint(surface.glm)
 ```
 
-\sol{Line \& Equal Variance assessed in one step by comparing predicted values \& residuals: }
-\sol{There are no trends in the residuals vs predicted values data so we meet the linear validity condition criteria. Also, the variance appears to be approximately even above and below the line for the entire domain, so we meet that validity condition also.  }
- 
-\sol{Independence assessed via context of the problem: \\
-We use context of the problem to identify if random sampling or random assignment occurred. When there is no “random” anything, with some critical thinking, it will become apparent whether the observations are independent from one another. }
 
-\sol{Normality assessed via histogram of residuals:
-The data appears to be centered just below data with wide tails on both sides of the center, which means it is approximately normal since there are no significant outliers strongly skewing the histogram. }
+(9) How do we interpret the coefficients directly from the model? What conclusions can we draw based on the confidence interval?
 
+\sol{The intercept of 1.6808 is the predicted log odds for field goal attempted on grass}
 
+\sol{The $\hat{\beta_1}$ coefficient is the change in log odds going from **kicking on grass** to **kicking on turf**.}
+
+\sol{The confidence interval for $\hat{\beta_1}$ contains 0 indicating that there is not a statistically significant relationship between surface type and log odds.} 
 
 
+(10) Typically these interpretations don't make much sense to the consumer. How do we write them and interpret them in terms of odds ratio? What conclusions can we draw based on the confidence interval? (Hint: Check out p. 28 in the handout)
 
 
+```{r}
+exp(coef(surface.glm))           
+exp(confint(surface.glm))
+```
+
+\sol{The odds of making a field goal on grass is 5.37:1 or in other words we would expect to make 5.37 field goals for every miss.}
+
+\sol{The odds of making a field goal on grass is (5.370+1.223):1 = 6.593:1 or we can say that we would expect to make 6.593 field goals for every miss.}
+
+\sol{We are 95\% confident that field goals kicked on turf have a 0.86 times smaller odds to 1.74 times larger odds of being made than field goals kicked on grass. This CI contains 1 indicating that there is not a significant difference in the odds of making a kick on turf vs grass}
+
+
+(11) What is the predicted probability of field goal attempted on grass? On turf? BONUS: What do you notice about the OR between the two odds?
+
+
+```{r}
+#On Grass
+#log odds = 1.6808
+odds_grass <- exp(1.6808)
+prob_grass <- odds_grass/(1+odds_grass)
+#On Turf
+#log odds = 1.6808+0.2015 = 1.8823
+odds_turf <- exp(1.8823)
+prob_turf <- odds_turf/(1+odds_turf)
+
+c(prob_grass, prob_turf)
+odds_turf/odds_grass
+```
+
+\sol{Our predicted success probability of a field goal attempted on grass is 0.8430}
+
+\sol{Our predicted success probability of a field goal attempted on turf is 0.8679}
+
+
+### Quantitative Explanatory Variable
+(12) Fit the model with the quantitative explanatory variable that captures kick distance. Calculate the 95\% CI for the coefficient estimates. 
+
+
+```{r echo=TRUE, out.width="10%", message=FALSE, warning=FALSE}
+distance.glm <- glm(field_goal_result ~  kick_distance, data=fg, family='binomial')
+# summary(distance.glm)
+coef(distance.glm)                # Predicted log odds of survival
+confint(distance.glm) 
+```
+
+
+(14) How do we interpret the coefficients directly from the model? What conclusions can we draw based on the confidence interval?
+
+
+\sol{The intercept of 6.55 is the predicted log odds for field goal attempted with a distance of 0 yards}
+
+\sol{The $\hat{\beta_1}$ coefficient of -0.11 is the change in log odds for an increase in 1 yard of kick distance.}
+
+\sol{The confidence interval for $\hat{\beta_1}$ does not contain 0 indicating that there is a statistically significant relationship between kick distance and log odds.} 
+
+
+(15) Typically these interpretations don't make much sense to the consumer. How do we write them and interpret them in terms of odds ratios? What conclusions can we draw based on the confidence interval?
+
+
+```{r}
+exp(coef(distance.glm))           
+exp(confint(distance.glm))        
+```
+
+\sol{The slope coefficient indicates a multiplicative change (x 0.8934) for each increase of 1 yard in distance.}
+
+\sol{The confidence interval does not contain 1 indicating a significant relationship between kick distance and odds.}
+
+(16) What is the predicted probability of making a field goal from 20 yards?  44 yards?  60 yards? What is the relationship between predicted probability and kick distance?
+
+
+```{r  out.width="40%"}
+newobs.data <- data.frame(kick_distance = c(20, 44, 60))
+
+predict.glm(distance.glm, newdata=newobs.data, type="response")
+
+# Predicted probability (inverse logit)
+distance.dat.sub <- fg %>% mutate(distance.pp = distance.glm$fitted.values)
+#view(smoke.dat.sub)
+distance.dat.sub %>% ggplot(aes(x=kick_distance, y=distance.pp) ) + 
+  geom_point() + geom_line() + theme_classic() + 
+  labs(x="Kick distance", y="kick probability", title = "Probability of successful kick vs. distance (in yards)")
+```
+
+\sol{The predicted probability of a 20/44/60 yard field goal is 0.9865/0.8301/0.4458. There is a negative relationship between predicted probability and kick distance.}
 
 
 
