@@ -1,0 +1,369 @@
+---
+title: ''
+geometry: "left=2cm,right=2cm,top=1cm,bottom=2cm"
+output:
+  pdf_document:
+    extra_dependencies: ["xcolor", "amsmath","multicol","hyperref"]
+  html_document: default
+editor_options:
+  markdown:
+    wrap: 100
+---
+
+```{r setup, message=FALSE, echo=TRUE, include=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+\newcommand{\sol}[1]{\color{violet} #1 \color{black}}
+
+<!-- \renewcommand{\sol}[1]{} -->
+
+
+<!-- xcolor standard colors: 
+black, blue, brown, cyan, darkgray, green, lime, magenta, olive, orange, red, purple, teal, violet, yellow, etc.  -->
+
+```{r include=FALSE, message=FALSE}
+library(tidyverse)
+library(ISLR2)
+library(gridExtra)
+library(survival)
+```
+
+
+# MA256 Lesson 28 Survival Analysis and Censored Data
+
+(Much of the material below is from ISLR2 \url{https://www.statlearning.com/}, often taken verbatim. )
+
+
+# Brain Cancer Example
+
+Suppose we have conducted a five-year medical study, in which the patients have been treated for cancer. We would like to fit a model to predict patient survival time, taking into account various features. 
+
+First, we perform some EDA. Here we show:
+
+1) A violin plot with the distribution of survival times (months) for those with cancer; 
+
+2) Survival time vs. the Karnofsky index (a measurement of the functional impairment for a patient. See: \url{http://www.npcrc.org/files/news/karnofsky_performance_scale.pdf}); 
+
+3) The survival times for various types of diagnoses ("Meningioma", "LG glioma", "HG glioma", and "Other");
+
+4) The survival time for various gross-tumor sizes (in $cm^3$).
+
+```{r out.width="90%", echo=FALSE}
+bc <- BrainCancer %>% mutate(status = as.factor(status))
+
+vp <- bc %>% ggplot(aes(x=time, y=rep(0,88))) + 
+  geom_violin() + 
+  geom_dotplot(stackdir = "center", dotsize = 0.5) +
+  labs(x = "time (months)", y = "")
+
+kip <- bc %>% ggplot(aes(x = jitter(ki), y = time)) + 
+  geom_point() +
+  labs(x = "Karnofsky index (jitter)", y = "time (months)")
+
+dip <- bc %>% ggplot(aes(x = time, color = diagnosis)) + 
+  geom_boxplot() +
+  labs(x = "time (months)")
+
+gtvp <- bc %>% ggplot(aes(x = gtv, y = time)) + 
+  geom_point() +
+  labs(x = "Gross tumor volume (cubic cm)", y = "time (months)")
+
+grid.arrange(vp, kip, dip, gtvp, ncol=2)
+
+```
+
+1) What do we see in these figures?
+
+\vfill
+
+2) We can even conduct a linear regression on these variables:
+```{r}
+# bc.lm <- bc %>% lm(time ~ XXXX + XXXX + XXXX, data = .)
+# ### summary(bc.lm)
+# anova(bc.lm)
+```
+
+
+
+3) Which variable did we ignore here? (hint: type `? BrainCancer` and read about the variables in the data set.)
+
+\vfill
+
+4) By ignoring this variable identified in 2), what are some potential pitfalls that we may encounter? 
+
+\vfill
+
+
+## Censored data
+
+To help with this issue, we introduce the idea of censored data. We suppose that we know the true *survival time*, $T$, as well as a true *censoring time*, $C$. The survival time represents the time at which the event of interest occurs: for instance, the time at which the patient dies, or the customer cancels his or her subscription. By contrast, the censoring time is the time at which censoring occurs: for example, the time at which the patient drops out of the study or the study ends.
+
+We then define the random variable: 
+\begin{equation}
+Y = \min(T,C) \label{censRV}
+\end{equation}
+
+and the status indicator:
+\begin{equation}
+\delta = \begin{cases} 1 \quad \text{ if } T\le C \\ 0 \quad \text{ if } T > C. \end{cases}   \label{cens_indicator}
+\end{equation}
+where $\delta = 1$ indicates that we observe the true survival time and $\delta = 0$ indicates that we observe the censoring time. We record the $n$ observations as the pair $(Y, \delta)$, which we can denote as $(y_1, \delta_1), \ldots, (y_n, \delta_n)$. 
+
+
+
+5) Consider the following picture, representing $n=4$ patients for a 365-day follow up study after the cancer study. Write out the 4 observations using notation described above and describe what you are seeing:  
+![](11_1.pdf){width="400"}
+
+
+
+
+6) Update the figures above to take into account the fact that some of the observations are censored. What do we see now? 
+
+```{r out.width="90%", echo=FALSE}
+# vp2 <- bc %>% ggplot(aes(x=time, y=rep(0,88), fill=XXXX)) + 
+#   geom_violin() +
+#   geom_dotplot(aes(fill=status), stackdir = "center", dotsize = 0.95) +
+#   labs(x = "time (months)", y = "")
+# 
+# kip2 <- bc %>% ggplot(aes(x = jitter(ki), y = time, color=XXXX)) + 
+#   geom_point() +
+#   labs(x = "Karnofsky index (jitter)", y = "time (months)")
+# 
+# dip2 <- bc %>% ggplot(aes(x = time, color = diagnosis, fill=XXXX)) + 
+#   geom_boxplot() +
+#   labs(x = "time (months)")
+# 
+# gtvp2 <- bc %>% ggplot(aes(x = gtv, y = time, color=XXXX)) + 
+#   geom_point() +
+#   labs(x = "Gross tumor volume (cubic cm)", y = "time (months)")
+# 
+# grid.arrange(vp2, kip2, dip2, gtvp2, ncol=2)
+```
+
+
+
+## Kaplan-Meier Survival estimator
+
+The survival curve or survival function is defined as
+\begin{equation}
+S(t) = P(T > t) \label{survfunc}
+\end{equation}
+
+
+7) For this statement: a) Write out what this means using words; b) write out an integral for this statement; and c) relate $S(t)$ to the CDF, $F(t)$. 
+
+\vfill
+
+
+
+8) Now we will look at a few ways to estimate Eq. \eqref{survfunc}. 
+
+a) Estimate $S(20) = P(T >20)$ using the `bc$time` vector by counting the number of people who had survived past this time. What is one issue with this? 
+
+```{r}
+# sum(bc$time > XXXX) / XXXX
+```
+
+
+b) We can also estimate $S(20) = P(T >20)$ by calculating the proportion of patients where $Y>20$ for those who were not censored by time $t=20$. 
+
+```{r}
+# # 71 not censored by time t=20
+# not.cens.by.t.20 <- XXXX - sum(bc$status[bc$time <= XXXX] == 0)
+# # 48 survived past Y > 20
+# at.risk <- length(bc$time[bc$time > 20])
+# 
+# at.risk / not.cens.by.t.20
+```
+
+
+
+### some details...
+
+A possible solution for these two issues is to calculate the Kaplan-Meier survival curve. 
+To do so we define the following:
+ - $d_1 < d_2 < \ldots < d_K$: denotes the $K$ *unique* death times among the non-censored patients.
+ 
+ - $q_k$: denotes the number of patients who *died at time* $d_k$.
+ 
+ - $r_k$: denotes the number of patients still alive and in the study just before $d_k$. 
+
+
+By the total law of probability
+\begin{align*}
+P(T > d_k)  = & P(T > d_k|T>d_{k-1}) P(T > d_{k-1})\\
+ & + P(T > d_k|T \le d_{k-1}) P(T \le d_{k-1})
+\end{align*}
+
+but since $d_{k-1} < d_k$ we have $P(T > d_k|T \le d_{k-1}) = 0$ so we have:
+\begin{align*}
+S(d_k) & = P(T > d_k) \\
+      & = P(T > d_k|T>d_{k-1}) P(T > d_{k-1}) \\
+      & = P(T > d_k|T>d_{k-1}) S(d_{k_1}) \\
+      & = P(T > d_k|T>d_{k-1}) \times \ldots \times P(T > d_2|T>d_2) P(T > d_1)
+\end{align*}
+
+
+We can estimate the probability that a person will survive after time $j$, given they have survived until time $j-1$ with
+$$\hat P(T>d_j|T>d_{j-1}) = (r_j - q_j) / r_j$$
+
+\newpage 
+
+We now have the Kaplan-Meier estimator to the survival curve: 
+$$S(d_k) = \prod_{j=1}^k \left( \frac{r_j - q_j}{r_j} \right)$$
+and for times $t$ between $d_j$ and $d_{j+1}$ we set $\hat S(t) = \hat S(d_j)$, which gives the K-M curve a step-like shape. 
+
+
+9) Use the function `survfit()` to estimate and plot the K-M survival curve for the full dataset and then again stratifying by sex, accounting for the variable `status`.  What is the estimate for S(20) using the K-M survival curve? 
+
+```{r out.width="40%"}
+# attach(BrainCancer)
+# fit.surv <- survfit(Surv(time, status) ~ XXXX)
+# plot(fit.surv, xlab = "Months",
+#     ylab = "Estimated Probability of Survival")
+# 
+# #### get probability of survival for t = 20
+# ind <- tail(which(XXXXXXXXX), n=1)
+# fit.surv$surv[ind]
+# #### detach(BrainCancer)
+```
+
+
+
+## Log-rank test
+
+10) The figure below shows the K-M survival curves for males and females. We can see that females tend to have a better survival rate up until about 50 months when they both level out. Interpret what you see. 
+
+```{r out.width="40%"}
+# fit.sex <- survfit(Surv(time, status) ~ XXXX)
+# plot(fit.sex , xlab = "Months", ylab = "Estimated Probability of Survival", col = c(2,4))
+# legend("bottomleft", levels(sex), col = c(2,4), lty = 1)
+```
+
+\vfill
+
+
+11) How can we compare the two curves? Is there a formal test that we can use? Describe how we could use a two-sample t-test to compare the differences. What is a problem with this?
+
+\vfill
+
+
+### some details...
+A solution to compare the two curves is to use the log-rank test statistic. To construct the log-rank test statistic, you create a 2 x 2 table for each unique date $d_j$,
+ \begin{tabular}{ l | c c | c } 
+   & Group 1 & Group 2 & Total \\  
+ Died & $q_{1j}$ & $q_{2j}$ & $q_j$ \\
+ Survived & $r_{1j} - q_{1j}$ & $r_{2j} - q_{2j}$ & $q_j$ \\
+ Total & $r_{1j}$ & $r_{2j}$ & $r_j$   
+ \end{tabular}
+where we break up the total number of patients who died at time $j$ ($q_{1j} + q_{2j} = q_j$) and the number of patients who are at risk at time $j$ ($r_{1j} + r_{2j} = r_j$), for groups 1 and 2, respectively. 
+
+Ultimately we arrive at the test statistic $W$ (details in in the ISLR):
+$$W = \frac{\sum_{j=1}^K(q_{1j} - E(q_{1j}))}{\sqrt{\sum_{j=1}^K(VAR(q_{1j}))}}$$
+With a large enough sample size, the log-rank statistic has an approximate standard normal distribution. You can then calculate a p-value to the null hypothesis that is no difference between the two survival curves. 
+
+\newpage
+
+12) use the `survdiff()` function to calculate the log-rank statistic to compare the survival of males to females. What is your conclusion? 
+
+
+```{r}
+# logrank.test <- survdiff(XXXX ~ XXXX)
+# logrank.test
+```
+
+\vfill
+
+
+
+
+## Regression Models with a Survival Response (\S 11.5)
+
+
+Now we will fit a regression model where the observations are of the form $(Y, \delta)$ (from \eqref{censRV} and \eqref{cens_indicator}). We will also consider additional explanatory variables, $X \in \mathbb{R}^p$, which is a vector with $p$ features. 
+
+Goal: Predict the true survival time, $T$. (but we only have $Y$, the minimum of $T$ and $C$!!!)
+
+We will use a similar idea to that presented in the K-M survival curve and use sequential construction. 
+
+But first... the hazard function... this is also known as the *hazard rate* (why?) or the *force of mortality* and is defined as:
+\begin{align*}
+h(t) & = \lim_{\Delta t \rightarrow 0} \frac{P(t<T\le t+\Delta t | T>t)}{\Delta t}  \\
+    & = \lim_{\Delta t \rightarrow 0} \frac{P(t<T\le t+\Delta t) \cap (T> t))/ \Delta t} {P(T > t)} \\
+    & = \lim_{\Delta t \rightarrow 0} \frac{P(t<T\le t+\Delta t))/ \Delta t} {P(T > t)} \\
+    & = \frac{f(t)} {S(t)} 
+\end{align*}
+
+With this we can move to the *proportional hazards assumption*: 
+\begin{equation}
+h(t|x_i) = h_0(t) \exp\left(\sum_{j=1}^p x_{ij} \beta_j \right) \label{prophaz}
+\end{equation}
+where $h_0(t) \ge 0$ is an unspecified function, known as the baseline hazard for a person with features (explanatory variables) $x_{i1} = \cdots = x_{ip} = 0$. The other term, $\exp\left(\sum_{j=1}^p x_{ij} \beta_j \right)$ is called the relative risk for a person with feature vector $x_i = (x_{i1}, \ldots, x_{ip})^T$, relative to the feature vector $x_i = (0, \ldots, 0)^T$. 
+
+
+What does it mean that the baseline hazard function $h_0(t)$ is unspecified? Basically, we make no assumptions about its functional form. We allow the instantaneous probability of death at time $t$, given that one has survived at least until time $t$, to take any form. This means that the hazard function is very flexible and can model a wide range of relationships between the covariates and survival time. Our only assumption is that a one-unit increase in $x_{ij}$ corresponds to an increase in $h(t|x_i)$ by a factor of $\exp(\beta_j)$.
+
+
+### Cox's proportional hazards model
+
+We can use \eqref{prophaz} and the ``sequential in time'' idea that we used above. First we assume that an observation is uncensored ($\delta_i = 1$) and thus $y_i$ is the actual failure time ($y_i = T_i$). The hazard function is defined as in \eqref{prophaz} and the total hazard at time $y_i$ for the at risk observations (those that have not failed yet) is given by: 
+\begin{equation}
+\sum_{i':y_{i'} \ge y_i}  h_0(y_i) \exp\left(\sum_{j=1}^p x_{i'j} \beta_j \right) \label{tot_haz}
+\end{equation}
+
+\newpage 
+
+
+Thus we can calculate the probability of the $i$th observation will fail at time $y_i$ is given by:
+\begin{align*}
+\frac{Eqn. \text{\eqref{prophaz}} (y_i)}{Eqn. \text{ \eqref{tot_haz}}} & = 
+\frac{h_0(y_i) \exp\left(\sum_{j=1}^p x_{ij} \beta_j \right)}{\sum_{i':y_{i'} \ge y_i}  h_0(y_i) \exp\left(\sum_{j=1}^p x_{i'j} \beta_j \right)} \\
+& = 
+\frac{\exp\left(\sum_{j=1}^p x_{ij} \beta_j \right)}{\sum_{i':y_{i'} \ge y_i} \exp\left(\sum_{j=1}^p x_{i'j} \beta_j \right)} \\
+\end{align*}
+We can see that the baseline hazard function cancels out of numerator and denominator. We can use the partial likelihood (See ISLR) to estimate the $\beta_j$'s. 
+
+13) Use the function `coxph()` to use the Cox proportional hazards model using `sex` as the only predictor. What is our conclusion? 
+```{r}
+# fit.cox <- coxph(Surv(time, status) ~ sex)
+# summary(fit.cox)
+```
+
+
+14) How does our result from the Cox prop. haz. model compare to what we saw with the log-rank test? (check the `chisq` result from our log-rank model)
+```{r}
+# logrank.test$chisq
+```
+
+\vfill
+
+15) Repeat the Cox prop. haz. model with additional explanatory variables: `sex, diagnosis, loc, ki, gtv, stereo`. Explain what you see. Does the negative coefficient make sense? 
+
+```{r}
+# fit.all <- coxph(XXXX ~ XXXXX)
+# summary(fit.all)
+```
+
+\vfill
+
+
+16) Plot the various survival curves for each diagnosis category, while keeping the other explanatory variables fixed. Does this match the exploratory figures we plotted above? 
+
+```{r}
+# modaldata <- data.frame(diagnosis = levels(diagnosis),
+#                         sex = rep("Female", 4),
+#                         loc = rep("Supratentorial", 4),
+#                         ki = rep(mean(ki), 4),
+#                         gtv = rep(mean(gtv), 4),
+#                         stereo = rep("SRT", 4)
+# )
+# survplots <- survfit(fit.all, newdata = modaldata)
+# 
+# plot(survplots,
+#      xlab = "Months",
+#      ylab = "Survival Probability", col = 2:5)
+# legend("bottomleft", levels(diagnosis), col = 2:5, lty = 1)
+```
+
+
