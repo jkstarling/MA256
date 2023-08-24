@@ -22,29 +22,6 @@ black, blue, brown, cyan, darkgray, green, lime, magenta, olive, orange, red, pu
 
 # MA256 Lesson 5 - Generalization (2.1, 2.2)
 
-## Warm up
-
-Match the following symbols with their definitions:
-$\quad \pi \quad \mu \quad \hat{p} \quad \bar{x} \quad s \quad \sigma$
-
-1.  Which symbol represents the *population's* parameter for a categorical variable?
-    \sol{$\pi$. }
-
-2.  Which represents the *sample's* average for a quantitative variable?
-    \sol{$\bar{x}$. We can calculate it with 'mean(x)' in R.}
-
-3.  Which represents the *population's* standard deviation for a quantitative variable?
-    \sol{$\sigma$}
-
-4.  Which represents the *sample's* proportion for a categorical variable?
-    \sol{$\hat{p}$}
-
-5.  Which represents the *sample's* standard deviation for a quantitative variable?
-    \sol{$s$}
-
-6.  What does the last remaining symbol represent?
-    \sol{$\mu$ is the population's average for a quantitative variable.}
-
 ## Definitions
 
 -   **generalization**
@@ -76,6 +53,33 @@ $\quad \pi \quad \mu \quad \hat{p} \quad \bar{x} \quad s \quad \sigma$
 
 \sol{A random sample which ensures each observational unit has the same chance of being selected in the sample. Typically done through a Random Number Generator, pulling names from a hat, rolling dice, etc.}
 \vfill
+
+
+
+
+## Warm up
+
+Match the following symbols with their definitions:
+$\quad \pi \quad \mu \quad \hat{p} \quad \bar{x} \quad s \quad \sigma$
+
+1.  Which symbol represents the *population's* proportion parameter for a categorical variable?
+    \sol{$\pi$. }
+
+2.  Which represents the *sample's* average for a quantitative variable?
+    \sol{$\bar{x}$. We can calculate it with 'mean(x)' in R.}
+
+3.  Which represents the *population's* standard deviation for a quantitative variable?
+    \sol{$\sigma$}
+
+4.  Which represents the *sample's* proportion for a categorical variable?
+    \sol{$\hat{p}$}
+
+5.  Which represents the *sample's* standard deviation for a quantitative variable?
+    \sol{$s$}
+
+6.  What does the last remaining symbol represent?
+    \sol{$\mu$ is the population's average for a quantitative variable.}
+
 
 
 ## Questions
@@ -164,12 +168,24 @@ Q11) Knowing this won’t exactly match the population proportion, how do we get
 (Note: Reference Exploration 2.1 (p. 126) and 2.2 (p. 138) )
 
 
-**1**. Select a representative set of 10 words from the Gettysburg Address passage by circling them.
+```{r warning=FALSE, message=FALSE, echo=FALSE}
+# The following code will read in the Gettysburg address, remove commas and periods, calculate the length of each word, and indicate whether or not a word contains the letter "e". The final result is a dataframe called `GW`. 
+
+library(tidyverse)
+
+gw <- scan('http://www.isi-stats.com/isi/data/chap3/GettysburgAddress.txt', character(), quote ="")
+
+gw <- gw %>% gsub(",", "", x=. ) %>% gsub("\\.", "", x=.)
+GW <- data.frame(words = gw) %>% 
+  mutate(wordlen = str_length(words), 
+         cont.e = grepl("e", words))
+```
+
+**1**. Select a representative set of 10 words from the Gettysburg Address passage by circling them. Record each word from your sample in the table below and then indicate the length of the word (number of letters) and whether or not the word contains at least one letter "e".
 
 *Four score and seven years ago our fathers brought forth on this continent, a new nation, conceived in Liberty, and dedicated to the proposition that all men are created equal. Now we are engaged in a great civil war, testing whether that nation, or any nation so conceived and so dedicated, can long endure. We are met on a great battlefield of that war. We have come to dedicate a portion of that field, as a final resting place for those who here gave their lives that that nation might live. It is altogether fitting and proper that we should do this. But, in a larger sense, we cannot dedicate -- we cannot consecrate -- we cannot hallow -- this ground. The brave men, living and dead, who struggled here, have consecrated it, far above our poor power to add or detract. The world will little note, nor long remember what we say here, but it can never forget what they did here. It is for us the living, rather, to be dedicated here to the unfinished work which they who fought here have thus far so nobly advanced. It is rather for us to be here dedicated to the great task remaining before us -- that from these honored dead we take increased devotion to that cause for which they gave the last full measure of devotion -- that we here highly resolve that these dead shall not have died in vain -- that this nation, under God, shall have a new birth of freedom -- and that government of the people, by the people, for the people, shall not perish from the earth.*
 
-\vspace{0.15in}
-**2**. Record each word from your sample and then indicate the length of the word (number of letters) and whether or not the word contains at least one letter "e".
+\vspace{0.05in}
 
 \begin{table*}[h!]
 \begin{center}
@@ -202,74 +218,64 @@ Q11) Knowing this won’t exactly match the population proportion, how do we get
 \end{table*}
 
 
-**3.** Identify the observational units and the variables you have recorded on those observational units. (Keep in mind that observational units do not have to be people!)
+**2.** Identify the observational units and the variables you have recorded on those observational units. (Keep in mind that observational units do not have to be people!)
 
 \sol{The Observational Units are each word (each of the 10 rows of our dataset table above, which the other variables describe or are an attribute of).\\
 The variables here are Length of the Word (quantitative) and contains *e* (categorical).}
 
 \vfill
 
-**4.**	Is the variable “length of word” quantitative or categorical?
+**3.**	Is the variable “length of word” quantitative or categorical?
 
 \sol{It is quantitative}
 
 \vfill
 
-**5.**	Calculate the average length of the 10 words in your sample and write it below. Is this number a parameter or a statistic?
+**4.**	Calculate the average length of the 10 words in your sample and the proportion of words in your sample that contain at least one “e”. Are these numbers parameters or statistics?
 
-\sol{Answers will vary; this is a statistic, a summary of our sample, it is what we saw in our data.}
-
-\vfill
-
-**6.**	The average length of the 268 words in the entire speech equals 4.295 letters. Is this number a parameter or a statistic? 
-
-\sol{This is a parameter, it is the true mean of the population.}
+\sol{Answers will vary; these are statistics, a summary of our sample, it is what we saw in our data.}
 
 \vfill
 
-**7.**	Calculate the proportion of words in your sample that contain at least one “e” and write it below. Is this number a parameter or a statistic? 
+
+**5.**	Calculate  and write it below. Is this number a parameter or a statistic? 
 
 \sol{Answers will vary; this is a statistic, a summary of our sample, what we each saw in our sample data. }
 
 \vfill
 
-\newpage
 
-**8.**	The proportion of all words in the entire speech that contain at least one letter “e” is $\frac{125}{268} \approx 0.466$. Is this number a parameter or a statistic? 
+**6.**	Calculate the average length of all words and the proportion of all words in the entire speech that contain at least one letter “e”. Are these numbers parameters or statistics? 
+```{r}
+c(mean(GW$wordlen), sum(GW$cont.e) / length(GW$cont.e))
+```
 
 \sol{This is a parameter, the true proportion of the population.}
 
 \vfill
 
-**9.** Compare the sample statistics with the population parameters. 
-
-
-**a)** How many and what proportion of cadets obtained a sample average word length larger than the population parameter?
+**7.** Compare the sample statistics with the population parameters. How many and what proportion of cadets obtained a sample average word length larger than the population parameter? How many and what proportion of cadets obtained a sample proportion of "e" words larger than the population parameter?
 
 \sol{Answers may vary, but in general, there will be bias.}
 
 \vfill
 
-**b)** How many and what proportion of cadets obtained a sample proportion of "e" words larger than the population parameter?
+<!-- \newpage  -->
 
-\sol{Answers may vary, but in general, there will be bias.}
-
-\vfill
-
-**10.** Do our results indicate that our sampling method is biased? Explain.
+**8.** Do our results indicate that our sampling method is biased? Explain.
 
 \sol{(Normally) Yes, there is a bias to choose longer words and a higher proportion of words with 'e'}
 
 \vfill
 
-**11.** Do you think that closing our eyes and pointing blindly at a page with a pencil 10 times would result in
+**9.** Do you think that closing our eyes and pointing blindly at a page with a pencil 10 times would result in
 a biased sample? Explain.
 
 \sol{Yes, longer words take up more space on the page and are more likely to be selected with this method.}
 
 \vfill
 
-**12.** Do you think that selecting 20 words instead of 10 would remove any bias in the previous two methods?
+**10.** Do you think that selecting 20 words instead of 10 would remove any bias in the previous two methods?
 Explain.
 
 \sol{No, increasing sample size does not fix a biased sampling method. The additional samples are just as likely to be biased towards longer words.}
@@ -277,80 +283,52 @@ Explain.
 \vfill
 
 
-**13.** What is another technique for selecting 10 words from the population that might be a better representation of the population with regards to word length and "e" words?
+**11.** What is another technique for selecting 10 words from the population that might be a better representation of the population with regards to word length and "e" words?
 
 \sol{Answers may include a random number generator, folded up papers with words pulled from a hat, rolling a 268 sided dice, etc.}
 
 \vfill
 
+
+
+**12.** Using R, plot a histogram of the word lengths. Describe the distribution. Where do we think the median is located? How would the mean compare to the median?
+```{r out.width="40%"}
+GW %>% ggplot(aes(x=wordlen)) + geom_histogram(binwidth = 1)
+c(median(GW$wordlen), mean(GW$wordlen))
+```
+
 \newpage
 
 
-The following code will read in the Gettysburg address, remove commas and periods, calculate the length of each word, and indicate whether or not a word contains the letter "e". The final result is a dataframe called `GW`. 
-
-```{r warning=FALSE, message=FALSE}
-library(tidyverse)
-
-gw <- scan('http://www.isi-stats.com/isi/data/chap3/GettysburgAddress.txt', character(), quote ="")
-
-gw <- gw %>% gsub(",", "", x=. ) %>% gsub("\\.", "", x=.)
-GW <- data.frame(words = gw) %>% 
-  mutate(wordlen = str_length(words), 
-         cont.e = grepl("e", words))
-```
-
-**14.** In R, use \color{blue} sample(1:268, 10) \color{black} to randomly sample 10 numbers between 1 and 268 (without replacement). 
+**13.** In R, use \color{blue} sample(1:268, 10) \color{black} to randomly sample 10 numbers between 1 and 268 (without replacement). Use these numbers to calculate 1) the average length of the 10 words in your new sample and write it below. AND 2) the proportion of words in your new sample that contain at least one “e” and write it below.
+How does these compare to your previous samples?
 
 ```{r}
-set.seed(256)
+set.seed(256) # use your second favorite number here (not 256)
 ind <- sample(1:268, 10)
 ind
-```
-
-
-
-**15.**	Calculate the average length of the 10 words in your new sample and write it below.
-How does this compare to your previous sample?
-
-```{r}
 mean(GW$wordlen[ind])
-```
-
-\sol{Answers will vary, but should be closer to the population mean of 4.287}
-
-\vfill
-
-**16.**	Calculate the proportion of words in your new sample that contain at least one “e” and write it below. How does this compare to your previous sample?
-```{r}
 sum(GW$cont.e[ind]) / length(ind)
-sum(GW$cont.e) / length(GW$cont.e)
 ```
-
-\sol{Answers will vary, but should be closer to the population mean of 0.466}
+\sol{Answers will vary, but should be closer to the population mean of 4.287 and population mean of 0.466}
 
 \vfill
 
-**17.** Compare the sample statistics with the population parameters. 
 
-**a)** How many and what proportion of cadets obtained a sample average word length larger than the population parameter?
+
+**14.** Compare the sample statistics (created with a random number generator) with the population parameters. How many and what proportion of cadets obtained a sample average word length larger than the population parameter?  How many and what proportion of cadets obtained a sample proportion of ``e'' words larger than 0.466?
 
 \sol{Answers will vary, but should be roughly half}
 
 \vfill
 
-**b)** How many and what proportion of cadets obtained a sample proportion of ``e'' words larger than 0.466?
-
-\sol{Answers will vary, but should be roughly half}
-
-\vfill
-
-**18.** Did our new simple random sample show evidence that it is a biased sampling method?
+**15.** Did our new simple random sample show evidence that it is a biased sampling method?
 
 \sol{No.}
 
 \vfill
 
-**19.** Do we meet the validity conditions for estimating strength of evidence? What are the implications?
+**16.** Do we meet the validity conditions for estimating strength of evidence? What are the implications?
 
 \sol{No, we do not have 10 success and 10 failures in our samples, so we cannot assess strength of evidence through theory alone, we would need to simulate.}
 

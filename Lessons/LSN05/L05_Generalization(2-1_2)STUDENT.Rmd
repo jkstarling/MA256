@@ -17,29 +17,6 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # MA256 Lesson 5 - Generalization (2.1, 2.2)
 
-## Warm up
-
-Match the following symbols with their definitions:
-$\quad \pi \quad \mu \quad \hat{p} \quad \bar{x} \quad s \quad \sigma$
-
-1.  Which symbol represents the *population's* parameter for a categorical variable?
-
-
-2.  Which represents the *sample's* average for a quantitative variable?
-
-
-3.  Which represents the *population's* standard deviation for a quantitative variable?
-
-
-4.  Which represents the *sample's* proportion for a categorical variable?
-
-
-5.  Which represents the *sample's* standard deviation for a quantitative variable?
-
-
-6.  What does the last remaining symbol represent?
-
-
 ## Definitions
 
 -   **generalization**
@@ -73,9 +50,35 @@ $\quad \pi \quad \mu \quad \hat{p} \quad \bar{x} \quad s \quad \sigma$
 \vfill
 
 
+## Warm up
+
+Match the following symbols with their definitions:
+$\quad \pi \quad \mu \quad \hat{p} \quad \bar{x} \quad s \quad \sigma$
+
+1.  Which symbol represents the *population's* proportion parameter for a categorical variable?
+
+
+2.  Which represents the *sample's* average for a quantitative variable?
+
+
+3.  Which represents the *population's* standard deviation for a quantitative variable?
+
+
+4.  Which represents the *sample's* proportion for a categorical variable?
+
+
+5.  Which represents the *sample's* standard deviation for a quantitative variable?
+
+
+6.  What does the last remaining symbol represent?
+
+
+
+
 ## Questions
 
 Q1) Does a larger sample size fix sampling bias?
+
 
 \vfill
 
@@ -151,12 +154,22 @@ Q11) Knowing this won’t exactly match the population proportion, how do we get
 (Note: Reference Exploration 2.1 (p. 126) and 2.2 (p. 138) )
 
 
-**1**. Select a representative set of 10 words from the Gettysburg Address passage by circling them.
+```{r warning=FALSE, message=FALSE, echo=FALSE}
+# The following code will read in the Gettysburg address, remove commas and periods, calculate the length of each word, and indicate whether or not a word contains the letter "e". The final result is a dataframe called `GW`. 
+library(tidyverse)
+
+gw <- scan('http://www.isi-stats.com/isi/data/chap3/GettysburgAddress.txt', character(), quote ="")
+gw <- gw %>% gsub(",", "", x=. ) %>% gsub("\\.", "", x=.)
+GW <- data.frame(words = gw) %>% 
+  mutate(wordlen = str_length(words), 
+         cont.e = grepl("e", words))
+```
+
+**1**. Select a representative set of 10 words from the Gettysburg Address passage by circling them. Record each word from your sample in the table below and then indicate the length of the word (number of letters) and whether or not the word contains at least one letter "e".
 
 *Four score and seven years ago our fathers brought forth on this continent, a new nation, conceived in Liberty, and dedicated to the proposition that all men are created equal. Now we are engaged in a great civil war, testing whether that nation, or any nation so conceived and so dedicated, can long endure. We are met on a great battlefield of that war. We have come to dedicate a portion of that field, as a final resting place for those who here gave their lives that that nation might live. It is altogether fitting and proper that we should do this. But, in a larger sense, we cannot dedicate -- we cannot consecrate -- we cannot hallow -- this ground. The brave men, living and dead, who struggled here, have consecrated it, far above our poor power to add or detract. The world will little note, nor long remember what we say here, but it can never forget what they did here. It is for us the living, rather, to be dedicated here to the unfinished work which they who fought here have thus far so nobly advanced. It is rather for us to be here dedicated to the great task remaining before us -- that from these honored dead we take increased devotion to that cause for which they gave the last full measure of devotion -- that we here highly resolve that these dead shall not have died in vain -- that this nation, under God, shall have a new birth of freedom -- and that government of the people, by the people, for the people, shall not perish from the earth.*
 
-\vspace{0.15in}
-**2**. Record each word from your sample and then indicate the length of the word (number of letters) and whether or not the word contains at least one letter "e".
+\vspace{0.05in}
 
 \begin{table*}[h!]
 \begin{center}
@@ -189,138 +202,104 @@ Q11) Knowing this won’t exactly match the population proportion, how do we get
 \end{table*}
 
 
-**3.** Identify the observational units and the variables you have recorded on those observational units. (Keep in mind that observational units do not have to be people!)
+**2.** Identify the observational units and the variables you have recorded on those observational units. (Keep in mind that observational units do not have to be people!)
 
 
 \vfill
 
-**4.**	Is the variable “length of word” quantitative or categorical?
+**3.**	Is the variable “length of word” quantitative or categorical?
 
 
 \vfill
 
-**5.**	Calculate the average length of the 10 words in your sample and write it below. Is this number a parameter or a statistic?
+**4.**	Calculate the average length of the 10 words in your sample and the proportion of words in your sample that contain at least one “e”. Are these numbers parameters or statistics?
 
 
 \vfill
 
-**6.**	The average length of the 268 words in the entire speech equals 4.295 letters. Is this number a parameter or a statistic? 
+
+**5.**	Calculate  and write it below. Is this number a parameter or a statistic? 
 
 
 \vfill
 
-**7.**	Calculate the proportion of words in your sample that contain at least one “e” and write it below. Is this number a parameter or a statistic? 
+
+**6.**	Calculate the average length of all words and the proportion of all words in the entire speech that contain at least one letter “e”. Are these numbers parameters or statistics? 
+```{r}
+# PUT SOMETHING USEFUL HERE
+```
+
+
+\vfill
+
+**7.** Compare the sample statistics with the population parameters. How many and what proportion of cadets obtained a sample average word length larger than the population parameter? How many and what proportion of cadets obtained a sample proportion of "e" words larger than the population parameter?
 
 
 \vfill
 
 \newpage
 
-**8.**	The proportion of all words in the entire speech that contain at least one letter “e” is $\frac{125}{268} \approx 0.466$. Is this number a parameter or a statistic? 
+**8.** Do our results indicate that our sampling method is biased? Explain.
 
 
 \vfill
 
-**9.** Compare the sample statistics with the population parameters. 
-
-
-**a)** How many and what proportion of cadets obtained a sample average word length larger than the population parameter?
-
-
-\vfill
-
-**b)** How many and what proportion of cadets obtained a sample proportion of "e" words larger than the population parameter?
-
-
-\vfill
-
-**10.** Do our results indicate that our sampling method is biased? Explain.
-
-
-\vfill
-
-**11.** Do you think that closing our eyes and pointing blindly at a page with a pencil 10 times would result in
+**9.** Do you think that closing our eyes and pointing blindly at a page with a pencil 10 times would result in
 a biased sample? Explain.
 
 
 \vfill
 
-**12.** Do you think that selecting 20 words instead of 10 would remove any bias in the previous two methods?
+**10.** Do you think that selecting 20 words instead of 10 would remove any bias in the previous two methods?
 Explain.
 
 
 \vfill
 
 
-**13.** What is another technique for selecting 10 words from the population that might be a better representation of the population with regards to word length and "e" words?
+**11.** What is another technique for selecting 10 words from the population that might be a better representation of the population with regards to word length and "e" words?
 
 
 \vfill
+
+
+
+**12.** Using R, plot a histogram of the word lengths. Describe the distribution. Where do we think the median is located? How would the mean compare to the median?
+```{r out.width="40%"}
+# PUT SOMETHING USEFUL HERE
+# PUT SOMETHING USEFUL HERE
+```
 
 \newpage
 
 
-The following code will read in the Gettysburg address, remove commas and periods, calculate the length of each word, and indicate whether or not a word contains the letter "e". The final result is a dataframe called `GW`. 
-
-```{r warning=FALSE, message=FALSE}
-library(tidyverse)
-
-gw <- scan('http://www.isi-stats.com/isi/data/chap3/GettysburgAddress.txt', character(), quote ="")
-
-gw <- gw %>% gsub(",", "", x=. ) %>% gsub("\\.", "", x=.)
-GW <- data.frame(words = gw) %>% 
-  mutate(wordlen = str_length(words), 
-         cont.e = grepl("e", words))
-```
-
-**14.** In R, use \color{blue} sample(1:268, 10) \color{black} to randomly sample 10 numbers between 1 and 268 (without replacement). 
+**13.** In R, use \color{blue} sample(1:268, 10) \color{black} to randomly sample 10 numbers between 1 and 268 (without replacement). Use these numbers to calculate 1) the average length of the 10 words in your new sample and write it below. AND 2) the proportion of words in your new sample that contain at least one “e” and write it below.
+How does these compare to your previous samples?
 
 ```{r}
-# set.seed(XXXXX)
-# ind <- sample(XXXXX)
+# set.seed(XXXXX) # use your second favorite number here (not 256)
+# ind <- XXXXX
 # ind
-```
-
-
-
-**15.**	Calculate the average length of the 10 words in your new sample and write it below.
-How does this compare to your previous sample?
-
-```{r}
-# mean(XXXXX)  # get mean using your index
-# mean(XXXXX)  # get mean of all words
+# # PUT SOMETHING USEFUL HERE
+# # PUT SOMETHING USEFUL HERE
 ```
 
 
 \vfill
 
-**16.**	Calculate the proportion of words in your new sample that contain at least one ``e'' and write it below. How does this compare to your previous sample?
-```{r}
-# sum(XXXXX ....   # get proportion using your index
-# sum(XXXXX ....   # get proportion of all words
-```
+
+
+**14.** Compare the sample statistics (created with a random number generator) with the population parameters. How many and what proportion of cadets obtained a sample average word length larger than the population parameter?  How many and what proportion of cadets obtained a sample proportion of ``e'' words larger than 0.466?
 
 
 \vfill
 
-**17.** Compare the sample statistics with the population parameters. 
-
-**a)** How many and what proportion of cadets obtained a sample average word length larger than the population parameter?
+**15.** Did our new simple random sample show evidence that it is a biased sampling method?
 
 
 \vfill
 
-**b)** How many and what proportion of cadets obtained a sample proportion of ``e'' words larger than 0.466?
-
-
-\vfill
-
-**18.** Did our new simple random sample show evidence that it is a biased sampling method?
-
-
-\vfill
-
-**19.** Do we meet the validity conditions for estimating strength of evidence? What are the implications?
+**16.** Do we meet the validity conditions for estimating strength of evidence? What are the implications?
 
 
 \vfill
@@ -331,7 +310,34 @@ How does this compare to your previous sample?
 
 In order to understand reasons why consumers visit their store, a local business conducts a survey by asking the next 100 people who visit their store to fill out a short survey. The business finds that 40 of the 100 people state that the main reason they visited the store was because the store is running a sale on coats that week.
 
-Identify each of the following by describing it or stating its value (where possible).
+**17.** Identify each of the following by describing it or stating its value (where possible).
+
+**a.)** Population of interest
+
+\vfill
+
+**b.)** Sample
+
+\vfill
+
+**c.)** Parameter of interest
+
+\vfill
+
+**d.)** Statistic
+
+\vfill
+
+**18.** Explain whether or not you believe the sample is representative of the population of interest and why.
+
+\vfill
+
+
+## School Survey
+
+In order to investigate how many hours a day full-time students at their school tend to spend on course work outside of regularly scheduled class time, a statistics student takes a random sample of 150 students from their school by randomly choosing names from a list of all full-time students at their school that semester. The student finds that the average reported daily study hours among the 150 students is 2.23 hours.
+
+**19.** Identify each of the following by describing it or stating its value (where possible).
 
 **a.)** Population of interest
 
@@ -350,34 +356,6 @@ Identify each of the following by describing it or stating its value (where poss
 \vfill
 
 **20.** Explain whether or not you believe the sample is representative of the population of interest and why.
-
-\vfill
-
-
-
-## School Survey
-
-In order to investigate how many hours a day full-time students at their school tend to spend on course work outside of regularly scheduled class time, a statistics student takes a random sample of 150 students from their school by randomly choosing names from a list of all full-time students at their school that semester. The student finds that the average reported daily study hours among the 150 students is 2.23 hours.
-
-Identify each of the following by describing it or stating its value (where possible).
-
-**a.)** Population of interest
-
-\vfill
-
-**b.)** Sample
-
-\vfill
-
-**c.)** Parameter of interest
-
-\vfill
-
-**d.)** Statistic
-
-\vfill
-
-**21.** Explain whether or not you believe the sample is representative of the population of interest and why.
 
 \vfill
 
