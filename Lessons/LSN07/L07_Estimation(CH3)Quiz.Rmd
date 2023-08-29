@@ -1,0 +1,51 @@
+---
+title: ''
+geometry: "left=2cm,right=2cm,top=1cm,bottom=2cm"
+output:
+  pdf_document:
+    extra_dependencies: ["xcolor", "amsmath"]
+  html_document: default
+editor_options:
+  markdown:
+    wrap: 100
+---
+
+```{r setup, message=FALSE, echo=TRUE, include=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# MA256 Lesson 7 - Warm up (quiz) - Exploration 2.3
+
+### Q1) Research Question: How much do students at your school sleep on a typical night? Let's make the question more specific and ask about last night. Is the average less than the recommended seven and a half hours? Provide the appropriate null and alternative hypotheses related to this study question. 
+
+
+\vfill
+
+### Q2) *(circle one word for each pair)* Convenience sampling may be (biased/unbiased) whereas simple random sampling is (biased/unbiased).
+
+\vspace{0.1in}
+
+### Q3) One class conducted this study and recorded their sleep times (<http://www.isi-stats.com/isi/data/chap2/SleepTimes.txt>). Summarize the shape, center (mean with appropriate symbol and measurement units), variability (standard deviation with appropriate symbol and measurement units) for the sample of sleep times for your class, and discuss any unusual observations or outliers in the data. Calculate the appropriate statistics and create an appropriate figure. 
+
+```{r message=FALSE, error=FALSE, out.width = "30%"}
+library(tidyverse)
+sleep <- read.table("http://www.isi-stats.com/isi/data/chap2/SleepTimes.txt", header = TRUE)
+# put something useful here
+```
+
+\vfill
+
+### Q4) Do these data provide any preliminary evidence that students at your school tend to sleep less than 7.5 hours a night?
+
+\vfill
+
+### Q5) Calculate the standardized statistic and p-value using the theory based approach for a one-sample t-test. Is it surprising to get a sample mean like the one you calculated?
+
+```{r}
+# put something useful here
+```
+
+\vfill
+
+

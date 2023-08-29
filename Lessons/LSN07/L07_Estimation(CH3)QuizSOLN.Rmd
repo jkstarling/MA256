@@ -1,0 +1,71 @@
+---
+title: ''
+geometry: "left=2cm,right=2cm,top=1cm,bottom=2cm"
+output:
+  pdf_document:
+    extra_dependencies: ["xcolor", "amsmath"]
+  html_document: default
+editor_options:
+  markdown:
+    wrap: 100
+---
+
+```{r setup, message=FALSE, echo=TRUE, include=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+\newcommand{\sol}[1]{\color{violet}  #1 \color{black}}
+
+<!-- \renewcommand{\sol}[1]{} -->
+
+<!-- xcolor standard colors: 
+black, blue, brown, cyan, darkgray, green, lime, magenta, olive, orange, red, purple, teal, violet, yellow, etc.  -->
+
+
+
+# MA256 Lesson 7 - Warm up (quiz) - Exploration 2.3
+
+### Q1) Research Question: How much do students at your school sleep on a typical night? Let's make the question more specific and ask about last night. Is the average less than the recommended seven and a half hours? Provide the appropriate null and alternative hypotheses related to this study question. 
+
+\sol{Null hypothesis: The average length of time all students at your school slept last night was 7.5 hours; $H_0: \mu = 7.5$ \\
+Alternative hypothesis: The average length of time all students at your school slept last night was less than 7.5 hours; $H_a: \mu < 7.5$ }
+\vfill
+
+### Q2) *(circle one word for each pair)* Convenience sampling may be (biased/unbiased) whereas simple random sampling is (biased/unbiased).
+
+\vspace{0.1in}
+
+### Q3) One class conducted this study and recorded their sleep times (<http://www.isi-stats.com/isi/data/chap2/SleepTimes.txt>). Summarize the shape, center (mean with appropriate symbol and measurement units), variability (standard deviation with appropriate symbol and measurement units) for the sample of sleep times for your class, and discuss any unusual observations or outliers in the data. Calculate the appropriate statistics and create an appropriate figure. 
+
+```{r message=FALSE, error=FALSE, out.width = "30%"}
+library(tidyverse)
+sleep <- read.table("http://www.isi-stats.com/isi/data/chap2/SleepTimes.txt", header = TRUE)
+sleep %>% summarise(mean(SleepHrs), sd(SleepHrs))
+sleep %>% ggplot(aes(x=SleepHrs)) + geom_histogram()
+```
+
+\sol{Fairly symmetric. No unusual observations or outliers (maybe the 10?). mean: $\bar{x} = 6.705$; standard deviation: $s=1.297$ }
+\vfill
+
+### Q4) Do these data provide any preliminary evidence that students at your school tend to sleep less than 7.5 hours a night?
+
+\sol{Yes, it provides evidence that students tend to sleep less than 8 hours. }
+\vfill
+
+### Q5) Calculate the standardized statistic and p-value using the theory based approach for a one-sample t-test. Is it surprising to get a sample mean like the one you calculated?
+
+```{r}
+xbar <- 6.705
+s <- 1.297
+mu0 <- 7.5
+n <- 22
+
+tstat <- (xbar - mu0) / (s / sqrt(n)); tstat
+pt(tstat, n-1) # p-value
+pnorm(tstat)
+```
+
+\sol{Yes, 6.705 is more than 2 standard deviations from 7.5, with a p-value of 0.2%. }
+\vfill
+
+
