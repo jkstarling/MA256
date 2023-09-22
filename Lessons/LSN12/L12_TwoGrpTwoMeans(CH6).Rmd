@@ -14,14 +14,14 @@ editor_options:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-\newcommand{\sol}[1]{\color{blue}  #1 \color{black}}
+\newcommand{\sol}[1]{\color{purple}  #1 \color{black}}
 
 <!-- \renewcommand{\sol}[1]{} -->
 <!-- xcolor standard colors: 
 black, blue, brown, cyan, darkgray, green, lime, magenta, olive, orange, red, purple, teal, violet, yellow, etc.  -->
 
 
-# MA256 Lesson 11 - Two Groups, Two Means (6.1-6.3)
+# MA256 Lesson 12 - Two Groups, Two Means (6.1-6.3)
 
 ## Review for Single Mean:
 
@@ -52,6 +52,79 @@ Strength of Evidence:  \sol{Calculate t statistic: $t=\frac{\bar x_1 - \bar x_2}
 
 
 Confidence Interval:  \sol{$\bar x_1 - \bar x_2 \pm t^*_{(1-\alpha/2, n-1)}\sqrt{\frac{s_1^2}{n_1}+\frac{s_2^2}{n_2}}$} 
+
+Validity conditions: \sol{Symmetric distribution in both groups OR $\ge$ 20 observations in each group and sample distribtuion not strongly skewed. }
+
+
+### Q1) In a survey of introductory statistics students, an instructor asked her students to report how many Facebook friends they had. Suppose that the intent is to study whether there is an association between number of Facebook friends and a person’s sex.
+
+a. Identify whether the study is an experiment or an observational study. Explain.
+
+\sol{Observational study; there is no randomization of treatment.}
+
+
+
+b. Identify the observational units.
+
+\sol{Each student}
+
+
+c. Identify the explanatory and response variables. Also, for each variable identify whether it is categorical or quantitative.
+
+\sol{Explanatory: gender (categorical); response: number of Facebook friends (quantitative)}
+
+
+d. What is an appropriate null and alternative hypothesis? 
+
+\sol{$H_0$: There is no association between a person’s sex and the number of Facebook friends. \\
+$H_a$: There is an association between a person’s sex and the number of Facebook friends.}
+
+\newpage 
+
+e. Below are a few summary statistics about the data.  In this context, calculate (an) appropriate statistic value(s) to compare men to women?
+
+|       | Sample size | Sample mean | Sample Median | Sample SD |
+|-------|-------------|-------------|---------------|-----------|
+| Women | 35          | 594.30      | 532           | 309.80    |
+| Men   | 13          | 405.60      | 485           | 228.40    |
+
+\sol{Means: 594.30 - 405.60 = 188.70. Medians:  532 - 485 = 47}
+
+
+### Q2) Suppose that randomly sampled college students are asked how many hours they typically spend online each day. You conduct a two-sided test of the null hypothesis that $\mu_{females} - \mu_{males} = 0$, and you also calculate a 95% confidence interval for $\mu_{females} - \mu_{males}$.
+
+a). Describe (in words) what the parameter $\mu_{females} - \mu_{males}$ means here. 
+
+\sol{The difference in the population mean number of hours spent online daily, in particular how many more hours are spent by females then males}
+
+b). Now suppose that your friend analyzes the same data but with the order of subtraction reversed (males - females, rather than females - males). Describe the impact (if any) on each of the following. In other words, describe how your friend’s findings will compare to yours with regard to each of the following.
+
+  i.  Distribution of simulated statistics under the null hypothesis.  \sol{no change}
+
+  ii.  Standard deviation of the simulated statistics under the null hypothesis.  \sol{no change}
+
+  iii. Observed value of the statistic (difference in sample means). \sol{Will change in sign}
+
+  iv. Approximate p-value from simulation.  \sol{no change}
+
+  v. Value of t-test statistic. \sol{Will change in sign}
+
+  vi.  p-value from t-test.  \sol{no change}
+ 
+  vii. Midpoint of confidence interval. \sol{Will change in sign}
+
+  viii. Endpoints of confidence interval.  \sol{both will change in sign}
+
+  ix. Width of confidence interval.  \sol{no change}
+
+
+
+c). What is the bottom line: Will you and your friend reach the same conclusions even though you disagreed about the order in which to perform the subtraction (males - females or females - males)? Explain.
+
+\sol{Yes, the exact same conclusion will be reached about strength of evidence against the null hypothesis. The CI will be different because it is estimating a different parameter but will mean the same thing in terms of whether males or females are, on average, spending more hours online each day.}
+
+
+\newpage
 
 
 ## IOCT Tabbing
@@ -104,7 +177,7 @@ ioct.data %>%
 191-166 # IQR-Males
 
 ioct.data %>%
-  ggplot(aes(x = as.factor(sex), y = IOCT_Time)) + geom_boxplot()+
+  ggplot(aes(x = IOCT_Time, y = as.factor(sex))) + geom_boxplot()+
   labs(x = "Biological Sex", y = "IOCT Time (Seconds)", 
        title = "IOCT Time (Seconds) by Biological Sex") 
 ```
@@ -114,14 +187,11 @@ ioct.data %>%
 
 ```{r out.width = '40%', eval=TRUE}
 ioct.data %>%
-  ggplot(aes(x=IOCT_Time)) + 
-  geom_histogram() +
-  facet_grid(sex~.)
+  ggplot(aes(x=IOCT_Time)) + geom_histogram() + geom_boxplot(width = 10, color = "coral", alpha = 0.75) + facet_grid(sex~.)
 
 #Male Histogram
 ioct.data %>%
-  filter(sex=="M")%>%
-  ggplot(aes(x=IOCT_Time))+geom_histogram()+
+  filter(sex=="M") %>% ggplot(aes(x=IOCT_Time)) + geom_histogram() +
   labs(title="Histogram of Male IOCT Completion Times")
 
 #Female Histogram
