@@ -21,7 +21,7 @@ knitr::opts_chunk$set(echo = TRUE)
 black, blue, brown, cyan, darkgray, green, lime, magenta, olive, orange, red, purple, teal, violet, yellow, etc.  -->
 
 
-# MA256 Lesson 12 - Paired Data (7.1-7.3)
+# MA256 Lesson 13 - Paired Data (7.1-7.3)
 
 
 ## Review of methods so far...
@@ -29,11 +29,11 @@ black, blue, brown, cyan, darkgray, green, lime, magenta, olive, orange, red, pu
   <!-- &  &  &  & \\  \hline -->
   <!--   &  &  &  & \\    -->
 \begin{tabular}{r|p{3.0cm} | p{3.0cm} | p{3.0cm} | p{3.7cm}}
- & 1-Categorical & 1-Quantitative & 2-Categorical & 1-Cat/1-Quant\\ \hline  
+ & 1-Categorical \sol{Ch 3.2}& 1-Quantitative \sol{Ch. 3.3} & 2-Categorical \sol{Ch. 5} & 1-Cat/1-Quant \sol{Ch. 6}\\ \hline  
 parameter & \sol{$\pi$} & \sol{$\mu$} & \sol{$\pi_1 - \pi_2$} & \sol{$\mu_1 - \mu_2$} \\ \hline
 statistic & \sol{$\hat\pi$} & \sol{$\bar x$} & \sol{$\hat p_1 - \hat p_2$} & \sol{$\bar x_1 - \bar x_2$} \\ \hline
 test & \sol{one-prop z-test} & \sol{one sample t-test} & \sol{two-sample z-test} & \sol{two-sample t-test} \\  \hline
-sd & \sol{$\sqrt{\frac{\pi(-1\pi)}{n}}$} & \sol{$s/\sqrt{n}$} & 
+sd & \sol{$\sqrt{\frac{\pi(1-\pi)}{n}}$} & \sol{$s/\sqrt{n}$} & 
 \sol{$\sqrt{\frac{\hat p_1 (1-\hat p_1)}{n_1} + {\frac{\hat p_2 (1-\hat p_2)}{n_2}}}$} &
 \sol{$\sqrt{\frac{s_1^2}{n_1}+\frac{s_2^2}{n_2}}$} \\  \hline
 stand. stat & \sol{$\frac{\hat p - \pi}{sd}$} & \sol{$\frac{\bar x - \mu_0}{sd}$} & \sol{$\frac{\hat p_1 - \hat p_2- \mu_0}{sd}$} & \sol{$\frac{\bar x_1 -\bar x_2 - \mu_0}{sd}$} \\  \hline
@@ -62,7 +62,7 @@ PD-repeated measures: Each observational unit (person/item, etc.) participates i
 
 ## Theory-based approach for paired samples
 
-Parameter/statistic: \sol{$\mu_d = \mu_1 - \mu_2$ and $\bar x_d$}
+Parameter/statistic: \sol{$\mu_d$ and $\bar x_d (= \frac{1}{n} \sum_{i=1}^n (x_{i2} - x_{i1})$}
 
 $H_0:$ \sol{$\mu_d = \mu_0$, where  $\mu_0$ is a number (typically 0)}
 
@@ -74,7 +74,38 @@ Strength of Evidence:  \sol{Calculate t statistic: $t=\frac{\bar x_d - \mu_0}{s/
 Confidence Interval: \sol{$\bar x_d \pm t^*_{(1-\alpha/2, n-1)} \times s /\sqrt{n}$}
 \sol{reject $H_0$ if $\mu_0$ is NOT in CI.}
 
-\newpage
+<!-- \newpage -->
+
+
+## Rounding First Base
+
+Imagine you are at the plate in baseball and have hit a hard line drive. You want to try to stretch your hit from a single to a double. Does the path that you take to “round” first base make much of a difference? For example, is it better to take a “narrow angle” or a “wide angle” around first base? This example is based on an actual study reported in a master’s thesis by W. F. Woodward in 1970. In Woodward’s study, he used a stopwatch to time 22 different runners going from a spot 35 feet past home to a spot 15 feet before second. He had each runner use each method, with a rest period in between. Here are the summary statistics on the difference in times (narrow - wide) for the 22 players:
+
+| Difference  | Sample Size | Sample Average (sec) | Sample SD (sec) |
+|-------------|-------------|----------------------|-----------------|
+| narrow-wide | 22          | 0.075                | 0.088           |
+
+a. Use an appropriate theory-based method to investigate whether the choice of angle affects the running time. Be sure to find and report a standardized statistic and p-value. Interpret the value of the standardized statistic in the context of the study.
+
+```{r}
+n <- 22
+xdbar <- 0.075
+se <- 0.088 / sqrt(n)
+t <- xdbar / se
+pval <- 2 * (1 - pt(t, n-1))
+c(t, pval)
+```
+
+b. Use an appropriate theory-based method to find and report a 95% confidence interval for the parameter of interest.
+```{r}
+multiplier <- qt(0.975, n-1)
+c(xdbar - multiplier * se, xdbar + multiplier * se)
+```
+
+
+c. Provide a full (four-part) conclusion, including comments on significance, estimation, causation, and generalization.
+
+\sol{We have strong evidence that the average difference in running time comparing narrow to wide angle is not 0, with longer running times for the narrow angle (on average between 0.036 and 0.114 seconds longer). This result suggests a cause-and-effect relationship between running time and choice of angle but does not necessarily generalize to all baseball players because little is known about how representative the baseball player samples are of the running characteristics of all players.}
 
 
 ## Filtering Water in Cameroon
@@ -154,14 +185,13 @@ ecoli.time %>%
 ```{r}
 xbar <- -51.63
 n <- 14
-sd <- 58.77 / sqrt(n)
+se <- 58.77 / sqrt(n)
 null <- 0
-t <- (xbar-null) / sd
+t <- (xbar-null) / se
 pvalue <- 2*(1-pt(abs(t),n-1))
 pvalue 
 
 multiplier <- qt(.975, n-1)
-se <- sd
 CI <- c(xbar - multiplier * se, xbar + multiplier * se)
 CI
 ```
@@ -183,6 +213,28 @@ CI
 12. Discuss the study design. Why does pairing make sense here? What would you do differently to improve upon this study? What further research would you propose based on your findings from this study?
 
 \sol{Researchers were wondering whether there was a difference in E. coli counts from just filtered water compared to water filtered the day before. Data were gathered on 14 filters in a village in Cameroon. The average E. coli count of just filtered water was 43.48/100 mL of water and 94.79/100 mL of water for the water filtered the day before. A matched pairs test was run on the data and resulted in a p-value of 0, which offered very strong evidence against the null and in support of the alternative that there is a difference in the average E. coli counts between Day 1 and Day 2 of filtered water. We can generalize these results to the population of filters yet to be built but are not able to draw any causal inference as this was an observational study, not a randomized experiment. Further research could be done on newer filters, also looking at more than 1-day-old water.}
+
+12-REDUX. What if we did not use a paired test? Conduct a different test, but compare the difference in the measurements from Day 1 and Day 2. What is our conclusion? (assume validity conditions are met for a theory based test) Are there any issues with conducting this test?
+
+```{r}
+mysummary <- ecoli.time %>% summarise(mean1 = mean(Day_1), mean2 = mean(Day_2), sd1 = sd(Day_1), sd2 = sd(Day_2))
+mysummary
+
+xbar1 <- mysummary[1,1]
+xbar2 <- mysummary[1,2]
+s1 <- mysummary[1,3]
+s2 <- mysummary[1,4]
+n1 <- 14
+n2 <- 14
+se <- sqrt(s1 / n1 + s2 / n2)
+null <- 0
+statistic <- xbar1  - xbar2
+t <- (statistic - null) / se
+n <- n1 + n2
+pvalue <- pt(t, n - 2)
+pvalue
+```
+\sol{We see that we have stronger evidence against the null hypothesis. One issue is that we did not account for the dependence among the observations from Day 1 to Day 2. (and our validity conditions aren't met.)}
 
 
 ## PART II
@@ -225,15 +277,14 @@ s_above <- 70.006
 s_below <- 96.83388
 n_above <- 14
 n_below <- 5
-sd <- sqrt(s_above^2/n_above + s_below^2/n_below)
+se <- sqrt(s_above^2/n_above + s_below^2/n_below)
 null <- 0
 statistic <- xbar_above - xbar_below
-t <- (statistic-null)/sd
+t <- (statistic-null) / se
 
 n <- n_above+n_below
 pvaluesand <- 2*(1-pt(abs(t), n-2)); pvaluesand
 multiplier <- qt(.975,n-2)
-se <- sd
 CIsand <- c(statistic - multiplier * se, statistic + multiplier * se)
 c(t, pvaluesand, CIsand)
 ```
@@ -272,13 +323,12 @@ ecoli.flow %>%
 xbar <- 913.6     
 s <- 582.9         # sample standard deviation
 n <- 23          # sample size
-sd <- s/sqrt(n)  # standard deviation of the null distribution
+se <- s / sqrt(n)  # standard error of the null distribution
 null <- 1000       
-t <- (xbar-null)/sd
+t <- (xbar-null) / se
 pvalue_flow <- 2*(1-pt(abs(t), n-1))
 
 multiplier <- qt(.975, n-1) # 95% CI
-se <- sd
 CI <- c(xbar-multiplier*se, xbar+multiplier*se)
 c(t, pvalue_flow, CI)
 ```
