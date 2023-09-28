@@ -33,16 +33,16 @@ black, blue, brown, cyan, darkgray, green, lime, magenta, olive, orange, red, pu
 parameter & \sol{$\pi$} & \sol{$\mu$} & \sol{$\pi_1 - \pi_2$} & \sol{$\mu_1 - \mu_2$} \\ \hline
 statistic & \sol{$\hat p$} & \sol{$\bar x$} & \sol{$\hat p_1 - \hat p_2$} & \sol{$\bar x_1 - \bar x_2$} \\ \hline
 test & \sol{one-prop z-test} & \sol{one sample t-test} & \sol{two-sample z-test} & \sol{two-sample t-test} \\  \hline
-SE & \sol{$\sqrt{\frac{\pi(1-\pi)}{n}}$} & 
+SE & \sol{$\sqrt{\frac{\hat p(1-\hat p)}{n}}$} & 
       \sol{$s/\sqrt{n}$} & 
       \sol{$\sqrt{\hat p(1- \hat p)\left(\frac{1}{n_1} + \frac{1}{n_2}\right)}$} &
       \sol{$\sqrt{\frac{s_1^2}{n_1}+\frac{s_2^2}{n_2}}$} \\  \hline
 stand. stat & \sol{$\frac{\hat p - \pi}{sd}$} & \sol{$\frac{\bar x - \mu_0}{sd}$} & \sol{$\frac{\hat p_1 - \hat p_2- \pi_0}{sd}$} & \sol{$\frac{\bar x_1 -\bar x_2 - \mu_0}{sd}$} \\  \hline
 valid. conds. & \sol{10 succ/10 fails} & \sol{Symmetric distr. OR $\ge20$ obs. and sample dist no strongly skewed} & \sol{10 obs in each box of a 2-way table} & \sol{$\ge 20$ obs. in each and not strongly skewed} \\  \hline
-CI & \sol{$\hat p \pm z^*_{(1-\alpha/2)} \cdot sd$} & 
-\sol{$\bar x \pm t^*_{(1-\alpha/2, n-1)} \cdot sd$} & 
+CI & \sol{$\hat p \pm z^*_{(1-\alpha/2)} \cdot SE$} & 
+\sol{$\bar x \pm t^*_{(1-\alpha/2, n-1)} \cdot SE$} & 
 \sol{$\hat p_1 - \hat p_2 \pm z^*_{(1-\alpha/2)} \cdot \sqrt{\frac{\hat p_1 (1-\hat p_1)}{n_1} + {\frac{\hat p_2 (1-\hat p_2)}{n_2}}}$} & 
-\sol{$\bar x_1 - \bar x_2 \pm t^*_{(1-\alpha/2, n-2)} \cdot sd$}  \\  \hline
+\sol{$\bar x_1 - \bar x_2 \pm t^*_{(1-\alpha/2, n-2)} \cdot SE$}  \\  \hline
 \end{tabular}
 
 
