@@ -31,14 +31,18 @@ black, blue, brown, cyan, darkgray, green, lime, magenta, olive, orange, red, pu
 \begin{tabular}{r|p{3.0cm} | p{3.0cm} | p{3.0cm} | p{3.7cm}}
  & 1-Categorical \sol{Ch 3.2}& 1-Quantitative \sol{Ch. 3.3} & 2-Categorical \sol{Ch. 5} & 1-Cat/1-Quant \sol{Ch. 6}\\ \hline  
 parameter & \sol{$\pi$} & \sol{$\mu$} & \sol{$\pi_1 - \pi_2$} & \sol{$\mu_1 - \mu_2$} \\ \hline
-statistic & \sol{$\hat\pi$} & \sol{$\bar x$} & \sol{$\hat p_1 - \hat p_2$} & \sol{$\bar x_1 - \bar x_2$} \\ \hline
+statistic & \sol{$\hat p$} & \sol{$\bar x$} & \sol{$\hat p_1 - \hat p_2$} & \sol{$\bar x_1 - \bar x_2$} \\ \hline
 test & \sol{one-prop z-test} & \sol{one sample t-test} & \sol{two-sample z-test} & \sol{two-sample t-test} \\  \hline
-sd & \sol{$\sqrt{\frac{\pi(1-\pi)}{n}}$} & \sol{$s/\sqrt{n}$} & 
-\sol{$\sqrt{\frac{\hat p_1 (1-\hat p_1)}{n_1} + {\frac{\hat p_2 (1-\hat p_2)}{n_2}}}$} &
-\sol{$\sqrt{\frac{s_1^2}{n_1}+\frac{s_2^2}{n_2}}$} \\  \hline
-stand. stat & \sol{$\frac{\hat p - \pi}{sd}$} & \sol{$\frac{\bar x - \mu_0}{sd}$} & \sol{$\frac{\hat p_1 - \hat p_2- \mu_0}{sd}$} & \sol{$\frac{\bar x_1 -\bar x_2 - \mu_0}{sd}$} \\  \hline
+SE & \sol{$\sqrt{\frac{\pi(1-\pi)}{n}}$} & 
+      \sol{$s/\sqrt{n}$} & 
+      \sol{$\sqrt{\hat p(1- \hat p)\left(\frac{1}{n_1} + \frac{1}{n_2}\right)}$} &
+      \sol{$\sqrt{\frac{s_1^2}{n_1}+\frac{s_2^2}{n_2}}$} \\  \hline
+stand. stat & \sol{$\frac{\hat p - \pi}{sd}$} & \sol{$\frac{\bar x - \mu_0}{sd}$} & \sol{$\frac{\hat p_1 - \hat p_2- \pi_0}{sd}$} & \sol{$\frac{\bar x_1 -\bar x_2 - \mu_0}{sd}$} \\  \hline
 valid. conds. & \sol{10 succ/10 fails} & \sol{Symmetric distr. OR $\ge20$ obs. and sample dist no strongly skewed} & \sol{10 obs in each box of a 2-way table} & \sol{$\ge 20$ obs. in each and not strongly skewed} \\  \hline
-CI & \sol{$\hat p \pm z^*_{(1-\alpha/2)} \cdot sd$} & \sol{$\bar x \pm t^*_{(1-\alpha/2, n-1)} \cdot sd$} & \sol{$\hat p_1 - \hat p_2 \pm z^*_{(1-\alpha/2)} \cdot sd$} & \sol{$\bar x_1 - \bar x_2 \pm t^*_{(1-\alpha/2, n-2)} \cdot sd$}  \\  \hline
+CI & \sol{$\hat p \pm z^*_{(1-\alpha/2)} \cdot sd$} & 
+\sol{$\bar x \pm t^*_{(1-\alpha/2, n-1)} \cdot sd$} & 
+\sol{$\hat p_1 - \hat p_2 \pm z^*_{(1-\alpha/2)} \cdot \sqrt{\frac{\hat p_1 (1-\hat p_1)}{n_1} + {\frac{\hat p_2 (1-\hat p_2)}{n_2}}}$} & 
+\sol{$\bar x_1 - \bar x_2 \pm t^*_{(1-\alpha/2, n-2)} \cdot sd$}  \\  \hline
 \end{tabular}
 
 
@@ -68,10 +72,10 @@ $H_0:$ \sol{$\mu_d = \mu_0$, where  $\mu_0$ is a number (typically 0)}
 
 $H_a:$ \sol{$\mu_d \ne \mu_0$}
 
-Strength of Evidence:  \sol{Calculate t statistic: $t=\frac{\bar x_d - \mu_0}{s/\sqrt{n}}$} 
+Strength of Evidence:  \sol{Calculate t statistic: $t=\frac{\bar x_d - \mu_0}{s_d/\sqrt{n}}$} 
 \sol{reject $H_0$ for $t$ "more extreme" using the guidlines for appropriate significance level.}
 
-Confidence Interval: \sol{$\bar x_d \pm t^*_{(1-\alpha/2, n-1)} \times s /\sqrt{n}$}
+Confidence Interval: \sol{$\bar x_d \pm t^*_{(1-\alpha/2, n-1)} \times s_d /\sqrt{n}$}
 \sol{reject $H_0$ if $\mu_0$ is NOT in CI.}
 
 <!-- \newpage -->
@@ -136,7 +140,7 @@ There are several research questions we will ask in this investigation. The firs
 
 4. Are the samples of the first E. coli count independent or dependent of the samples of the second E. coli count? Explain. Based on your answer, is this an independent samples or paired design?
 
-\sol{The samples of the first E. coli count are dependent of the samples of the second E. coli count because they came from the same filter. If the filter is functioning well, we would expect both E.coli counts to be low. If the filter is not functioning well, we would expect both E. coli counts to be higher. So we will perform a matched pairs test for the mean difference.}
+\sol{The samples of the first E. coli count are dependent of the samples of the second E. coli count because they came from the same filter. If the filter is functioning well, we would expect both E.coli counts to be low. If the filter is not functioning well, we would expect both E. coli counts to be higher. So we will perform a repeated measures paired test for the mean difference.}
 
 5. Could the sample size of 14 be large enough to give a valid p-value from a theory-based test of significance?
 
@@ -183,9 +187,9 @@ ecoli.time %>%
 ### STEP 4: Draw inferences beyond the data.
 9. Carry out an appropriate test of significance to see whether, on average, there is a genuine difference between the first E. coli count and the second E. coli count. Report your p-value and a 95% confidence interval.
 ```{r}
-xbar <- -51.63
+xbar <- -51.307
 n <- 14
-se <- 58.77 / sqrt(n)
+se <- 58.687 / sqrt(n)
 null <- 0
 t <- (xbar-null) / se
 pvalue <- 2*(1-pt(abs(t),n-1))
@@ -226,12 +230,12 @@ s1 <- mysummary[1,3]
 s2 <- mysummary[1,4]
 n1 <- 14
 n2 <- 14
-se <- sqrt(s1 / n1 + s2 / n2)
+se <- sqrt(s1^2 / n1 + s2^2 / n2)
 null <- 0
 statistic <- xbar1  - xbar2
 t <- (statistic - null) / se
 n <- n1 + n2
-pvalue <- pt(t, n - 2)
+pvalue <- 2 * (1 - pt(abs(t), n - 2))
 pvalue
 ```
 \sol{We see that we have stronger evidence against the null hypothesis. One issue is that we did not account for the dependence among the observations from Day 1 to Day 2. (and our validity conditions aren't met.)}

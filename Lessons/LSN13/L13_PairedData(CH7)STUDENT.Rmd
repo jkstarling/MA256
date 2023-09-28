@@ -33,7 +33,7 @@ statistic & & & & \\
 test  & & & & \\  
 &  &  &  & \\ \hline
 &  &  &  & \\ 
-sd  & & & & \\  
+SE  & & & & \\  
 &  &  &  & \\ \hline
 &  &  &  & \\ 
 stand. stat &  & & & \\  
