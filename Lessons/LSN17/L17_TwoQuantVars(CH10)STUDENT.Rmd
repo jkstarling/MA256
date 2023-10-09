@@ -14,12 +14,6 @@ editor_options:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-\newcommand{\sol}[1]{\color{violet} #1 \color{black}}
-
-<!-- \renewcommand{\sol}[1]{} -->
-
-<!-- xcolor standard colors: 
-black, blue, brown, cyan, darkgray, green, lime, magenta, olive, orange, red, purple, teal, violet, yellow, etc.  -->
 
 ```{r include=FALSE, message=FALSE}
 library(tidyverse)
@@ -44,12 +38,11 @@ We will regard the 366 dates of the year as observational units. We will conside
 
 ### A1) In a perfectly fair, random lottery, what should be the value of the correlation coefficient between draft number and sequential date of birthday?
 
-\vfill
+
 
 ### A2) Use `ggplot()` to create a scatter plot. 
 ```{r out.width = '40%'}
-# p.draft <- draft %>% ggplot(aes(x = XXXXX, y = XXXXX)) +
-#   geom_point() + 
+# p.draft <- draft %>% XXXXX + 
 #   labs(x = "Sequential Date", 
 #        y= "Draft Number",
 #        title = "Scatterplot of the draft numbers and sequential dates.")
@@ -72,25 +65,24 @@ We will regard the 366 dates of the year as observational units. We will conside
 
 
 
+
 ## It’s difficult to see much of a pattern or association in the scatterplot, so it seems reasonable to conclude that this was a fair, random lottery with a correlation coefficient near zero. But let’s dig a little deeper:
 
-\newpage 
+\newpage
 
 ### A6) Calculate the median draft number for all 12 months. Do you notice any pattern or trend in the median draft numbers over the course of the year? (Hint: Draw a picture to help visualize the data.)
 
 ```{r out.width = '40%'}
-# draft.tab <- draft %>% group_by(XXXXX) %>% summarise(med = median(XXXXX))
+# draft.tab <- draft %>% group_by(XXXXX) %>% summarise(med = XXXXX)
 # draft.tab
 # 
-# draft.tab %>% ggplot(aes(x=XXXXX, y=XXXXX)) + 
-#   geom_point() + 
+# draft.tab %>% XXXXX + 
 #   scale_x_discrete(limits = factor(1:12)) + 
 #   labs(x = "Month", 
 #        y= "Draft Number",
 #        title = "Scatterplot of the draft numbers and sequential dates.")
 ```
 
-\vfill
 
 ### A7)  Use the R function `cor()` to calculate the correlation coefficient. What does this number reveal? Is it consistent with the scatterplot? Or what you expected? 
 
@@ -110,7 +102,6 @@ We will regard the 366 dates of the year as observational units. We will conside
 
 \vfill
 
-\newpage 
 
 ### A10) Simulate with 1000 replications. How many observations are more extreme than your statistic? What is your estimated p-value?  Interpret the p-value: This is the probability of what, assuming what?
 
@@ -122,10 +113,10 @@ We will regard the 366 dates of the year as observational units. We will conside
 # 
 # for (i in 1:M){
 #   draft.shuff <- sample(XXXXX)
-#   RES$res[i] <- cor(draft$sequential_date, draft.shuff)
+#   RES$res[i] <- cor(XXXXX, XXXXX)
 # }
 # 
-# RES %>% ggplot(aes(x = res)) + geom_histogram(bins = 20)
+# RES %>% ggplot(aes(x = XXXXX)) + geom_XXXXX(bins = 20)
 # 
 # #estimate p-value
 # sum(XXXXX) / M
@@ -134,21 +125,19 @@ We will regard the 366 dates of the year as observational units. We will conside
 
 
 
-
-
 ### A11) What conclusion would you draw from this p-value? Do you have strong evidence that the 1970 draft lottery was not conducted with a fair, random process? Explain the reasoning behind your conclusion.
 
 \vfill
 
 
-## Once they saw these results, statisticians were quick to point out that something fishy happened with the 1970 draft lottery. Th e irregularity can be attributed to improper mixing of the balls used in the lottery drawing process. (Balls with birthdays early in the year were placed in the bin fi rst, and balls with birthdays late in the year were placed in the bin last. Without thorough mixing, balls with birthdays late in the year settled near the top of the bin and so tended to be selected earlier.) The mixing process was changed for the 1971 draft lottery (e.g., two bins, one for the draft numbers and one for the birthdays), for which the correlation coefficient turned out to be r = 0.014.
+## Once they saw these results, statisticians were quick to point out that something fishy happened with the 1970 draft lottery. The irregularity can be attributed to improper mixing of the balls used in the lottery drawing process. (Balls with birthdays early in the year were placed in the bin fi rst, and balls with birthdays late in the year were placed in the bin last. Without thorough mixing, balls with birthdays late in the year settled near the top of the bin and so tended to be selected earlier.) The mixing process was changed for the 1971 draft lottery (e.g., two bins, one for the draft numbers and one for the birthdays), for which the correlation coefficient turned out to be r = 0.014.
 
 ### A12) Use your simulation results to approximate the p-value for the 1971 draft lottery. Is there any reason to suspect that this 1971 draft lottery was not conducted with a fair, random process? Explain the reasoning behind your conclusion. Also explain why you don’t need to paste in the data from the 1971 lottery first.
 ```{r}
-# XXXXX
+# (put something useful here)
 ```
 
-\vfill
+
 
 
 
@@ -170,7 +159,6 @@ We will regard the 366 dates of the year as observational units. We will conside
 \vfill
 
 
-
 ### B3) Notice that the results also provdie the t-value and the p-value.  When have we used the t-statistic before?  What is the null/alternative hypotheses we are testing here? What is our conclusion? 
 
 \vfill
@@ -180,30 +168,34 @@ We will regard the 366 dates of the year as observational units. We will conside
 ### B4) Plot the linear model on top of the figure object `p.draft` that you had saved above. 
 
 ```{r out.width='40%'}
-
+# p.draft + geom_XXXXX(method = "lm", se = FALSE)
 ```
 
-### B5) There are three validity conditions. Write them down. Does our data set meet these conditions? 
+\newpage
+
+### B5) There are four validity conditions. Write them down. Does our data set meet these conditions? 
 
 1 - 
 
-2 -
+2 - 
 
 3 - 
+
+4 - 
 
 
 ### B6) The coefficient of determination ($R^2$) is the *\% of total variation in the response variable that is explained by the linear relationship with the explanatory variable. The equation for $R^2$ is given as: 
 $$R^2 = \frac{SSE(\bar y) - SSE(regression line)}{SSE(\bar y)}$$
 Where $SSE(\bar y)$ is the sum of the squared residuals from the horizontal line at the average value of the response variable ($\sum_{i=1}^{n} (\bar y - y_i)$) and $SSE(regression line)$ is the sum of the squared residuals ($\sum_{i=1}^{n} (\hat y_i - y_i)$). OR you can simply square the correlation coefficient. 
 ```{r}
-# ybar <-XXXXX
+# ybar <- XXXXX
 # SSEybar <- XXXXX
 # SSEreg <- XXXXX
-# r.sq <- (SSEybar - SSEreg) /  SSEybar
+# r.sq <- XXXXX
 # r.sq
 # 
 # # OR 
-# mystat^2
+# XXXXX
 ```
 
 
@@ -214,7 +206,7 @@ Where $SSE(\bar y)$ is the sum of the squared residuals from the horizontal line
 # set.seed(256)
 # M <- 1000
 # RES2 <- data.frame(res = rep(NA, M))
-# mystat <- -0.2260414  # beta_1
+# mystat <- XXXXX  # beta_1
 # 
 # for (i in 1:M){
 #   draft$shuff <- sample(XXXXX)
@@ -223,13 +215,46 @@ Where $SSE(\bar y)$ is the sum of the squared residuals from the horizontal line
 #   xx <- summary(draft.lm)
 # }
 # 
-# RES2 %>% ggplot(aes(x = res)) + geom_histogram(bins = 20)
+# RES2 %>% ggplot(aes(x = res)) + geom_XXXX(bins = 20)
 # 
 # #estimate p-value
 # sum(abs(RES2$res) > abs(mystat)) / M
 
 ```
 
+\newpage
+
+# Used Hondas
+
+The data in the file `UsedHondas` come from a sample of used Honda Civics listed for sale online in July 2006. The variables recorded are the car’s age (calculated as 2006 minus year of manufacture) and price. Consider conducting an analysis to test whether the sample data provide strong evidence of an association between a car’s price and age in the population in terms of the population slope.
+
+```{r}
+# hondas <- read.table("https://www.isi-stats.com/isi/data/chap10/HondaAgePrice.txt", header = TRUE)
+```
+
+### C1) Describe the population slope in the context of the study and assign a symbol to it.
+
+\vfill
 
 
+### C2) State the appropriate null and alternative hypotheses in terms of the population slope using the symbol used in part (a).
 
+\vfill
+
+### C3) Is a theory-based test appropriate? Why or why not?
+
+\vfill
+
+
+### C4) Use a theory-based approach to find a p-value to test the hypotheses stated in part (b).
+
+```{r}
+# honda.lm <- hondas %>% XXXXX
+# summary(honda.lm)
+```
+
+\vfill
+
+### C5) Summarize your conclusion based on the p-value reported in part (d).
+
+\vfill

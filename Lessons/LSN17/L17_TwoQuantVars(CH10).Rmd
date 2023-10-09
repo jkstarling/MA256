@@ -172,7 +172,7 @@ draft.lm <- draft %>% lm(draft_number ~ sequential_date,
 summary(draft.lm)
 ```
 
-\sol{$\hat y_i = \hat{\beta_0} + \hat{beta_1} (seq date_i) = 225 - 0.22606 \cdot (seq date_i)$\\
+\sol{$\hat y_i = \hat{\beta_0} + \hat{\beta_1} (seq date_i) = 225 - 0.22606 \cdot (seq date_i)$\\
 This model tells us that for every unit increase in the sequential date, we expect a decrease of 0.226 in the draft number. }
 
 
@@ -238,4 +238,37 @@ sum(abs(RES2$res) > abs(mystat)) / M
 
 
 
+# Used Hondas
 
+The data in the file `UsedHondas` come from a sample of used Honda Civics listed for sale online in July 2006. The variables recorded are the car’s age (calculated as 2006 minus year of manufacture) and price. Consider conducting an analysis to test whether the sample data provide strong evidence of an association between a car’s price and age in the population in terms of the population slope.
+
+```{r}
+hondas <- read.table("https://www.isi-stats.com/isi/data/chap10/HondaAgePrice.txt", header = TRUE)
+```
+
+### C1) Describe the population slope in the context of the study and assign a symbol to it.
+
+\sol{In the population of all Honda Civics, the slope tells how much the price changes on average for each year older the car is; $\beta$ is the symbol for the population slope.}
+
+
+### C2) State the appropriate null and alternative hypotheses in terms of the population slope using the symbol used in part (a).
+
+\sol{$H_0: \beta = 0; H_a: \beta \ne 0$}
+
+### C3) Is a theory-based test appropriate? Why or why not?
+
+\sol{Yes, the three validity conditions (linear trend, similar distributions, and equal spread around the line) are all reasonably well met for this dataset.}
+
+
+### C4) Use a theory-based approach to find a p-value to test the hypotheses stated in part (b).
+
+```{r}
+honda.lm <- hondas %>% lm(Price ~ age, data = .)
+summary(honda.lm)
+```
+\sol{$p-value = 0$}
+
+
+### C5) Summarize your conclusion based on the p-value reported in part (d).
+
+\sol{With a p-value of 0 we have very strong evidence against the null and in favor of the alternative that the population slope describing the association between the number of years before 2006 a Honda Civic was manufactured and the sale price is different from zero.}
