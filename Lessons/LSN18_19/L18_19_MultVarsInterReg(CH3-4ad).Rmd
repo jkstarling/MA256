@@ -60,7 +60,7 @@ $H_a:$ \sol{$\beta_1 > 0$. There is a positive association between the size of a
 ```{r out.width="40%"}
 houses %>% ggplot(aes(x = sqft, y = `price in thousands`)) + 
   geom_point() +
-  geom_smooth(method = "lm") + 
+  geom_smooth(method = "lm", se = FALSE) + 
   labs(x="Home Size in Square Feet", y = "Home Price in Thousands",
        title = "Home Price vs. Square Feet")
 ```
@@ -68,7 +68,7 @@ houses %>% ggplot(aes(x = sqft, y = `price in thousands`)) +
 
 
 
-## A5.)	Use the Course Guide example R Code for Lesson 18-19 to find estimates of the fitted model and then write the complete equation for `house.lm` given the form of $y = \beta_0 + \beta_1 * sqft$. Are the 4x validity conditions met for us to use the theory-based approach to assess strength of evidence? Use headers to explicitly state each of them, and then clarify if they are met.
+## A5.)	Use the Course Guide example R Code for Lesson 18-19 to find estimates of the fitted model and then write the complete equation for `house.lm` given the form of $y = \beta_0 + \beta_1 * sqft$. Are the 4 validity conditions met for us to use the theory-based approach to assess strength of evidence? Use headers to explicitly state each of them, and then clarify if they are met.
 
 ```{r out.width="40%"}
 house.lm <- houses %>% lm(`price in thousands` ~ sqft, data = .)
@@ -123,7 +123,7 @@ Alternative Interpretation: \sol{The average price of a 0 square foot home is -\
 \sol{Since positive numbers indicate money flowing from a buyer to a seller to purchase their property, and since the intercept coefficient is negative, it doesn’t make sense that someone would pay me \$59,368.70 to “purchase” a vacant lot i.e. 0 square foot home. I am not comfortable using my model in this way. WE MUST ALWAYS USE CAUTION WHEN EXTRAPOLATING WITH OUR MODEL. }
 
 
-### A7-Bonus) If we want to predict prices for vacant lots, what should we use to create a model?
+### A7.) If we want to predict prices for vacant lots, what should we use to create a model?
 
 \sol{If we wanted to predict the prices of vacant lots, perhaps we should only use vacant lots to create a new least squares regression model. }
 
@@ -131,7 +131,6 @@ Alternative Interpretation: \sol{The average price of a 0 square foot home is -\
 ## A8.)	Calculate the 95\% confidence interval for the slope statistic and provide an interpretation of the CI.
 
 ```{r}
-
 sqft.coef <- summary(house.lm)$coefficients['sqft','Estimate']
 sqft.se <- summary(house.lm)$coefficients['sqft','Std. Error']
 multiplier <- qt(0.975, df = 11)
@@ -279,7 +278,6 @@ houses%>%
  geom_smooth(method = "lm")+
  labs(x="Home Size in Square Feet", y="Home Price in Thousands of USD", 
  	title="Home Price in Thousands of USD vs Size in Square Feet")
-
 ```
 
 ## A22.) How do we interpret the two slope coefficients associated with the size of a home i.e. sqft and sqft*lake given the least squared regression equation of: 

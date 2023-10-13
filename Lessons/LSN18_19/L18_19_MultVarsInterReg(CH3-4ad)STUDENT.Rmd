@@ -14,11 +14,6 @@ editor_options:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-\newcommand{\sol}[1]{\color{violet} #1 \color{black}}
-
-<!-- \renewcommand{\sol}[1]{} -->
-<!-- xcolor standard colors: 
-black, blue, brown, cyan, darkgray, green, lime, magenta, olive, orange, red, purple, teal, violet, yellow, etc.  -->
 
 ```{r include=FALSE, message=FALSE}
 # library(tidyverse)
@@ -66,7 +61,7 @@ $H_a:$
 
 
 
-## A5.)	Use the Course Guide example R Code for Lesson 18-19 to find estimates of the fitted model and then write the complete equation for `house.lm` given the form of $y = \beta_0 + \beta_1 * sqft$. Are the 4x validity conditions met for us to use the theory-based approach to assess strength of evidence? Use headers to explicitly state each of them, and then clarify if they are met.
+## A5.)	Use the Course Guide example R Code for Lesson 18-19 to find estimates of the fitted model and then write the complete equation for `house.lm` given the form of $y = \beta_0 + \beta_1 * sqft$. Are the 4 validity conditions met for us to use the theory-based approach to assess strength of evidence? Use headers to explicitly state each of them, and then clarify if they are met.
 
 ```{r out.width="40%"}
 # house.lm <- houses %>% lm(....)
