@@ -1,0 +1,229 @@
+---
+title: ''
+geometry: "left=2cm,right=2cm,top=1cm,bottom=2cm"
+output:
+  pdf_document:
+    extra_dependencies: ["xcolor", "amsmath","multicol"]
+  html_document: default
+editor_options:
+  markdown:
+    wrap: 100
+---
+
+
+## Lesson 19: ACFT Problem 
+```{r setup, message=FALSE, echo=TRUE, include=FALSE, warning=FALSE}
+knitr::opts_chunk$set(
+  warning = FALSE,   # avoid warnings and messages in the output
+  message = FALSE,  # collapse all output into a single block
+  tidy = FALSE,      # don't tidy our code-- assume we do it ourselves
+  out.width = "50%"
+)
+```
+
+
+
+```{r  include=FALSE}
+# rm(list=ls())
+# library(tidyverse)
+# library(janitor)
+```
+
+```{r, include=FALSE}
+# df <-  read_csv("https://raw.githubusercontent.com/acammack1234/ma206/main/acft_ioct.csv")
+```
+
+### Is there an association between the Standing Power Throw and Maximum Deadlift raw scores?
+
+We are going to determine if an association exists between `spr\_raw` and `mdl\_raw` scores.
+
+The relationship we are modeling looks like this:
+
+$$\widehat{mdl} = \beta_0 + \beta_1 \cdot spr$$
+
+1.  Provide the hypotheses in symbols and words:
+
+\vfill
+
+2.  Plot the association, including the regression line.
+
+```{r}
+# df %>%
+#   ggplot(XXXXX
+```
+
+3.  Is there anything unusual about the data?
+
+\vfill
+
+4.  Remove the outlier using the `filter(spr_raw < 100)` command. How many observations were dropped?
+
+```{r}
+# df <- XXXXX 
+```
+
+5.  Create a new scatter plot with updated dataframe.
+
+```{r}
+# df %>%
+#   ggplot(XXXXX
+```
+
+6.  Create a linear model to test your hypotheses.
+
+```{r}
+# lrmodel <- df %>%
+#   XXXXX
+# summary(lrmodel)
+```
+
+7.  Write out the linear model with the coefficients determined by the linear regression. 
+
+\vfill
+
+
+8.  Interpret the intercept term.
+
+\vfill
+
+\newpage
+
+9.  Interpret the slope term.
+
+\vfill
+
+10. Conclusion of your hypothesis test at a 5% significance level.
+
+\vfill
+
+11. Interpret the R-squared value.
+
+\vfill
+
+12. Check the 4 Validity Conditions (L.I.N.E.). Are any not met?
+
+```{r}
+# lrmodel %>%
+#   fortify(lrmodel$model) %>%
+#   XXXXX
+#   XXXXX
+#   labs( x = "Predicted Values", 
+#         y = "Residuals", 
+#         title = "Residuals vs. Predicted Values")
+# 
+# lrmodel %>%
+#   fortify(lrmodel$model) %>%
+#   XXXXX
+#   XXXXX
+#   labs(x = "Order of Occurence", 
+#        y = "Residuals", 
+#        title = "Residuals in Order of Occurence")
+# 
+# lrmodel %>%
+#   fortify(lrmodel$model) %>%
+#   XXXXX
+#   XXXXX
+#   labs(x = "Residuals", 
+#        title = "Histogram of Residuals")
+```
+
+\vfill
+
+13. Can we determine causation? Why or why not.
+
+\vfill
+
+
+## Does adding the variable `sex` change the association between the Standing Power Throw (`spr\_raw`) and Leg Tuck (`ltk\_raw`) raw scores?
+
+Now, we add `sex` as another variable to the model but also include it as an interaction with `spr\_raw`.
+
+    Our updated model looks like this:
+
+$\widehat{mdl} = \beta_0 + \beta_1 \cdot spr + \beta_2 \cdot sexmale + \beta_3 (spr \cdot sexmale)$
+
+14.  Plot the data **(including the interaction term)**, including the regression line.
+
+```{r}
+# df %>%
+#   ggplot(XXXXX)
+```
+
+\newpage
+
+15.  Does there appear to be a different relationship between `mdl\_raw` and `spr\_raw` based on `sex`?
+
+\vfill
+
+16.  Conduct a linear regression with the updated model.
+
+```{r}
+# lrmodel <- df %>%
+#   lm(XXXXX)
+# summary(lrmodel)
+```
+
+17.  Interpret the coefficient on the interaction term.
+
+\vfill
+
+18.  Is this significant at the 5% level?
+
+\vfill
+
+19.  Interpret the intercept term.
+
+\vfill
+
+20.  Interpret the base slope term for `spr\_raw`.
+
+\vfill
+
+\newpage
+
+21.  Using this model (even with no significance), calculate the following:
+
+-   The `mdl\_raw` for a male cadet with an `spr\_raw` of 6m:
+
+```{r}
+#
+```
+
+-   The `mdl\_raw` for a female cadet with an `spr\_raw` of 6m:
+
+```{r}
+#
+```
+
+
+
+22.  Interpret the R-squared value.
+
+\vfill
+
+23. Check the 4 Validity Conditions (L.I.N.E.). Are any not met?
+
+```{r}
+# lrmodel %>%
+#   fortify(lrmodel$model) %>%
+#   XXXXXXXX 
+#   XXXXXXXX
+#   labs( x = "Predicted Values", 
+#         y = "Residuals", 
+#         title = "Residuals vs. Predicted Values")
+# 
+# lrmodel %>%
+#   fortify(lrmodel$model) %>%
+#   XXXXXXX
+#   XXXXXXX
+#   labs(x = "Order of Occurence", 
+#        y = "Residuals", 
+#        title = "Residuals in Order of Occurence")
+# 
+# lrmodel %>%
+#   fortify(lrmodel$model) %>%
+#   XXXXXXXXXX
+#   XXXXXXXXXX
+#   labs(x = "Residuals", 
+#        title = "Histogram of Residuals")
+```
