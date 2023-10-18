@@ -40,7 +40,7 @@ df <-  read_csv("https://raw.githubusercontent.com/acammack1234/ma206/main/acft_
 
 ### Is there an association between the Standing Power Throw and Maximum Deadlift raw scores?
 
-We are going to determine if an association exists between `spr\_raw` and `mdl\_raw` scores.
+We are going to determine if an association exists between `spr_raw` and `mdl_raw` scores.
 
 The relationship we are modeling looks like this:
 
@@ -147,9 +147,9 @@ lrmodel %>%
 \sol{No, because this was an observational study and there was no random assignment.}
 
 
-## Does adding the variable `sex` change the association between the Standing Power Throw (`spr\_raw`) and Leg Tuck (`ltk\_raw`) raw scores?
+## Does adding the variable `sex` change the association between the Standing Power Throw (`spr_raw`) and Leg Tuck (`ltk_raw`) raw scores?
 
-Now, we add `sex` as another variable to the model but also include it as an interaction with `spr\_raw`.
+Now, we add `sex` as another variable to the model but also include it as an interaction with `spr_raw`.
 
     Our updated model looks like this:
 
@@ -164,7 +164,7 @@ df %>%
   geom_smooth(method = "lm")
 ```
 
-15.  Does there appear to be a different relationship between `mdl\_raw` and `spr\_raw` based on `sex`?
+15.  Does there appear to be a different relationship between `mdl_raw` and `spr_raw` based on `sex`?
 
 \sol{Maybe. The lines don't have a very different slope.}
 
@@ -188,19 +188,19 @@ summary(lrmodel)
 
 \sol{With a zero `spr\_raw` , Females will exhibit a `mdl\_raw` of 119lbs.}
 
-20.  Interpret the base slope term for `spr\_raw`.
+20.  Interpret the base slope term for `spr_raw`.
 
 \sol{For Females, a one-unit increase in `spr\_raw` results in an 8.67 increase in `mdl\_raw`, on average, holding all else equal.}
 
 21.  Using this model (even with no significance), calculate the following:
 
--   The `mdl\_raw` for a male cadet with an `spr\_raw` of 6m:
+-   The `mdl_raw` for a male cadet with an `spr_raw` of 6m:
 
 ```{r}
 (118.529 + 10.84) + 6*(8.662 + 5.797)
 ```
 
--   The `mdl\_raw` for a female cadet with an `spr\_raw` of 6m:
+-   The `mdl_raw` for a female cadet with an `spr_raw` of 6m:
 
 ```{r}
 (118.529) + 6*(8.662)
