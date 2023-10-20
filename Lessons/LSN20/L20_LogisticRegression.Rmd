@@ -25,7 +25,8 @@ black, blue, brown, cyan, darkgray, green, lime, magenta, olive, orange, red, pu
 ```{r include=FALSE, message=FALSE}
 library(tidyverse)
 library(lubridate)
-library(table1)
+library(janitor)
+
 
 ### DO NOT RUN THIS UNLESS YOU WANT TO EXPLORE ALL NFL DATA
 #loading play by play for the 2021 season
@@ -78,13 +79,18 @@ fg <- fg %>%
 ```
 
 
-(3) Create a contingency table using the `table1()` command (or the `table()` command).
+(3) Create a contingency table using the `tablyl()` command from the janitor package (or the `table()` command).
 
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
 # Contingency table
-table1(~field_goal_result|surface, data = fg)
+# table1(~field_goal_result|surface, data = fg)
 # table(fg$field_goal_result, fg$surface)
+
+fg %>% 
+  tabyl(field_goal_result, surface) %>% 
+  adorn_totals(c("row", "col")) %>% adorn_percentages() %>% adorn_pct_formatting() %>% adorn_ns(position="front")
+
 ```
 
 

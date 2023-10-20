@@ -14,18 +14,11 @@ editor_options:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-\newcommand{\sol}[1]{\color{violet} #1 \color{black}}
-
-<!-- \renewcommand{\sol}[1]{} -->
-
-
-<!-- xcolor standard colors: 
-black, blue, brown, cyan, darkgray, green, lime, magenta, olive, orange, red, purple, teal, violet, yellow, etc.  -->
 
 ```{r include=FALSE, message=FALSE}
 library(tidyverse)
 library(lubridate)
-library(table1)
+library(janitor)
 
 ### DO NOT RUN THIS UNLESS YOU WANT TO EXPLORE ALL NFL DATA
 #loading play by play for the 2021 season
@@ -73,7 +66,7 @@ The 2021 NFL Season had seen some historically bad weeks for the field goal kick
 ```
 
 
-(3) Create a contingency table using the `table1()` command (or the `table()` command).
+(3) Create a contingency table using the `tablyl()` command from the janitor package (or the `table()` command).
 
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
