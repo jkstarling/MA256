@@ -228,7 +228,7 @@ TukeyHSD(aov.bmi)
 
 ### D8. Which of the confidence intervals calculated in #17 indicate a significant difference between groups? How are you deciding? Based on your analysis, would you conclude that there is one diet that works significantly better than the other three? If so, which one?
 
-\sol{Atkins vs. Zone, Atkins vs. Ornish, and Atkins vs. LEARN because they do not include zero.  The Atkins diet is associated with a significantly greater decrease in BMI than the LEARN, Ornish, and Zone diets. }
+\sol{Atkins vs. Zone because they do not include zero.  The Atkins diet is associated with a significantly greater decrease in BMI than the Zone diet. }
 
 
 ### D9. Do the sample data for the diet study appear to satisfy the validity conditions for conducting an ANOVA F-test? How are you deciding?
