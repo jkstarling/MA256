@@ -21,7 +21,7 @@ knitr::opts_chunk$set(echo = TRUE)
 black, blue, brown, cyan, darkgray, green, lime, magenta, olive, orange, red, purple, teal, violet, yellow, etc.  -->
 
 
-# MA256 Lesson 12 - Two Groups, Two Means (6.1-6.3)
+# MA256 Lesson 11 - Two Groups, Two Means (6.1-6.3)
 
 ## Review for Single Mean:
 
