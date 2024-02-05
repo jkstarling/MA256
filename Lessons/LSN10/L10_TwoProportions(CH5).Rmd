@@ -21,16 +21,16 @@ knitr::opts_chunk$set(echo = TRUE)
 black, blue, brown, cyan, darkgray, green, lime, magenta, olive, orange, red, purple, teal, violet, yellow, etc.  -->
 
 
-# MA256 Lesson 11 - Two Proportions (5.1-5.3)
+# MA256 Lesson 10 - Two Proportions (5.1-5.3)
 
 
 ## Review for Single Proportion:
 
 ### Hypotheses (in symbols):
 
-$H_0:$ \sol{$\pi = 0$}
+$H_0:$ \sol{$\pi = \pi_0$}
 
-$H_a:$ \sol{$\pi \ne 0$}
+$H_a:$ \sol{$\pi \ne \pi_0$ (OR $> \pi_0$ OR $< \pi_0$}
 
 Strength of Evidence:  \sol{Calculate z statistic: $z=\frac{\hat p - \pi_0}{\sqrt{\pi (1-\pi)/n}}$}
 
