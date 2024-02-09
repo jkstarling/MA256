@@ -111,7 +111,7 @@ What are the explanatory and response variables in this study and what types of 
 braking_long %>% ggplot(aes(x=time, fill=socialmedia)) + geom_histogram(binwidth = 0.15, position = "identity", color = "black", alpha = 0.3)
 ```
 
-1d. Assume validity conditions are met. Calculate the appropriate standardized statistic, p-value, and confidence interval. What is your conclusion?
+1d. Assume validity conditions are met. Calculate the appropriate standardized statistic, p-value, and 95% confidence interval. What is your conclusion?
 
 ```{r}
 mean.fb <- mean(braking$Facebook)
@@ -161,7 +161,7 @@ Let $\mu_d$ represent the mean difference in braking reaction time between
 Facebook and Instagram; $H_0: \mu_d = 0$;  $H_a: \mu_d \ne 0$.
 
 
-1g. Assume validity conditions are met. Calculate the appropriate standardized statistic, p-value, and confidence interval. What is your conclusion?
+1g. Assume validity conditions are met. Calculate the appropriate standardized statistic, p-value, and 95% confidence interval. What is your conclusion?
 
 
 ```{r}
@@ -239,7 +239,7 @@ print(xbar_d)
 \sol{$x_d = 8.333$}
 
 
-2d. Assume validity conditions are met. Calculate the appropriate standardized statistic, p-value, and confidence interval. 
+2d. Assume validity conditions are met. Calculate the appropriate standardized statistic, p-value, and 95% confidence interval. 
 
 ```{r}
 sd_d <- sd(chimp.social$delta)
@@ -295,7 +295,7 @@ print(xbar_d)
 
 \sol{$x_d = -0.520$}
 
-3c. Assume validity conditions are met. Calculate the appropriate standardized statistic, p-value, and confidence interval.
+3c. Assume validity conditions are met. Calculate the appropriate standardized statistic, p-value, and 95% confidence interval.
 
 ```{r}
 sd_d <- sd(chimp.agg$delta)
