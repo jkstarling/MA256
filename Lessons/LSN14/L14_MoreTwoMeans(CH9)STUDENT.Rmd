@@ -15,7 +15,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 
-# MA256 Lesson 15 - Multiple Means (9.1-9.2)
+# MA256 Lesson 14 - Multiple Means (9.1-9.2)
 
 
 ## Review: Comparing two means. 
@@ -47,6 +47,10 @@ The analysis of variance F-statistic is (see p. 658):
 \vfill
 
 Validity conditions:  
+
+\vfill
+
+Calculating the p-value: 
 
 \vfill
 

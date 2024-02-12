@@ -22,7 +22,7 @@ knitr::opts_chunk$set(echo = TRUE)
 <!-- xcolor standard colors: 
 black, blue, brown, cyan, darkgray, green, lime, magenta, olive, orange, red, purple, teal, violet, yellow, etc.  -->
 
-# MA256 Lesson 15 - Multiple Means (9.1-9.2)
+# MA256 Lesson 14 - Multiple Means (9.1-9.2)
 
 
 ## Review: Comparing two means. 
@@ -55,6 +55,10 @@ The analysis of variance F-statistic is (see p. 658):
 \vfill
 
 Validity conditions: \sol{$\ge 20$ observations in each group without strong skewness or (i less than 20) be symmetric; \& standard deviations of data within each group should be similar (within a factor of 2). }
+
+\vfill
+
+Calculating the p-value: \sol{\texttt{1 - pf(fstat, I-1, N-1)}}
 
 \vfill
 
