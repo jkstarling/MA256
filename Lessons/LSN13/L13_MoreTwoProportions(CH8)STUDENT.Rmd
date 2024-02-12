@@ -15,7 +15,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 
-# MA256 Lesson 14 - Multiple Proportions (8.1-8.3)
+# MA256 Lesson 13 - Multiple Proportions (8.1-8.3)
 
 
 ## Multiple-proportions: Similar to our methods used when considering two-proportions, but:
@@ -177,7 +177,7 @@ $H_a:$
  
 
 
-# Nearsightedness and NighLights REDUX
+# Nearsightedness and NightLights REDUX
 
 Recall Example 4.1, which described a study investigating whether there is a relationship between use of night lights in a child’s room before age 2 and the child’s eyesight condition a few years later. In Chapter 4, we presented a two-way table of counts from the study examining whether the child was nearsighted as the response variable:
 
