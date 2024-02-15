@@ -134,7 +134,7 @@ pval <- 2*(1-pt(abs(t), n - 2))
 
 print(paste0("Our pvalue is : ", round(pval,4)))
 #CI
-multiplier <- pt(0.975, n - 2)
+multiplier <- qt(0.975, n - 2)
 print(paste0("Our CI is: (", round(mystat - multiplier * SE,3),", ", round(mystat + multiplier * SE,3), ")"))
 
 print("We have strong evidence to reject the null hypothesis, and state that we have evidence in different braking times when people are driving and looking at Instagram and Facebook.")
@@ -179,7 +179,7 @@ using Facebook and Instagram is ", round(xbar_del, 3)," seconds in the sample.")
 p.pair <- 2*(1-pt(abs(t.pair), n_del -1))
 print(paste0("Our p-value is ", round(p.pair, 3)))
 
-multiplier <- pt(0.975, n_del - 1)
+multiplier <- qt(0.975, n_del - 1)
 print(paste0("Our CI is: (", round(xbar_del - multiplier * SE,3),", ", round(xbar_del + multiplier * SE,3), ")"))
 
 ```
@@ -252,7 +252,7 @@ print(paste0("Our std. stat is ", round(t.pair, 3)))
 p.pair <- 2*(1-pt(abs(t.pair), n.d -1))
 print(paste0("Our p-value is ", round(p.pair, 3)))
 
-multiplier <- pt(0.975, n.d - 1)
+multiplier <- qt(0.975, n.d - 1)
 print(paste0("Our CI is: (", round(xbar_d - multiplier * SE,3),", ", round(xbar_d + multiplier * SE,3), ")"))
 
 ```
@@ -308,7 +308,7 @@ print(paste0("Our std. stat is ", round(t.pair, 3)))
 p.pair <- 2*(1-pt(abs(t.pair), n.d -1))
 print(paste0("Our p-value is ", round(p.pair, 3)))
 
-multiplier <- pt(0.975, n.d - 1)
+multiplier <- qt(0.975, n.d - 1)
 print(paste0("Our CI is: (", round(xbar_d - multiplier * SE,3),", ", round(xbar_d + multiplier * SE,3), ")"))
 
 ```
