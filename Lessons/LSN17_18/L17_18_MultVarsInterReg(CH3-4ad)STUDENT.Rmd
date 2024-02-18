@@ -24,7 +24,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 
-# MA256 Lesson 18 \& 19 - Multiple Variables and Interactions (Causality and Multiple Regression Supplement Ch3 \& 4)
+# MA256 Lesson 17 \& 18 - Multiple Variables and Interactions (Causality and Multiple Regression Supplement Ch3 \& 4)
 
 Many people say that you can predict the cost of a home (in thousands of USD) based on its size (square footage) because bigger homes cost more to build, so I’d like for you to verify this claim using a random sample of homes around Lake Michigan (Houses.csv). 
 
