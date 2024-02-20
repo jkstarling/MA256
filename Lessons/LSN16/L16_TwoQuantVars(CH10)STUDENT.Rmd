@@ -27,7 +27,7 @@ draft$month <- month(mydates)
 ```
 
 
-# MA256 Lesson 17 - Two Quantitative Variables (10.1, 10.3-10.5)
+# MA256 Lesson 16 - Two Quantitative Variables (10.1, 10.3-10.5)
 
 
 ## Example: Draft Lottery
