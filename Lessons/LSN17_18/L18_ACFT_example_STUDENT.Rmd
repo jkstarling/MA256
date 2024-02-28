@@ -11,7 +11,7 @@ editor_options:
 ---
 
 
-## Lesson 19: ACFT Problem 
+## Lesson 18: ACFT Problem 
 ```{r setup, message=FALSE, echo=TRUE, include=FALSE, warning=FALSE}
 knitr::opts_chunk$set(
   warning = FALSE,   # avoid warnings and messages in the output

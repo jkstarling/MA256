@@ -15,7 +15,7 @@ editor_options:
 black, blue, brown, cyan, darkgray, green, lime, magenta, olive, orange, red, purple, teal, violet, yellow, etc.  -->
 
 
-## Lesson 19: ACFT Problem (solution)
+## Lesson 18: ACFT Problem (solution)
 ```{r setup, message=FALSE, echo=TRUE, include=FALSE, warning=FALSE}
 knitr::opts_chunk$set(
   warning = FALSE,   # avoid warnings and messages in the output
