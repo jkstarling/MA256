@@ -51,7 +51,7 @@ $\beta_1$ \sol{(Slope Coefficient): the population slope is the predicted increa
 
 $H_0:$ \sol{$\beta_1 = 0$. There is no association between the size of a home and its price.}
 
-$H_a:$ \sol{$\beta_1 > 0$. There is a positive association between the size of a home and its price.} 
+$H_a:$ \sol{$\beta_1 \ne 0$. There is a positive association between the size of a home and its price.} 
 
 
 
