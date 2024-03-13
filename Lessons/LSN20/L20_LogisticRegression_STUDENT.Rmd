@@ -144,7 +144,7 @@ Calculate the confidence interval of the model's coefficients using the `confint
 \vfill
 
 
-(10) Typically these interpretations don't make much sense to the consumer. How do we write them and interpret them in terms of odds ratio? What conclusions can we draw based on the confidence interval? (Hint: Check out p. 28 in the handout)
+(10) Typically these interpretations don't make much sense to the consumer. How do we write them and interpret them in terms of odds ratio? What conclusions can we draw based on the confidence interval? 
 
 
 ```{r}
